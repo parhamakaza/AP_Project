@@ -33,17 +33,20 @@ public class Menu {
             Buttons.styler1(startButton);
             Button levelButton = Buttons.makeButton("Levels", Main.stageWidth/2,475);
             Buttons.styler1(levelButton);
+            levelButton.setOnAction(e -> {
+                MenuController.levelsButton();
+            });
             Button settingButton = Buttons.makeButton("Setting", Main.stageWidth/2,630 );
             Buttons.styler1(settingButton);
+             settingButton.setOnAction(e -> {
+                MenuController.settingButton();
+            });
             Button exitButton = Buttons.makeButton("Exit", Main.stageWidth/2,785 );
             Buttons.styler1(exitButton);
             exitButton.setOnAction(e -> {
                 MenuController.exitButton();
             });
 
-            settingButton.setOnAction(e -> {
-                MenuController.settingButton();
-            });
 
 
 

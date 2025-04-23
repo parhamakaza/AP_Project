@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import view.Levels;
 import view.Setting;
 
 public class MenuController {
@@ -18,6 +19,9 @@ public class MenuController {
 
     public static void settingButton(){
         Setting.setSetting();
+    }
+    public static void levelsButton(){
+        Levels.setLevels();
     }
 
 }
