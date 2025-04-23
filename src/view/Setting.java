@@ -13,6 +13,7 @@ import javafx.scene.media.MediaPlayer;
 import model.Buttons;
 
 public class Setting {
+    private static double volume = 0.2;
 
     public static void setSetting(){
         Pane root = new Pane();
@@ -24,14 +25,18 @@ public class Setting {
 
 
 
-        Slider volumeSlider = new Slider(0, 1, 0);   // min=0, max=1, initial=0.5
+        Slider volumeSlider = new Slider(0, 1, volume);   // min=0, max=1, initial=0.5
         volumeSlider.setPrefHeight(10);
         volumeSlider.setPrefWidth(500);
 
         volumeSlider.setLayoutX(Main.stageWidth / 2 - volumeSlider.getPrefWidth()/2);
         volumeSlider.setLayoutY(Main.stageHeight /2 - volumeSlider.getPrefHeight()/2 );
         Main.musicPlayer.volumeProperty().bind(volumeSlider.valueProperty());
-        Label label = new Label("Music Vloume");
+        volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+                        volume = (double) newVal;
+                });
+        volume = volumeSlider.getValue();
+        Label label = new Label("Music Volume");
 
         HBox container = new HBox(label);
         container.setAlignment(Pos.CENTER);
@@ -70,8 +75,8 @@ public class Setting {
 
         VBox vbox = new VBox(10, label, volumeSlider);
 
-        vbox.setLayoutX(Main.stageWidth/2 - volumeSlider.getPrefWidth()/2);
-        vbox.setLayoutY(Main.stageHeight/2  - (10 + volumeSlider.getPrefHeight() + label.getHeight()) /2);
+        vbox.setLayoutX(Main.stageWidth/2 - volumeSlider.getPrefWidth()/2 + 30);
+        vbox.setLayoutY(Main.stageHeight/2  - (40 + volumeSlider.getPrefHeight() + label.getHeight()) );
         vbox.setAlignment(Pos.CENTER);
 
         root.getChildren().add(vbox);
