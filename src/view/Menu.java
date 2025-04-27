@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import model.Buttons;
 import controler.MenuController;
+import model.Labels;
 
 public class Menu {
         public static void menuConfig(){
@@ -18,19 +19,12 @@ public class Menu {
             label.setPrefWidth(470);
             label.setLayoutX(Main.stageWidth/2 - 200);
             label.setLayoutY(100);
-            label.setStyle("-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #002b36 0%, #003842 50%, #002b36 100%);" +
-                    "-fx-background-radius: 8;" +
-                    "-fx-padding: 8 16 8 16;" +
-                    "-fx-text-fill: #00ffff;" +
-                    "-fx-font-size: 50px;" +
-                    "-fx-font-weight: bold;" +
-                    "-fx-effect: dropshadow(one-pass-box, rgba(0,255,255,0.6), 4, 0.0, 0, 0);" +
-                    "-fx-alignment: center;" +
-                    "-fx-border-color: #0088aa;" +
-                    "-fx-border-width: 2;" +
-                    "-fx-border-radius: 8;");
+            Labels.styler1(label);
             Button startButton = Buttons.makeButton("start", Main.stageWidth/2,320);
             Buttons.styler1(startButton);
+            startButton.setOnAction(e -> {
+                Level1.startLevel1();
+            });
             Button levelButton = Buttons.makeButton("Levels", Main.stageWidth/2,475);
             Buttons.styler1(levelButton);
             levelButton.setOnAction(e -> {

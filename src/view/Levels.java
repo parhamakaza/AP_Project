@@ -5,6 +5,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import model.Buttons;
+import model.Labels;
+
+import static view.Setting.menuButton;
 
 public class Levels {
     public static void setLevels(){
@@ -15,17 +18,11 @@ public class Levels {
         label.setPrefWidth(470);
         label.setLayoutX(Main.stageWidth/2 - 200);
         label.setLayoutY(100);
-        label.setStyle("-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #002b36 0%, #003842 50%, #002b36 100%);" +
-                "-fx-background-radius: 8;" +
-                "-fx-padding: 8 16 8 16;" +
-                "-fx-text-fill: #00ffff;" +
-                "-fx-font-size: 50px;" +
-                "-fx-font-weight: bold;" +
-                "-fx-effect: dropshadow(one-pass-box, rgba(0,255,255,0.6), 4, 0.0, 0, 0);" +
-                "-fx-alignment: center;" +
-                "-fx-border-color: #0088aa;" +
-                "-fx-border-width: 2;" +
-                "-fx-border-radius: 8;");
+        Labels.styler1(label);
+        Button menuButton = Buttons.makeButton("Menu",200,100,200,80);
+        Buttons.styler1(menuButton);
+
+        menuButton.setOnAction(e -> menuButton());
         Button lvl1 = Buttons.makeButton("Level1", Main.stageWidth/2,320);
         Buttons.styler1(lvl1);
         Button lvl2 = Buttons.makeButton("Level2", Main.stageWidth/2,475);
@@ -33,6 +30,8 @@ public class Levels {
 
         root.getChildren().add(lvl1);
         root.getChildren().add(lvl2);
+        root.getChildren().add(menuButton);
+
         root.getChildren().add(label);
         Main.theStage.setScene(scene);
 

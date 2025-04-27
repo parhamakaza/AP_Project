@@ -12,6 +12,7 @@ import controler.MenuController;
 import javafx.stage.StageStyle;
 
 public class Main extends Application {
+    //private final SystemManager systems = new SystemManager();
     public static double stageWidth = 1920;
     public static double stageHeight =  1080;
     public static Stage theStage;
@@ -32,7 +33,7 @@ public class Main extends Application {
         stage.setWidth(stageWidth);
         stage.setHeight(stageHeight);
         stage.setResizable(false);
-        stage.initStyle(StageStyle.UNDECORATED);
+        //stage.initStyle(StageStyle.UNDECORATED);
 
         //Scene scene =  Menu.menuConfig();
         Menu.menuConfig();
@@ -45,7 +46,7 @@ public class Main extends Application {
 
         player.setCycleCount(MediaPlayer.INDEFINITE);
 
-        player.play();
+        //player.play();
         musicPlayer=player;
         //stage.setScene(scene);
         stage.setOnCloseRequest(event -> {event.consume();
