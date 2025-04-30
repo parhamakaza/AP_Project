@@ -1,15 +1,11 @@
 package controler;
 
-import javafx.animation.FadeTransition;
-import javafx.beans.property.DoubleProperty;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 import model.*;
-import model.System;
+import model.Gsystem;
 
 public class PortsController {
     public static void drawSquarePort(SquarePort port , Pane pane ){
@@ -31,7 +27,7 @@ public class PortsController {
 
         //Xpositon
         if(port.portType.equals(PortType.OUTPUT)){
-            port.x = port.system.x+ (System.WIDTH- (SquarePort.SIZE) /2 );
+            port.x = port.system.x+ (Gsystem.WIDTH- (SquarePort.SIZE) /2 );
             square.setLayoutX(port.x);
 
         }else if(port.portType.equals(PortType.INPUT)){
@@ -78,6 +74,7 @@ public class PortsController {
 
 
         square.toFront();
+
     }
     public static void drawTrianglePort(TrianglePort port , Pane pane){
         Polygon triangle = new Polygon();
@@ -94,7 +91,7 @@ public class PortsController {
         //triangle.getStrokeDashArray().addAll(10.0, 5.0);
 
         if(port.portType.equals(PortType.OUTPUT)){
-            port.x = port.system.x+ (System.WIDTH );
+            port.x = port.system.x+ (Gsystem.WIDTH );
             triangle.setLayoutX(port.x);
 
         }else if(port.portType.equals(PortType.INPUT)){
@@ -105,23 +102,24 @@ public class PortsController {
 
 
         switch(port.portNum) {
+
             case 1:
                 port.y = 15 + port.system.y;
                 break;
+
             case 2:
                 port.y = 65+ port.system.y;
-
                 break;
+
             case 3:
                 port.y = 115+ port.system.y;
                 break;
 
-
         }
+
         triangle.setLayoutY(port.y);
         triangle.setOnMouseEntered(event -> triangle.setOpacity(0.8));
         triangle.setOnMouseExited(event -> triangle.setOpacity(1));
-
 
 
         pane.getChildren().add(triangle);
@@ -129,6 +127,8 @@ public class PortsController {
 
 
     }
+
+
 
 
 

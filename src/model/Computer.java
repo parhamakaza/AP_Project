@@ -1,19 +1,15 @@
 package model;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
+import javafx.scene.layout.Pane;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public abstract class AbstarctSystem {
+public abstract class Computer {
     public static final int WIDTH = 100, HEIGHT = 150;
     public double x;
     public double y;
     public ArrayList<Port>  ports;
-
-
-
+    public Pane root;
 
 
 

@@ -1,11 +1,8 @@
 package model;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-
 import java.util.ArrayList;
 
-public class Server extends AbstarctSystem{
+public class Server extends Computer {
 
     public Server(ArrayList<Port> ports ){
         this.ports = ports;
@@ -13,8 +10,6 @@ public class Server extends AbstarctSystem{
             i.system = this;
         }
     }
-
-
 
 
 }
