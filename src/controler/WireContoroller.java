@@ -11,7 +11,7 @@ import java.lang.System;
 
 public class WireContoroller {
 
-    public static void drawWires(Wire wire , Pane root){
+    public static Line drawWires(Wire wire , Pane root){
         double x1 = wire.startX;
         double y1 = wire.startY;
         double x2 = wire.endX;
@@ -26,7 +26,7 @@ public class WireContoroller {
 
         root.getChildren().add(line);
         line.toFront();
-
+        return line;
 
     }
 

@@ -27,14 +27,14 @@ public class Gsystem extends Computer {
         if(packet.getClass().getSimpleName().equals("SquarePacket")){
             for(Port i : this.ports){
                 if((i instanceof SquarePort ) && i.portType.equals(PortType.OUTPUT) && (i.wire.avaible == true)){
-                    ((SquarePacket)packet).sendPacket(i,this.root);
+                    packet.sendPacket(i,this.root);
                     return;
                 }
             }
 
             for(Port i : this.ports){
                 if( i.portType.equals(PortType.OUTPUT) && (i.wire.avaible == true)){
-                    ((SquarePacket)packet).sendPacket(i , this.root);
+                    packet.sendPacket(i , this.root);
                     return;
                 }
             }
@@ -44,15 +44,15 @@ public class Gsystem extends Computer {
         if(packet.getClass().getSimpleName().equals("TrianglePacket")){
             for(Port i : this.ports){
                 if((i instanceof TrianglePort ) && i.portType.equals(PortType.OUTPUT) && (i.wire.avaible == true)){
-                    System.out.println("the one i want :" + i);
-                    ((TrianglePacket)packet).sendPacket(i,this.root);
+
+                    packet.sendPacket(i,this.root);
                     return;
                 }
             }
 
             for(Port i : this.ports){
                 if( i.portType.equals(PortType.OUTPUT) && (i.wire.avaible == true)){
-                    ((TrianglePacket)packet).sendPacket(i , this.root);
+                    packet.sendPacket(i , this.root);
                     return;
                 }
             }

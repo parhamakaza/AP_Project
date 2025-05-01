@@ -1,30 +1,29 @@
 package model;
 
+import controler.ServerControler;
+import controler.SystemController;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 public class SquarePacket extends Packet {
+    public int health = 2;
 
 
 
-    public SquarePacket(Wire wire){
-        this.wire = wire;
-        this.sPort= wire.sPort;
-        this.ePort = wire.ePort;
-
-    }
-
-    public SquarePacket (Port sPort){
+    public SquarePacket (Port sPort , Pane root){
+        this.root = root;
         this.sPort=sPort;
         this.wire = sPort.wire;
         this.ePort = sPort.wire.ePort;
-
     }
+
     public void sendPacket(Port sPort , Pane root){
+        this.root = root;
         if(sPort.portType.equals(PortType.OUTPUT)) {
             this.sPort = sPort;
             this.wire = sPort.wire;
@@ -34,19 +33,22 @@ public class SquarePacket extends Packet {
     }
 
     public void movePacket(Pane root){
+        this.root = root;
 
         double x1 = this.sPort.x;
         double y1 = this.sPort.y;
         double x2 = this.ePort.x;
         double y2 = this.ePort.y;
-
+        this.sPort.wire.avaible=false;
 
 
         Rectangle square = new Rectangle(20, 20);
         square.setFill(Color.GREEN);
         square.setX(x1);
         square.setY(y1);
-        root.getChildren().add(square);
+        Platform.runLater(() -> {
+            root.getChildren().add(square);
+        });
         final double totalTime = 2000; // 2 seconds
         final double[] elapsed = {0};
         Timeline timeline = new Timeline();
@@ -60,14 +62,20 @@ public class SquarePacket extends Packet {
 
             square.setX(x);
             square.setY(y);
+            this.x= x;
+            this.y =y;
+
 
             if (t >= 1) {
                 timeline.stop();
                 root.getChildren().remove(square);
+                this.sPort.wire.avaible=true;
+
                 try{
                     ((Gsystem)this.ePort.system).transferPacket(this);
                 }
                 catch (Exception e){
+                    ServerControler.takePacket(((Server)this.ePort.system), this);
 
                 }
 

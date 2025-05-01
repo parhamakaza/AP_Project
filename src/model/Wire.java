@@ -1,5 +1,7 @@
 package model;
 
+import javafx.scene.shape.Line;
+
 import java.lang.System;
 
 public class Wire {
@@ -11,6 +13,7 @@ public class Wire {
     public double endX;
     public double endY;
     public boolean avaible = true;
+    public Line line;
 
     public Wire(Port sPort , Port ePort)throws Exception{
         this.sPort = sPort;
