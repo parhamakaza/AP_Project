@@ -29,8 +29,6 @@ public class Buttons {
         button.setLayoutY(ly - h/2);
 
 
-
-
         return button;
     }
     public static void styler1(Button button){

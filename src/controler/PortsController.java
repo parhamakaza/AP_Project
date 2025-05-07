@@ -20,6 +20,7 @@ public class PortsController {
         square.setFill(Color.LIMEGREEN);
         square.setStroke(Color.DARKGREEN);
         square.setStrokeWidth(3);
+        port.shape = square;
 
         // Glow effect
        /* DropShadow glow = new DropShadow();
@@ -73,7 +74,7 @@ public class PortsController {
         fadeIn.setToValue(1.0); // back to full opacity when mouse exits
         */
         // Mouse events
-        square.setOnMouseEntered(event -> square.setOpacity(0.8));
+        square.setOnMouseEntered(event -> square.setOpacity(0.5));
         square.setOnMouseExited(event -> square.setOpacity(1));
 
 
@@ -90,6 +91,7 @@ public class PortsController {
                 10.0,20.0,// Bottom right point (slanted)
         -10.0,20.0       // Bottom left point
         );
+        port.shape = triangle;
         triangle.setFill(Color.rgb(255, 255, 0, 0.2)); // semi-transparent yellow fill
         triangle.setStroke(Color.YELLOW); // strong yellow outline
         triangle.setStrokeWidth(4); // thicker line for blueprint effect
@@ -137,29 +139,42 @@ public class PortsController {
     private static void handleShapeClick(Port port, MouseEvent event) {
         if (event.getButton() == MouseButton.SECONDARY) { // Right-click
             if (port.wire != null) {
+                Wire wire = port.wire;
                 ((Pane) port.wire.line.getParent()).getChildren().remove(port.wire.line);
                 port.wire.line = null;
-                port.wire=null;
+                wire.sPort.wire =null;
+                wire.ePort.wire= null;
+                LevelsController.lvl.wireLength.set(LevelsController.lvl.wireLength.get() + wire.length);
+                wire = null;
 
             }
         }
-        if(port.wire==null){
-            if (firstPort == null) {
-                firstPort = port;
-              // Indicate selection
-            } else {
-                try {
-                    Wire w1 = new Wire(firstPort,port);
-                    w1.line = WireContoroller.drawWires(w1,port.system.root);
-                }catch (Exception e){
-                    System.out.println(e.getMessage());
+        if(event.getButton() == MouseButton.PRIMARY) {
+            if (port.wire == null) {
+                if (firstPort == null) {
+                    firstPort = port;
+                    //firstPort.shape.setOpacity(0.3);
+                    // Indicate selection
+                } else {
+                    firstPort.shape.setOpacity(1);
+                    try {
+
+                        Wire w1 = new Wire(firstPort, port);
+
+                        w1.line = WireContoroller.drawWires(w1, port.system.root);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        firstPort = null;
+                        port=null;
+                    }
+
+
+                    firstPort = null;
                 }
-
-
-
-
-                firstPort = null;
             }
+        }
+        if(event.getButton() == MouseButton.MIDDLE){
+            firstPort =null;
         }
 
     }

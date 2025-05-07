@@ -10,6 +10,7 @@ import model.Labels;
 import static view.Setting.menuButton;
 
 public class Levels {
+
     public static void setLevels(){
         Pane root = new Pane();
         Scene scene = new Scene(root);
@@ -25,8 +26,10 @@ public class Levels {
         menuButton.setOnAction(e -> menuButton());
         Button lvl1 = Buttons.makeButton("Level1", Main.stageWidth/2,320);
         Buttons.styler1(lvl1);
+        lvl1.setOnAction(e ->Level1.startLevel1());
         Button lvl2 = Buttons.makeButton("Level2", Main.stageWidth/2,475);
         Buttons.styler1(lvl2);
+        lvl2.setOnAction(e ->Level2.startLevel2());
 
         root.getChildren().add(lvl1);
         root.getChildren().add(lvl2);

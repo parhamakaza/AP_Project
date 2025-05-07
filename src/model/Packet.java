@@ -1,6 +1,7 @@
 package model;
 
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Shape;
 
 public abstract class Packet {
     public Wire wire;
@@ -9,6 +10,7 @@ public abstract class Packet {
     public Pane root;
     double x;
     double y;
+    public Shape shape;
 
     abstract void movePacket(Pane root);
 

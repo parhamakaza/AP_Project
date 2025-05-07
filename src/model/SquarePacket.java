@@ -1,5 +1,6 @@
 package model;
 
+import controler.LevelsController;
 import controler.ServerControler;
 import controler.SystemController;
 import javafx.animation.KeyFrame;
@@ -43,6 +44,7 @@ public class SquarePacket extends Packet {
 
 
         Rectangle square = new Rectangle(20, 20);
+        this.shape = square;
         square.setFill(Color.GREEN);
         square.setX(x1);
         square.setY(y1);
@@ -54,35 +56,36 @@ public class SquarePacket extends Packet {
         Timeline timeline = new Timeline();
 
         KeyFrame keyFrame = new KeyFrame(Duration.millis(20), event -> {
-            double t = elapsed[0] / totalTime;
-            if (t > 1) t = 1;
+            if(LevelsController.paused == false) {
+                double t = elapsed[0] / totalTime;
+                if (t > 1) t = 1;
 
-            double x = x1 + t * (x2 - x1);
-            double y = y1 + t * (y2 - y1);
+                double x = x1 + t * (x2 - x1);
+                double y = y1 + t * (y2 - y1);
 
-            square.setX(x);
-            square.setY(y);
-            this.x= x;
-            this.y =y;
+                square.setX(x);
+                square.setY(y);
+                this.x = x;
+                this.y = y;
 
 
-            if (t >= 1) {
-                timeline.stop();
-                root.getChildren().remove(square);
-                this.sPort.wire.avaible=true;
+                if (t >= 1) {
+                    timeline.stop();
+                    root.getChildren().remove(square);
+                    this.sPort.wire.avaible = true;
 
-                try{
-                    ((Gsystem)this.ePort.system).transferPacket(this);
+                    try {
+                        ((Gsystem) this.ePort.system).transferPacket(this);
+                    } catch (Exception e) {
+                        ServerControler.takePacket(((Server) this.ePort.system), this, LevelsController.lvl);
+
+                    }
+
+
                 }
-                catch (Exception e){
-                    ServerControler.takePacket(((Server)this.ePort.system), this);
 
-                }
-
-
+                elapsed[0] += 16;
             }
-
-            elapsed[0] += 16;
         });
 
         timeline.getKeyFrames().add(keyFrame);

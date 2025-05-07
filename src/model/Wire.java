@@ -1,5 +1,6 @@
 package model;
 
+import controler.LevelsController;
 import javafx.scene.shape.Line;
 
 import java.lang.System;
@@ -13,6 +14,7 @@ public class Wire {
     public double endX;
     public double endY;
     public boolean avaible = true;
+    public double length;
     public Line line;
 
     public Wire(Port sPort , Port ePort)throws Exception{
@@ -31,7 +33,14 @@ public class Wire {
             sPort.wire = this;
             ePort.wire = this;
 
+            this.length = lengthcounter(this);
+            if(this.length >  LevelsController.lvl.wireLength.get()){
+                sPort.wire = null;
+                ePort.wire = null;
+                throw new Exception("not enougth length");
+            }
 
+            LevelsController.lvl.wireLength.set(LevelsController.lvl.wireLength.get() - this.length);
         }else{
             this.ePort=null;
             this.sPort=null;
@@ -44,6 +53,18 @@ public class Wire {
         }else {
             this.type = WireType.SQUARE;
         }
+    }
+    public double lengthcounter(Wire wire){
+        double x1 = wire.startX;
+        double y1 = wire.startY;
+        double x2 = wire.endX;
+        double y2 = wire.endY;
+        double l = Math.abs(x1 - x2);
+        double h = Math.abs(y2 - y1);
+
+        return Math.sqrt((l * l) + (h * h));
+
+
     }
 
     private boolean checkPorts(Port p1, Port p2){

@@ -4,23 +4,24 @@ import model.*;
 import view.Level1;
 
 public  class ServerControler {
-    public static void takePacket(Server server, Packet packet){
+    public static void takePacket(Server server, Packet packet , Level lvl){
         if(packet instanceof TrianglePacket){
-            Level1.coins += 2;
+            lvl.coins.set(lvl.coins.get() + 2);
         }
 
         if(packet instanceof SquarePacket){
-            Level1.coins++;
+            lvl.coins.set(lvl.coins.get() + 1);
         }
-        System.out.println(Level1.coins);
         packet = null;
     }
     public static void makePacket(Server server) {
         for(Port i : server.ports){
 
             if(i instanceof SquarePort){
-                SquarePacket sq = new SquarePacket(i,server.root);
-                sq.movePacket(server.root);
+                if(LevelsController.paused == false) {
+                    SquarePacket sq = new SquarePacket(i, server.root);
+                    sq.movePacket(server.root);
+                }
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -28,9 +29,11 @@ public  class ServerControler {
                 }
             }
             if(i instanceof TrianglePort){
-                TrianglePacket tri = new TrianglePacket(i,server.root);
+                if(LevelsController.paused == false) {
+                    TrianglePacket tri = new TrianglePacket(i, server.root);
 
-                tri.movePacket(server.root);
+                    tri.movePacket(server.root);
+                }
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {

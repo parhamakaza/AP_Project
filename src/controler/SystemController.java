@@ -47,7 +47,7 @@ public class SystemController {
         module.setStrokeWidth(2);
 
         // optional: subtle glow/drop‑shadow
-
+        system.shape=module;
         DropShadow glow = new DropShadow(10, Color.web("#00ffff"));
         glow.setSpread(0.2);
         module.setEffect(glow);

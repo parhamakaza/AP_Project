@@ -1,5 +1,6 @@
 package model;
 
+import controler.LevelsController;
 import controler.ServerControler;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -36,6 +37,7 @@ public class TrianglePacket extends Packet {
         double y2 = this.ePort.y;
 
         Polygon triangle = new Polygon();
+        this.shape = triangle;
         triangle.getPoints().addAll(
                 0.0, 0.0,    // Peak at (0,0)
                 10.0,20.0,// Bottom right point (slanted)
@@ -52,36 +54,36 @@ public class TrianglePacket extends Packet {
         Timeline timeline = new Timeline();
 
         KeyFrame keyFrame = new KeyFrame(Duration.millis(20), event -> {
+            if(LevelsController.paused == false) {
 
-            double t = elapsed[0] / totalTime;
-            if (t > 1) t = 1;
+                double t = elapsed[0] / totalTime;
+                if (t > 1) t = 1;
 
-            // Linear interpolation between P1 and P2
-            double x = x1 + t * (x2 - x1);
-            double y = y1 + t * (y2 - y1);
+                // Linear interpolation between P1 and P2
+                double x = x1 + t * (x2 - x1);
+                double y = y1 + t * (y2 - y1);
 
+                triangle.setTranslateX(x);
+                triangle.setTranslateY(y);
+                this.x = x;
+                this.y = y;
+                this.sPort.wire.avaible = false;
+                if (t >= 1) {
 
-            triangle.setTranslateX(x);
-            triangle.setTranslateY(y);
-            this.x=x;
-            this.y=y;
-            this.sPort.wire.avaible=false;
-            if (t >= 1) {
+                    timeline.stop();
+                    root.getChildren().remove(triangle);
+                    this.sPort.wire.avaible = true;
 
-                timeline.stop();
-                root.getChildren().remove(triangle);
-                this.sPort.wire.avaible=true;
+                    try {
+                        ((Gsystem) this.ePort.system).transferPacket(this);
+                    } catch (Exception e) {
+                        ServerControler.takePacket(((Server) this.ePort.system), this, LevelsController.lvl);
+                    }
 
-                try{
-                    ((Gsystem)this.ePort.system).transferPacket(this);
                 }
-                catch (Exception e){
-                    ServerControler.takePacket(((Server)this.ePort.system), this);
-                }
 
+                elapsed[0] += 16;
             }
-
-            elapsed[0] += 16;
         });
 
         timeline.getKeyFrames().add(keyFrame);
