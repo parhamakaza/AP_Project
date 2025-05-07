@@ -10,7 +10,7 @@ public class Gsystem extends Computer {
     //private ArrayList<SquarePort> squarePorts;
     //private ArrayList<TrianglePort> trianglePorts;
 
-    public Gsystem(ArrayList<Port> ports , Pane root){
+    public Gsystem(ArrayList<Port> ports ,  Level lvl){
         this.ports = ports;
         for(Port i : ports){
             i.system = this;
@@ -21,7 +21,8 @@ public class Gsystem extends Computer {
                 this.trianglePorts.add((TrianglePort)i);
             }*/
         }
-        this.root = root;
+        this.root = lvl.root;
+        this.lvl=lvl;
     }
     public void transferPacket(Packet packet){
         if(packet.getClass().getSimpleName().equals("SquarePacket")){

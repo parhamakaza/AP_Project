@@ -3,6 +3,7 @@ package model;
 import controler.LevelsController;
 import controler.ServerControler;
 import controler.SystemController;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -13,7 +14,6 @@ import javafx.util.Duration;
 
 public class SquarePacket extends Packet {
     public int health = 2;
-
 
 
     public SquarePacket (Port sPort , Pane root){
@@ -48,50 +48,90 @@ public class SquarePacket extends Packet {
         square.setFill(Color.GREEN);
         square.setX(x1);
         square.setY(y1);
+
+
         Platform.runLater(() -> {
+
             root.getChildren().add(square);
+
         });
-        final double totalTime = 2000; // 2 seconds
-        final double[] elapsed = {0};
+
+        // Direction vector
+        double dx = x2 - x1;
+        double dy = y2 - y1;
+        double distance = Math.sqrt(dx * dx + dy * dy);
+
+        // Normalize direction
+        double unitX = dx / distance;
+        double unitY = dy / distance;
+
+        // Frame timing
+        double frameDuration = 16; // milliseconds (~60 FPS)
+        double frameDurationSeconds = frameDuration / 1000.0;
+
+        // Distance to move each frame
+        double speed = 100;
+        if(sPort instanceof TrianglePort){
+            speed = speed * 2;
+        }
+        double movePerFrame = speed * frameDurationSeconds;
+
+        // Position tracker
+        final double[] currentX = {x1};
+        final double[] currentY = {y1};
+
         Timeline timeline = new Timeline();
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(frameDuration), event -> {
+            // Move
+            currentX[0] += unitX * movePerFrame;
+            currentY[0] += unitY * movePerFrame;
 
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(20), event -> {
-            if(LevelsController.paused == false) {
-                double t = elapsed[0] / totalTime;
-                if (t > 1) t = 1;
-
-                double x = x1 + t * (x2 - x1);
-                double y = y1 + t * (y2 - y1);
-
-                square.setX(x);
-                square.setY(y);
-                this.x = x;
-                this.y = y;
+            // Update position
+            square.setX(currentX[0]);
+            square.setY(currentY[0]);
+            this.x = currentX[0];
+            this.y = currentY[0];
 
 
-                if (t >= 1) {
-                    timeline.stop();
-                    root.getChildren().remove(square);
-                    this.sPort.wire.avaible = true;
+            // Check if reached or passed target
+            double traveled = Math.sqrt((currentX[0] - x1) * (currentX[0] - x1) + (currentY[0] - y1) * (currentY[0] - y1));
+            if (traveled >= distance) {
+                // Snap to final position
+                square.setX(x2);
+                square.setY(y2);
 
-                    try {
-                        ((Gsystem) this.ePort.system).transferPacket(this);
-                    } catch (Exception e) {
-                        ServerControler.takePacket(((Server) this.ePort.system), this, LevelsController.lvl);
+                timeline.stop();
+                root.getChildren().remove(square);
+                sPort.wire.avaible = true;
 
-                    }
-
-
+                try {
+                    ((Gsystem) ePort.system).transferPacket(this); // Assuming `square` is the packet
+                } catch (Exception e) {
+                    ServerControler.takePacket((Server) ePort.system, this, LevelsController.lvl);
                 }
-
-                elapsed[0] += 16;
             }
         });
 
         timeline.getKeyFrames().add(keyFrame);
-        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
 
+        //final double totalTime = 2000; // 2 seconds
+        //final double[] elapsed = {0};
+        //double speed = 0.1;
+       /* Timeline timeline = new Timeline();
+        this.timeline = timeline;
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(16), event -> {
+            if(LevelsController.paused == false) {
+
+
+            }
+
+        });
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+        LevelsController.lvl.packets.add(this);*/
 
     }
 

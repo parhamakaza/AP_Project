@@ -2,6 +2,7 @@ package model;
 
 import controler.LevelsController;
 import controler.ServerControler;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -51,8 +52,9 @@ public class TrianglePacket extends Packet {
         Platform.runLater(() -> {
             root.getChildren().add(triangle);
         });
+        /*
         Timeline timeline = new Timeline();
-
+        this.timeline = timeline;
         KeyFrame keyFrame = new KeyFrame(Duration.millis(20), event -> {
             if(LevelsController.paused == false) {
 
@@ -77,7 +79,7 @@ public class TrianglePacket extends Packet {
                     try {
                         ((Gsystem) this.ePort.system).transferPacket(this);
                     } catch (Exception e) {
-                        ServerControler.takePacket(((Server) this.ePort.system), this, LevelsController.lvl);
+                            ServerControler.takePacket(((Server) this.ePort.system), this, LevelsController.lvl);
                     }
 
                 }
@@ -89,11 +91,83 @@ public class TrianglePacket extends Packet {
         timeline.getKeyFrames().add(keyFrame);
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+        LevelsController.lvl.packets.add(this);
+
+         */
+
+        // Direction vector
+        double dx = x2 - x1;
+        double dy = y2 - y1;
+        double distance = Math.sqrt(dx * dx + dy * dy);
+        this.sPort.wire.avaible = false;
+
+        // Normalize direction
+        double unitX = dx / distance;
+        double unitY = dy / distance;
+
+        // Frame timing
+        double frameDuration = 16; // milliseconds (~60 FPS)
+        double frameDurationSeconds = frameDuration / 1000.0;
+
+        // Distance to move each frame
+        final double[] speed = {90.0};
+
+
+        // Position tracker
+        final double[] currentX = {x1};
+        final double[] currentY = {y1};
+
+        Timeline timeline = new Timeline();
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(frameDuration), event -> {
+
+            double movePerFrame = speed[0] * frameDurationSeconds;
+            // Move
+            currentX[0] += unitX * movePerFrame;
+            currentY[0] += unitY * movePerFrame;
+            if(sPort instanceof SquarePort){
+                speed[0] = speed[0] + 5;
+
+            }
+            // Update position
+            triangle.setTranslateX(currentX[0]);
+            triangle.setTranslateY(currentY[0]);
+            this.x = currentX[0];
+            this.y = currentY[0];
+
+
+            // Check if reached or passed target
+            double traveled = Math.sqrt((currentX[0] - x1) * (currentX[0] - x1) + (currentY[0] - y1) * (currentY[0] - y1));
+            if (traveled >= distance) {
+                // Snap to final position
+                triangle.setTranslateX(x2);
+                triangle.setTranslateY(y2);
+                this.sPort.wire.avaible = true;
+
+
+
+                timeline.stop();
+                root.getChildren().remove(triangle);
+                sPort.wire.avaible = true;
+
+                try {
+                    ((Gsystem) ePort.system).transferPacket(this); // Assuming `square` is the packet
+                } catch (Exception e) {
+                    ServerControler.takePacket((Server) ePort.system, this, LevelsController.lvl);
+                }
+            }
+        });
+
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
 
 
 
 
 
+    }
+    private static void acceleration(double s){
+        s  = s  + 10;
     }
 
 

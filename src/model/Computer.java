@@ -1,5 +1,6 @@
 package model;
 
+import javafx.animation.Timeline;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 
@@ -13,6 +14,8 @@ public abstract class Computer {
     public Pane root;
     public boolean ready = false;
     public Shape shape;
+    public Level lvl;
+    public Timeline tl;
 
 
 

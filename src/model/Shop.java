@@ -26,7 +26,10 @@ public class Shop {
         shopStage.setWidth(800);
         shopStage.setHeight(500);
         shopStage.setResizable(false);
-        shopStage.setOnCloseRequest(e1 ->LevelsController.paused = false);
+        shopStage.setOnCloseRequest(e1 -> {
+            LevelsController.paused = false;
+            LevelsController.resumelvl(LevelsController.lvl);
+        });
 
 
 

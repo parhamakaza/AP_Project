@@ -31,15 +31,14 @@ public class Level {
     public  Port firstport = null;
     Label wirelabel = new Label();
     Label coinslabel = new Label();
+    public ArrayList<Packet> packets = new ArrayList<>();
 
 
     {
-
-        menuButton.setOnAction(e -> {
-            LevelsController.paused = true;
-            Menu.menuConfig();
-        });
+        startButton.setDisable(true);
+        shopButton.setDisable(true);
         shopButton.setOnAction(e -> {
+            LevelsController.pauseLvl(LevelsController.lvl);
             LevelsController.paused = true;
             Shop.openShop(e);
         });
@@ -79,12 +78,22 @@ public class Level {
         scene.setOnKeyPressed((KeyEvent event) -> {
             if (event.getCode() == KeyCode.P) {
                 LevelsController.paused = !LevelsController.paused;
+                if(LevelsController.paused == false){
+                    LevelsController.resumelvl(LevelsController.lvl);
+
+                }
+                if(LevelsController.paused == true){
+                        LevelsController.pauseLvl(LevelsController.lvl);
+
+                }
+
             }
         });
     }
     {
         Timeline timeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), event -> {
+
             for(Computer i : this.comps){
                 this.startButton.setDisable(false);
                 DropShadow glow = new DropShadow(10, Color.web("#00ffff"));

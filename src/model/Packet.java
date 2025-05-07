@@ -1,5 +1,6 @@
 package model;
 
+import javafx.animation.Timeline;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 
@@ -11,6 +12,7 @@ public abstract class Packet {
     double x;
     double y;
     public Shape shape;
+    public Timeline timeline;
 
     abstract void movePacket(Pane root);
 
