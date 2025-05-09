@@ -115,6 +115,8 @@ public class SquarePacket extends Packet {
         timeline.getKeyFrames().add(keyFrame);
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+        this.timeline = timeline;
+        LevelsController.lvl.packets.add(this);
 
         //final double totalTime = 2000; // 2 seconds
         //final double[] elapsed = {0};

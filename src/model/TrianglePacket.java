@@ -160,7 +160,8 @@ public class TrianglePacket extends Packet {
         timeline.getKeyFrames().add(keyFrame);
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
-
+        this.timeline = timeline;
+        LevelsController.lvl.packets.add(this);
 
 
 

@@ -80,12 +80,11 @@ public class Level {
                 LevelsController.paused = !LevelsController.paused;
                 if(LevelsController.paused == false){
                     LevelsController.resumelvl(LevelsController.lvl);
-
                 }
                 if(LevelsController.paused == true){
                         LevelsController.pauseLvl(LevelsController.lvl);
-
                 }
+                System.out.println( LevelsController.paused );
 
             }
         });

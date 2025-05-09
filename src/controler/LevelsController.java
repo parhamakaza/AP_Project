@@ -42,7 +42,7 @@ public class LevelsController {
     }
     public static void pauseLvl(Level lvl){
         for (Packet i : lvl.packets){
-            i.timeline.stop();
+            i.timeline.pause();
         }
     }
     public static void resumelvl(Level lvl){
