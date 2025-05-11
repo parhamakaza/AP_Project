@@ -22,6 +22,7 @@ public class TrianglePacket extends Packet {
     }
 
     public TrianglePacket (Port sPort , Pane root){
+        LevelsController.lvl.packets.add(this);
         this.root = root;
         this.sPort=sPort;
         this.wire = sPort.wire;
@@ -30,7 +31,7 @@ public class TrianglePacket extends Packet {
 
 
 
-    public void movePacket(Pane root){
+    public synchronized void movePacket(Pane root){
         this.root=root;
         double x1 = this.sPort.x;
         double y1 = this.sPort.y;
@@ -52,48 +53,7 @@ public class TrianglePacket extends Packet {
         Platform.runLater(() -> {
             root.getChildren().add(triangle);
         });
-        /*
-        Timeline timeline = new Timeline();
-        this.timeline = timeline;
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(20), event -> {
-            if(LevelsController.paused == false) {
 
-                double t = elapsed[0] / totalTime;
-                if (t > 1) t = 1;
-
-                // Linear interpolation between P1 and P2
-                double x = x1 + t * (x2 - x1);
-                double y = y1 + t * (y2 - y1);
-
-                triangle.setTranslateX(x);
-                triangle.setTranslateY(y);
-                this.x = x;
-                this.y = y;
-                this.sPort.wire.avaible = false;
-                if (t >= 1) {
-
-                    timeline.stop();
-                    root.getChildren().remove(triangle);
-                    this.sPort.wire.avaible = true;
-
-                    try {
-                        ((Gsystem) this.ePort.system).transferPacket(this);
-                    } catch (Exception e) {
-                            ServerControler.takePacket(((Server) this.ePort.system), this, LevelsController.lvl);
-                    }
-
-                }
-
-                elapsed[0] += 16;
-            }
-        });
-
-        timeline.getKeyFrames().add(keyFrame);
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
-        LevelsController.lvl.packets.add(this);
-
-         */
 
         // Direction vector
         double dx = x2 - x1;
@@ -119,6 +79,7 @@ public class TrianglePacket extends Packet {
 
         Timeline timeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(frameDuration), event -> {
+            this.sPort.wire.avaible = false;
 
             double movePerFrame = speed[0] * frameDurationSeconds;
             // Move
@@ -129,8 +90,8 @@ public class TrianglePacket extends Packet {
 
             }
             // Update position
-            triangle.setTranslateX(currentX[0]);
-            triangle.setTranslateY(currentY[0]);
+            triangle.setLayoutX(currentX[0]);
+            triangle.setLayoutY(currentY[0]);
             this.x = currentX[0];
             this.y = currentY[0];
 
@@ -139,8 +100,8 @@ public class TrianglePacket extends Packet {
             double traveled = Math.sqrt((currentX[0] - x1) * (currentX[0] - x1) + (currentY[0] - y1) * (currentY[0] - y1));
             if (traveled >= distance) {
                 // Snap to final position
-                triangle.setTranslateX(x2);
-                triangle.setTranslateY(y2);
+                triangle.setLayoutX(x2);
+                triangle.setLayoutY(y2);
                 this.sPort.wire.avaible = true;
 
 
@@ -154,22 +115,22 @@ public class TrianglePacket extends Packet {
                 } catch (Exception e) {
                     ServerControler.takePacket((Server) ePort.system, this, LevelsController.lvl);
                 }
+
             }
+
         });
 
         timeline.getKeyFrames().add(keyFrame);
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
         this.timeline = timeline;
-        LevelsController.lvl.packets.add(this);
+
 
 
 
 
     }
-    private static void acceleration(double s){
-        s  = s  + 10;
-    }
+
 
 
 }

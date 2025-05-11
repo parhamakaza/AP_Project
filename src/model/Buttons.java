@@ -16,6 +16,7 @@ public class Buttons {
 
         return button;
     }
+
     public static Button makeButton (String s, double lx, double ly){
 
         Button button = new Button();
@@ -31,6 +32,7 @@ public class Buttons {
 
         return button;
     }
+
     public static void styler1(Button button){
         String style = "-fx-background-color: transparent;"+
                 "-fx-border-color: #00b4d8; /* cyan-ish glow */"+

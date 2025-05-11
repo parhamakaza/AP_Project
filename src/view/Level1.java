@@ -37,7 +37,8 @@ public class Level1 extends Level{
         Server server1 = new Server(ports ,lvl);
         SystemController.drawServers(lvl.root,500,500,server1);
 
-        lvl.startButton.setOnAction(e -> {LevelsController.start(server1);
+        lvl.startButton.setOnAction(e -> {
+            LevelsController.start(server1);
             lvl.shopButton.setDisable(false);
         });
 
@@ -63,11 +64,13 @@ public class Level1 extends Level{
         lvl.comps.addAll(Arrays.asList(server1,server2,system1));
 
         lvl.menuButton.setOnAction(e -> {
+
             LevelsController.paused = true;
             LevelsController.pauseLvl(lvl);
             Menu.menuConfig();
 
         });
+        LevelsController.checkColiison();
 
 
     }

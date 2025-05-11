@@ -17,38 +17,32 @@ public class SquarePacket extends Packet {
 
 
     public SquarePacket (Port sPort , Pane root){
+        LevelsController.lvl.packets.add(this);
         this.root = root;
         this.sPort=sPort;
         this.wire = sPort.wire;
         this.ePort = sPort.wire.ePort;
     }
 
-    public void sendPacket(Port sPort , Pane root){
-        this.root = root;
-        if(sPort.portType.equals(PortType.OUTPUT)) {
-            this.sPort = sPort;
-            this.wire = sPort.wire;
-            this.ePort = sPort.wire.ePort;
-            this.movePacket(root);
-        }
-    }
 
-    public void movePacket(Pane root){
+
+    public synchronized void movePacket(Pane root){
         this.root = root;
 
         double x1 = this.sPort.x;
         double y1 = this.sPort.y;
         double x2 = this.ePort.x;
         double y2 = this.ePort.y;
-        this.sPort.wire.avaible=false;
+
+        this.sPort.wire.avaible = false;
 
 
         Rectangle square = new Rectangle(20, 20);
-        this.shape = square;
         square.setFill(Color.GREEN);
         square.setX(x1);
         square.setY(y1);
 
+        this.shape = square;
 
         Platform.runLater(() -> {
 
@@ -60,7 +54,6 @@ public class SquarePacket extends Packet {
         double dx = x2 - x1;
         double dy = y2 - y1;
         double distance = Math.sqrt(dx * dx + dy * dy);
-
         // Normalize direction
         double unitX = dx / distance;
         double unitY = dy / distance;
@@ -72,7 +65,9 @@ public class SquarePacket extends Packet {
         // Distance to move each frame
         double speed = 100;
         if(sPort instanceof TrianglePort){
+
             speed = speed * 2;
+
         }
         double movePerFrame = speed * frameDurationSeconds;
 
@@ -82,6 +77,8 @@ public class SquarePacket extends Packet {
 
         Timeline timeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(frameDuration), event -> {
+            this.sPort.wire.avaible = false;
+
             // Move
             currentX[0] += unitX * movePerFrame;
             currentY[0] += unitY * movePerFrame;
@@ -99,6 +96,7 @@ public class SquarePacket extends Packet {
                 // Snap to final position
                 square.setX(x2);
                 square.setY(y2);
+                this.sPort.wire.avaible = true;
 
                 timeline.stop();
                 root.getChildren().remove(square);
@@ -109,6 +107,9 @@ public class SquarePacket extends Packet {
                 } catch (Exception e) {
                     ServerControler.takePacket((Server) ePort.system, this, LevelsController.lvl);
                 }
+
+
+
             }
         });
 
@@ -116,24 +117,9 @@ public class SquarePacket extends Packet {
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
         this.timeline = timeline;
-        LevelsController.lvl.packets.add(this);
-
-        //final double totalTime = 2000; // 2 seconds
-        //final double[] elapsed = {0};
-        //double speed = 0.1;
-       /* Timeline timeline = new Timeline();
-        this.timeline = timeline;
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(16), event -> {
-            if(LevelsController.paused == false) {
 
 
-            }
 
-        });
-        timeline.getKeyFrames().add(keyFrame);
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
-        LevelsController.lvl.packets.add(this);*/
 
     }
 

@@ -11,8 +11,6 @@ import model.*;
 import static model.Computer.*;
 
 public class SystemController {
-    private static double mouseOffsetX;
-    private static double mouseOffsetY;
 
     //private final SystemManager systems = new SystemManager();
     public static void drawServers(Pane root, double x, double y,  Computer system){

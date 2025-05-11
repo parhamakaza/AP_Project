@@ -84,7 +84,6 @@ public class Level {
                 if(LevelsController.paused == true){
                         LevelsController.pauseLvl(LevelsController.lvl);
                 }
-                System.out.println( LevelsController.paused );
 
             }
         });

@@ -25,16 +25,20 @@ public class Gsystem extends Computer {
         this.lvl=lvl;
     }
     public void transferPacket(Packet packet){
-        if(packet.getClass().getSimpleName().equals("SquarePacket")){
+        if(packet instanceof SquarePacket){
             for(Port i : this.ports){
-                if((i instanceof SquarePort ) && i.portType.equals(PortType.OUTPUT) && (i.wire.avaible == true)){
+                if((i instanceof SquarePort ) && (i.portType.equals(PortType.OUTPUT) )&& (i.wire.avaible == true)){
+
                     packet.sendPacket(i,this.root);
+
                     return;
                 }
             }
 
             for(Port i : this.ports){
                 if( i.portType.equals(PortType.OUTPUT) && (i.wire.avaible == true)){
+
+
                     packet.sendPacket(i , this.root);
                     return;
                 }
@@ -42,7 +46,7 @@ public class Gsystem extends Computer {
             packets.add( packet);
 
         }
-        if(packet.getClass().getSimpleName().equals("TrianglePacket")){
+        if(packet instanceof TrianglePacket){
             for(Port i : this.ports){
                 if((i instanceof TrianglePort ) && i.portType.equals(PortType.OUTPUT) && (i.wire.avaible == true)){
 
@@ -53,6 +57,8 @@ public class Gsystem extends Computer {
 
             for(Port i : this.ports){
                 if( i.portType.equals(PortType.OUTPUT) && (i.wire.avaible == true)){
+
+
                     packet.sendPacket(i , this.root);
                     return;
                 }
