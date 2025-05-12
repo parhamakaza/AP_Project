@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 
 import java.sql.SQLOutput;
@@ -64,7 +65,22 @@ public class TrianglePacket extends Packet {
 
         // Normalize direction
         double unitX = dx / distance;
+        this.unitX[0] = unitX;
+
         double unitY = dy / distance;
+        this.unitY[0] = unitY;
+
+        Timeline timeline2 = new Timeline();
+        KeyFrame keyFrame2 = new KeyFrame(Duration.millis(500), e -> {
+            this.unitX[0] = unitX;
+            this.unitY[0] = unitY;
+
+        });
+        timeline2.getKeyFrames().add(keyFrame2);
+        timeline2.setCycleCount(Animation.INDEFINITE);
+
+        timeline2.play();
+
 
         // Frame timing
         double frameDuration = 16; // milliseconds (~60 FPS)
@@ -84,8 +100,8 @@ public class TrianglePacket extends Packet {
 
             double movePerFrame = speed[0] * frameDurationSeconds;
             // Move
-            currentX[0] += unitX * movePerFrame;
-            currentY[0] += unitY * movePerFrame;
+            currentX[0] += this.unitX[0] * movePerFrame;
+            currentY[0] += this.unitY[0] * movePerFrame;
             if(sPort instanceof SquarePort){
                 speed[0] = speed[0] + 5;
 
@@ -99,6 +115,10 @@ public class TrianglePacket extends Packet {
 
             // Check if reached or passed target
             double traveled = Math.sqrt((currentX[0] - x1) * (currentX[0] - x1) + (currentY[0] - y1) * (currentY[0] - y1));
+            Shape intersection = Shape.intersect(triangle, sPort.wire.line);
+            if (    !( intersection.getBoundsInLocal().getWidth() > 0 &&  intersection.getBoundsInLocal().getHeight() > 0)) {
+              LevelsController.killPacket(this);
+            }
             if (traveled >= distance) {
                 // Snap to final position
                 triangle.setLayoutX(x2);
