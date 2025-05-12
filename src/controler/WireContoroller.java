@@ -26,6 +26,8 @@ public class WireContoroller {
 
         root.getChildren().add(line);
         line.toFront();
+        LevelsController.connectionPlayer.play();
+
         return line;
 
     }

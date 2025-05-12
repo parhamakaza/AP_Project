@@ -13,7 +13,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 public class SquarePacket extends Packet {
-    public int health = 2;
+
 
 
     public SquarePacket (Port sPort , Pane root){
@@ -22,6 +22,7 @@ public class SquarePacket extends Packet {
         this.sPort=sPort;
         this.wire = sPort.wire;
         this.ePort = sPort.wire.ePort;
+        this.health = 2;
     }
 
 
@@ -78,6 +79,7 @@ public class SquarePacket extends Packet {
         Timeline timeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(frameDuration), event -> {
             this.sPort.wire.avaible = false;
+
 
             // Move
             currentX[0] += unitX * movePerFrame;

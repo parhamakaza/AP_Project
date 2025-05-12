@@ -8,8 +8,6 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import model.Buttons;
 import model.Labels;
 
@@ -32,7 +30,7 @@ public class Setting {
 
         volumeSlider.setLayoutX(Main.stageWidth / 2 - volumeSlider.getPrefWidth()/2);
         volumeSlider.setLayoutY(Main.stageHeight /2 - volumeSlider.getPrefHeight()/2 );
-        Main.musicPlayer.volumeProperty().bind(volumeSlider.valueProperty());
+        Main.backGroundMusicPlayer.volumeProperty().bind(volumeSlider.valueProperty());
         volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
                         volume = (double) newVal;
                 });

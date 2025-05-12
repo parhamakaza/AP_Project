@@ -70,7 +70,7 @@ public class Level1 extends Level{
             Menu.menuConfig();
 
         });
-        LevelsController.checkColiison();
+        LevelsController.checkForCollison();
 
 
     }

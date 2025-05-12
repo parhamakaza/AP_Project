@@ -1,12 +1,15 @@
 package model;
 
 import controler.LevelsController;
+import javafx.animation.PauseTransition;
 import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import view.Level1;
 
 public class Shop {
 
@@ -19,6 +22,7 @@ public class Shop {
         }
 
     public static void openShop (Event e){
+
         Shop shop = new Shop();
         Stage shopStage = new Stage();
         shopStage.initModality(Modality.APPLICATION_MODAL);  // blocks input to other windows
@@ -27,8 +31,36 @@ public class Shop {
         shopStage.setHeight(500);
         shopStage.setResizable(false);
         shopStage.setOnCloseRequest(e1 -> {
-            LevelsController.paused = false;
-            LevelsController.resumelvl(LevelsController.lvl);
+            shop.closeShop();
+        });
+        shop.atar.setOnAction(e2 -> {
+            if(LevelsController.lvl.coins.get() >= 3) {
+                atar();
+                shopStage.close();
+                shop.closeShop();
+
+            }
+
+        });
+        shop.airyaman.setOnAction(e3 -> {
+            if(LevelsController.lvl.coins.get() >= 4) {
+                airyaman();
+                shopStage.close();
+                shop.closeShop();
+
+
+            }
+
+        });
+        shop.anahita.setOnAction(e3 -> {
+            if(LevelsController.lvl.coins.get() >= 5) {
+                anahita();
+                shopStage.close();
+                shop.closeShop();
+
+
+            }
+
         });
 
 
@@ -44,5 +76,59 @@ public class Shop {
         shopStage.showAndWait();
 
     }
+    public static void atar(){
+        LevelsController.lvl.coins.set(LevelsController.lvl.coins.get() - 3);
 
+        LevelsController.atar=true;
+        PauseTransition delay = new PauseTransition(Duration.seconds(10));
+        delay.setOnFinished(event -> {
+            LevelsController.atar=false;
+
+
+        });
+        delay.play();
+
+
+
+
+    }
+    public static void airyaman(){
+        LevelsController.lvl.coins.set(LevelsController.lvl.coins.get() - 4);
+
+            LevelsController.airyaman=true;
+            PauseTransition delay = new PauseTransition(Duration.seconds(5));
+            delay.setOnFinished(event -> {
+                LevelsController.airyaman=false;
+
+
+            });
+            delay.play();
+
+
+
+
+    }
+    public static void anahita(){
+        LevelsController.lvl.coins.set(LevelsController.lvl.coins.get() - 5);
+
+        for(Packet i :LevelsController.lvl.packets ){
+            if(i instanceof TrianglePacket){
+                i.health = 3;
+            }
+            if(i instanceof SquarePacket){
+                i.health = 2;
+            }
+
+        }
+
+
+
+
+
+    }
+
+        private void closeShop() {
+            LevelsController.paused = false;
+            LevelsController.resumelvl(LevelsController.lvl);
+        }
 }

@@ -14,7 +14,6 @@ import javafx.util.Duration;
 import java.sql.SQLOutput;
 
 public class TrianglePacket extends Packet {
-    public int health = 3;
     public TrianglePacket(Computer computer){
         this.wire = wire;
         this.sPort= wire.sPort;
@@ -27,6 +26,8 @@ public class TrianglePacket extends Packet {
         this.sPort=sPort;
         this.wire = sPort.wire;
         this.ePort = sPort.wire.ePort;
+        this.health = 3;
+
     }
 
 
@@ -70,7 +71,7 @@ public class TrianglePacket extends Packet {
         double frameDurationSeconds = frameDuration / 1000.0;
 
         // Distance to move each frame
-        final double[] speed = {90.0};
+        final double[] speed = {100.0};
 
 
         // Position tracker

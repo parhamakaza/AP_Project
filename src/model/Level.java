@@ -21,7 +21,9 @@ import java.util.ArrayList;
 
 
 public class Level {
-    public IntegerProperty coins = new SimpleIntegerProperty(0);
+    public  int generatedPackets = 0;
+    public  int lostPackets = 0;
+    public IntegerProperty coins = new SimpleIntegerProperty(10);
     public Pane root;
     public Button menuButton = Buttons.makeButton("Menu",200,100,200,80);
     public Button startButton = Buttons.makeButton("Start",200,100,200,185);

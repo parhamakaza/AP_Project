@@ -14,6 +14,7 @@ public abstract class Packet {
     double y;
     public Shape shape;
     public Timeline timeline;
+    public int health;
 
     abstract void movePacket(Pane root);
 

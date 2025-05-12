@@ -2,11 +2,6 @@ package view;
 
 import controler.LevelsController;
 import controler.SystemController;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.paint.Color;
-import javafx.util.Duration;
 import model.*;
 
 import java.util.ArrayList;
@@ -80,6 +75,8 @@ public class Level2 extends Level{
                 Menu.menuConfig();
 
             });
+            LevelsController.checkForCollison();
+
 
 
 

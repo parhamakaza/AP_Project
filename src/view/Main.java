@@ -1,16 +1,11 @@
 package view;
 
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import controler.MenuController;
-import javafx.stage.StageStyle;
-import model.Computer;
 
 public class Main extends Application {
     //private final SystemManager systems = new SystemManager();
@@ -20,7 +15,7 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    public static MediaPlayer musicPlayer;
+    public static MediaPlayer backGroundMusicPlayer;
 
 
     @Override
@@ -41,7 +36,7 @@ public class Main extends Application {
 
         Menu.menuConfig();
         String musicUrl = Setting.class
-                .getResource("/resources/music.mp3")
+                .getResource("/resources/music.wav")
                 .toExternalForm();
         Media media = new Media(musicUrl);
         MediaPlayer player = new MediaPlayer(media);
@@ -50,14 +45,12 @@ public class Main extends Application {
         player.setCycleCount(MediaPlayer.INDEFINITE);
 
         //player.play();
-        musicPlayer=player;
+        backGroundMusicPlayer =player;
 
         //stage.setScene(scene);
         stage.setOnCloseRequest(event -> {event.consume();
             MenuController.exitButton();});
         stage.show();
-
-
 
 
 
