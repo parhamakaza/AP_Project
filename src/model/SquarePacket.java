@@ -18,6 +18,8 @@ public class SquarePacket extends Packet {
 
 
     public SquarePacket (Port sPort , Pane root){
+        theID++;
+        this.id= theID;
         LevelsController.lvl.packets.add(this);
         this.root = root;
         this.sPort=sPort;

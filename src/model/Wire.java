@@ -3,8 +3,6 @@ package model;
 import controler.LevelsController;
 import javafx.scene.shape.Line;
 
-import java.lang.System;
-
 public class Wire {
     public WireType type;
     public Port sPort;
@@ -43,7 +41,7 @@ public class Wire {
             LevelsController.lvl.wireLength.set(LevelsController.lvl.wireLength.get() - this.length);
         }else{
             this.ePort=null;
-            this.sPort=null;
+            this.sPort =null;
 
             throw new Exception("wires ports type mismatch");
 
@@ -67,12 +65,12 @@ public class Wire {
 
     }
 
-    private boolean checkPorts(Port p1, Port p2){
+    private static boolean checkPorts(Port p1, Port p2){
 
-        boolean a = sPort.getClass().getSimpleName().equals(ePort.getClass().getSimpleName());
-        boolean b = !sPort.system.equals(ePort.system);
-        boolean c = sPort.portType.equals(PortType.OUTPUT);
-        boolean d = ePort.portType.equals(PortType.INPUT);
+        boolean a = p1.getClass().getSimpleName().equals(p2.getClass().getSimpleName());
+        boolean b = !p1.system.equals(p2.system);
+        boolean c =  p1.portType.equals(PortType.OUTPUT);
+        boolean d = p2.portType.equals(PortType.INPUT);
 
         return a && b && c && d;
 

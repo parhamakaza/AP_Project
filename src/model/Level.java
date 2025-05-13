@@ -1,6 +1,7 @@
 package model;
 
 import controler.LevelsController;
+import controler.PortsController;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
@@ -58,13 +59,13 @@ public class Level {
         Labels.styler1(coinslabel);
 
         wirelabel.setWrapText(true);
+        wirelabel.setLayoutX(1200);
         wirelabel.setScaleX(0.8);  // scales width
         wirelabel.setScaleY(0.8);
-        wirelabel.setLayoutX(Main.stageWidth / 2  - 200);
-        coinslabel.setLayoutY(80);
-        coinslabel.setScaleX(0.8);  // scales width
+        coinslabel.setLayoutY(103);
+        coinslabel.setLayoutX(173);
+        coinslabel.setScaleX(0.75);  // scales width
         coinslabel.setScaleY(0.8);
-        coinslabel.setLayoutX(Main.stageWidth / 2  - 180);
 
         Buttons.styler1(menuButton);
         Buttons.styler1(startButton);
@@ -94,20 +95,32 @@ public class Level {
         Timeline timeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), event -> {
 
+            boolean a = true;
+
+            DropShadow glow = new DropShadow();
             for(Computer i : this.comps){
-                this.startButton.setDisable(false);
-                DropShadow glow = new DropShadow(10, Color.web("#00ffff"));
-                glow.setSpread(0.2);
-                i.shape.setEffect(glow);
-                for(Port p : i.ports){
-                    if(p.wire == null){
-                        this.startButton.setDisable(true);
-                        glow = new DropShadow(10, Color.web("#FF0066"));
-                        glow.setSpread(0.2);
-                        i.shape.setEffect(glow);
-                    }
+                boolean b = LevelsController.compIsReady(i);
+                if( b ){
+                    glow = new DropShadow(10, Color.web("#00ffff")); //cyan
+                    glow.setSpread(0.2);
+                    i.shape.setEffect(glow);
+                    i.ready = true;
+                }else{
+                    glow = new DropShadow(10, Color.web("#FF0066")); // red
+                    glow.setSpread(0.2);
+                    i.shape.setEffect(glow);
+                    i.ready = false;
                 }
+                a = a & b;
             }
+            if( a ){
+                startButton.setDisable(false);
+            }else {
+                startButton.setDisable(true);
+            }
+
+
+
 
         });
 
@@ -115,5 +128,6 @@ public class Level {
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
+
 
 }

@@ -11,8 +11,12 @@ import javafx.scene.layout.VBox;
 import model.Buttons;
 import model.Labels;
 
+import static controler.LevelsController.collisionPlayer;
+import static controler.LevelsController.connectionPlayer;
+
 public class Setting {
     private static double volume = 0.2;
+
 
     public static void setSetting(){
         Pane root = new Pane();
@@ -24,13 +28,16 @@ public class Setting {
 
 
 
-        Slider volumeSlider = new Slider(0, 1, volume);   // min=0, max=1, initial=0.5
+        Slider volumeSlider = new Slider(0, 1, volume);// min=0, max=1,
+
         volumeSlider.setPrefHeight(10);
         volumeSlider.setPrefWidth(500);
 
         volumeSlider.setLayoutX(Main.stageWidth / 2 - volumeSlider.getPrefWidth()/2);
         volumeSlider.setLayoutY(Main.stageHeight /2 - volumeSlider.getPrefHeight()/2 );
         Main.backGroundMusicPlayer.volumeProperty().bind(volumeSlider.valueProperty());
+        connectionPlayer.volumeProperty().bind(volumeSlider.valueProperty());
+        collisionPlayer.volumeProperty().bind(volumeSlider.valueProperty());
         volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
                         volume = (double) newVal;
                 });

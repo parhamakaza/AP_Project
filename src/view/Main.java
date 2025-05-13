@@ -41,7 +41,6 @@ public class Main extends Application {
         Media media = new Media(musicUrl);
         MediaPlayer player = new MediaPlayer(media);
         player.setVolume(0.2);
-
         player.setCycleCount(MediaPlayer.INDEFINITE);
 
         //player.play();

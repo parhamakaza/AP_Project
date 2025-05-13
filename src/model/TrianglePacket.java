@@ -12,16 +12,11 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 
-import java.sql.SQLOutput;
-
 public class TrianglePacket extends Packet {
-    public TrianglePacket(Computer computer){
-        this.wire = wire;
-        this.sPort= wire.sPort;
-        this.ePort = wire.ePort;
-    }
 
     public TrianglePacket (Port sPort , Pane root){
+        theID++;
+        this.id= theID;
         LevelsController.lvl.packets.add(this);
         this.root = root;
         this.sPort=sPort;
@@ -49,8 +44,11 @@ public class TrianglePacket extends Packet {
         );
         triangle.setFill(Color.YELLOW);
 
+
         final double totalTime = 2000; // milliseconds
         final double[] elapsed = {0};
+        triangle.setLayoutX(x1);
+        triangle.setLayoutY(y1);
 
         Platform.runLater(() -> {
             root.getChildren().add(triangle);

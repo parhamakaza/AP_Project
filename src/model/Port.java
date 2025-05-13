@@ -11,8 +11,8 @@ public abstract class Port {
     public Wire wire;
     public Shape shape;
 
-    abstract double centerX();
-    abstract double centerY();
+    public abstract double centerX();
+    public abstract double centerY();
 
 
 

@@ -1,5 +1,7 @@
 package controler;
 
+import javafx.event.Event;
+import javafx.geometry.Bounds;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -7,13 +9,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import model.*;
 import model.Gsystem;
 
+import static controler.WireContoroller.professionalWiring;
 
 
 public class PortsController {
-    private static Port firstPort;
     public static void drawSquarePort(SquarePort port , Pane pane ){
 
         Rectangle square = new Rectangle(SquarePort.SIZE, SquarePort.SIZE);
@@ -60,6 +63,8 @@ public class PortsController {
         }
         square.setLayoutY(port.y);
         square.setOnMouseClicked(event -> handleShapeClick(port, event));
+        professionalWiring(port);
+
 
 
 
@@ -74,8 +79,14 @@ public class PortsController {
         fadeIn.setToValue(1.0); // back to full opacity when mouse exits
         */
         // Mouse events
-        square.setOnMouseEntered(event -> square.setOpacity(0.5));
-        square.setOnMouseExited(event -> square.setOpacity(1));
+        square.setOnMouseEntered(event -> {square.setOpacity(0.5);
+
+        ;} );
+        square.setOnMouseExited(event -> {
+            square.setOpacity(1);
+
+        }
+        );
 
 
         pane.getChildren().add(square);
@@ -95,7 +106,7 @@ public class PortsController {
         triangle.setFill(Color.rgb(255, 255, 0, 0.2)); // semi-transparent yellow fill
         triangle.setStroke(Color.YELLOW); // strong yellow outline
         triangle.setStrokeWidth(4); // thicker line for blueprint effect
-        triangle.setOnMouseClicked(event -> handleShapeClick(port, event));
+        //triangle.setOnMouseClicked(event -> handleShapeClick(port, event));
         // Optionally add dashed stroke for more "blueprint" feeling
         //triangle.getStrokeDashArray().addAll(10.0, 5.0);
 
@@ -129,6 +140,7 @@ public class PortsController {
         triangle.setLayoutY(port.y);
         triangle.setOnMouseEntered(event -> triangle.setOpacity(0.8));
         triangle.setOnMouseExited(event -> triangle.setOpacity(1));
+        professionalWiring(port);
 
 
         pane.getChildren().add(triangle);
@@ -136,6 +148,11 @@ public class PortsController {
 
 
     }
+
+
+
+
+
     private static void handleShapeClick(Port port, MouseEvent event) {
         if (event.getButton() == MouseButton.SECONDARY) { // Right-click
             if (port.wire != null) {
@@ -148,33 +165,6 @@ public class PortsController {
                 wire = null;
 
             }
-        }
-        if(event.getButton() == MouseButton.PRIMARY) {
-            if (port.wire == null) {
-                if (firstPort == null) {
-                    firstPort = port;
-                    //firstPort.shape.setOpacity(0.3);
-                    // Indicate selection
-                } else {
-                    firstPort.shape.setOpacity(1);
-                    try {
-
-                        Wire w1 = new Wire(firstPort, port);
-
-                        w1.line = WireContoroller.drawWires(w1, port.system.root);
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                        firstPort = null;
-                        port=null;
-                    }
-
-
-                    firstPort = null;
-                }
-            }
-        }
-        if(event.getButton() == MouseButton.MIDDLE){
-            firstPort =null;
         }
 
     }

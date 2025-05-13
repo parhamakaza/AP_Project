@@ -6,6 +6,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 
 public abstract class Packet {
+    public static int theID = 0;
+    public int id;
     public Wire wire;
     public Port sPort;
     public Port ePort;

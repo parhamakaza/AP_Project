@@ -52,13 +52,14 @@ public  class ServerControler {
                     sq.movePacket(LevelsController.lvl.root);
                     LevelsController.lvl.generatedPackets++;
                 }
+
                 if (port instanceof TrianglePort && port.wire.avaible == true) {
                     TrianglePacket tri = new TrianglePacket(port, LevelsController.lvl.root);
                     tri.movePacket(LevelsController.lvl.root);
                     LevelsController.lvl.generatedPackets++;
                 }
-            }
 
+            }
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
 

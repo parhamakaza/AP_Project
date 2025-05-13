@@ -3,6 +3,7 @@ package view;
 
 import controler.LevelsController;
 import controler.SystemController;
+import javafx.animation.Timeline;
 import model.*;
 import model.Gsystem;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class Level1 extends Level{
         lvl.startButton.setOnAction(e -> {
             LevelsController.start(server1);
             lvl.shopButton.setDisable(false);
+            lvl.startButton.setDisable(true);
         });
 
         ArrayList<Port> ports2 = new ArrayList<>();
@@ -71,6 +73,9 @@ public class Level1 extends Level{
 
         });
         LevelsController.checkForCollison();
+
+
+
 
 
     }

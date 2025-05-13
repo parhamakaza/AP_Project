@@ -21,7 +21,8 @@ public class LevelsController {
     public static  boolean anahita = false;
 
     public static AudioClip connectionPlayer = mediaPlayerMaker("/resources/connection.mp3") ;
-    public static AudioClip collisionPlayer = mediaPlayerMaker("/resources/electric.mp3") ;
+    public static AudioClip collisionPlayer = mediaPlayerMaker("/resources/packet_damage.mp3") ;
+
 
     public static Level lvl;
     public static boolean paused;
@@ -31,7 +32,6 @@ public class LevelsController {
         String musicUrl = Setting.class
                 .getResource(s)
                 .toExternalForm();
-        //Media media = new Media(musicUrl);
         AudioClip player = new AudioClip(musicUrl);
         player.setCycleCount(1);
         player.setVolume(0.5);
@@ -84,40 +84,49 @@ public class LevelsController {
         Timeline tl = new Timeline();
         ArrayList<Packet> packets = LevelsController.lvl.packets;
         KeyFrame kf = new KeyFrame((Duration.millis(1)),event -> {
+
             if(!airyaman) {
-
                 int n = packets.size();
-                for (int i = 0; i < n; i++) {
-                    for (int j = i + 1; j < n; j++) {
-                        Packet p1 = packets.get(i);
-                        Packet p2 = packets.get(j);
+                if (n > 1) {
+                    for (int i = 0; i < n  ; i++) {
+                        for (int j = i + 1; j < n; j++) {
+                            Packet p1 = packets.getFirst();
+                            Packet p2 = packets.getLast();
 
-                        String id1 = p1.toString();
-                        String id2 = p2.toString();
-                        String key = (id1.compareTo(id2) < 0) ? id1 + "-" + id2 : id2 + "-" + id1;
+                            try {
+                             p1 = packets.get(i);
+                            p2 = packets.get(j);
+                            }catch (Exception e){
 
-                        boolean isColliding = false;
-                        try {
-                            Shape intersect = Shape.intersect(p1.shape, p2.shape);
-                            isColliding = !intersect.getBoundsInLocal().isEmpty();
-                        } catch (Exception e) {
-                            e.printStackTrace(); // Always log exceptions in dev
-                        }
-
-                        if (isColliding) {
-                            if (!currentCollisions.contains(key)) {
-                                currentCollisions.add(key);
-
-                                Shape intersect = Shape.intersect(p1.shape, p2.shape);
-                                Bounds collisionBounds = intersect.getBoundsInLocal();
-                                double collisionX = collisionBounds.getMinX() + collisionBounds.getWidth() / 2;
-                                double collisionY = collisionBounds.getMinY() + collisionBounds.getHeight() / 2;
-
-                                collison(p1, p2);
-                                explosion(collisionX, collisionY);
                             }
-                        } else {
-                            currentCollisions.remove(key);
+
+                            String id1 =  String.valueOf(p1.id) ;
+                            String id2 =  String.valueOf(p2.id);
+                            String key = (id1.compareTo(id2) < 0) ? id1 + "-" + id2 : id2 + "-" + id1;
+
+                            boolean isColliding = false;
+                            try {
+                                Shape intersect = Shape.intersect(p1.shape, p2.shape);
+                                isColliding = !intersect.getBoundsInLocal().isEmpty();
+                            } catch (Exception e) {
+                                e.printStackTrace(); // Always log exceptions in dev
+                            }
+
+                            if (isColliding) {
+                                if (!currentCollisions.contains(key)) {
+                                    currentCollisions.add(key);
+
+                                    Shape intersect = Shape.intersect(p1.shape, p2.shape);
+                                    Bounds collisionBounds = intersect.getBoundsInLocal();
+                                    double collisionX = collisionBounds.getMinX() + collisionBounds.getWidth() / 2;
+                                    double collisionY = collisionBounds.getMinY() + collisionBounds.getHeight() / 2;
+
+                                    collison(p1, p2);
+                                    explosion(collisionX, collisionY , p1 , p2);
+                                }
+                            } else {
+                                currentCollisions.remove(key);
+                            }
                         }
                     }
                 }
@@ -149,60 +158,65 @@ public class LevelsController {
 
     }
     public static void killPacket(Packet packet){
+
         lvl.lostPackets++;
         LevelsController.lvl.packets.remove(packet);
         packet.root.getChildren().remove(packet.shape);
         packet.timeline.stop();
         packet.wire.avaible = true;
+
     }
 
-    public static  void  explosion(double explosionX , double explosionY){
-        double explosionRadius = 500;
-        for(Packet i : lvl.packets){
-            double packetCenterX = -50;
-            double packetCenterY = -50;
-            if( i instanceof SquarePacket){
-                Rectangle square = (Rectangle) i.shape;
-                packetCenterX =  square.getX()+ square.getWidth()/2;
-                packetCenterY =  square.getY() + square.getHeight() /2;
+    public static void  explosion(double explosionX , double explosionY , Packet p1, Packet p2) {
+        double explosionRadius = 200;
+        for(Packet i : lvl.packets) {
+            if (i != p1 && i != p2) {
+                double packetCenterX = -50;
+                double packetCenterY = -50;
+                if (i instanceof SquarePacket) {
+                    Rectangle square = (Rectangle) i.shape;
+                    packetCenterX = square.getX() + square.getWidth() / 2;
+                    packetCenterY = square.getY() + square.getHeight() / 2;
 
+                }
+                if (i instanceof TrianglePacket) {
+                    // + 10 is cus the tri angle height and width
+                    packetCenterX = i.shape.getLayoutX() + 10;
+                    packetCenterY = i.shape.getLayoutY() + 10;
+
+                }
+                double dxExplosion = packetCenterX - explosionX;
+                double dyExplosion = packetCenterY - explosionY;
+                double distanceToExplosion = Math.sqrt(dxExplosion * dxExplosion + dyExplosion * dyExplosion);
+
+
+                if (distanceToExplosion <= explosionRadius) {
+                    double deflectX = dxExplosion / distanceToExplosion;
+                    double deflectY = dyExplosion / distanceToExplosion;
+                    double blendFactor = 0.25;
+                    i.unitX[0] = (1 - blendFactor) * i.unitX[0] + blendFactor * deflectX;
+                    i.unitY[0] = (1 - blendFactor) * i.unitY[0] + blendFactor * deflectY;
+
+                    double magnitude = Math.sqrt(i.unitX[0] * i.unitX[0] + i.unitY[0] * i.unitY[0]);
+                    i.unitX[0] /= magnitude;
+                    i.unitY[0] /= magnitude;
+
+                }
 
 
             }
-            if( i instanceof TrianglePacket){
-                // + 10 is cus the tri angle height and width
-                packetCenterX =  i.shape.getLayoutX() + 10;
-                packetCenterY =  i.shape.getLayoutY() + 10;
-
-            }
-            double dxExplosion = packetCenterX - explosionX;
-            double dyExplosion = packetCenterY - explosionY;
-            double distanceToExplosion = Math.sqrt(dxExplosion * dxExplosion + dyExplosion * dyExplosion);
-
-
-            if (distanceToExplosion <= explosionRadius){
-                double deflectX = dxExplosion / distanceToExplosion;
-                double deflectY = dyExplosion / distanceToExplosion;
-                double blendFactor = 0.25;
-                i.unitX[0] = (1 - blendFactor) * i.unitX[0] + blendFactor * deflectX;
-                i.unitY[0] = (1 - blendFactor) * i.unitY[0] + blendFactor * deflectY;
-
-                double magnitude = Math.sqrt(i.unitX[0] * i.unitX[0] + i.unitY[0] * i.unitY[0]);
-                i.unitX[0] /= magnitude;
-                i.unitY[0] /= magnitude;
-
-
-
-            }
-
-
-
-
-
         }
 
 
 
+    }
+    public static boolean compIsReady(Computer comp){
+        for(Port i : comp.ports){
+            if (i.wire == null){
+                return false;
+            }
+        }
+       return true;
 
 
     }
