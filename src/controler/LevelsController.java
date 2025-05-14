@@ -3,15 +3,26 @@ package controler;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.geometry.Bounds;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import model.*;
+import view.Menu;
 import view.Setting;
 
+import java.text.NumberFormat;
 import java.util.*;
 
 public class LevelsController {
@@ -27,6 +38,7 @@ public class LevelsController {
     public static Level lvl;
     public static boolean paused;
     static Set<String> currentCollisions = new HashSet<>();
+
 
     public static AudioClip mediaPlayerMaker(String s){
         String musicUrl = Setting.class
@@ -49,6 +61,7 @@ public class LevelsController {
     }
 
     public static void pauseLvl(Level lvl){
+        LevelsController.paused = true;
         for (Packet i : lvl.packets){
             i.timeline.pause();
 
@@ -63,6 +76,7 @@ public class LevelsController {
     }
 
     public static void resumelvl(Level lvl){
+        LevelsController.paused = false;
         for (Packet i : lvl.packets){
             i.timeline.play();
         }
@@ -79,29 +93,94 @@ public class LevelsController {
         LevelsController.lvl = lvl;
     }
 
-    public static void checkForCollison(){
 
+
+    public static void lvlIsOver(boolean a){
+        Label label = new Label();
+        LevelsController.pauseLvl(LevelsController.lvl);
+        Stage lvlOverStage = new Stage();
+        lvlOverStage.initModality(Modality.APPLICATION_MODAL); ;// blocks input to other windows
+        lvlOverStage.setWidth(800);
+        lvlOverStage.setHeight(500);
+        lvlOverStage.setResizable(false);
+        Button menuButton = Buttons.makeButton("Menu",200,100,500,400);
+        if(a){
+
+            label.setText("Level Accomplished");
+            label.setTextFill(Color.DARKCYAN);                  // Text color
+            label.setFont(Font.font("Arial", 24));              // Font and size
+            label.setStyle("-fx-background-color: cyan;" +      // Background
+                    "-fx-padding: 10px 20px;" +          // Padding
+                    "-fx-background-radius: 12;" +       // Rounded corners
+                    "-fx-border-radius: 12;" +
+                    "-fx-border-color: darkcyan;" +      // Border
+                    "-fx-border-width: 2px;" +
+                    "-fx-font-weight: bold;");
+
+        }else{
+            label.setText("Game Over");
+            label.setTextFill(Color.RED);                      // Text color
+            label.setFont(Font.font("Impact", 48));           // Bold dramatic font
+            label.setStyle("-fx-background-color: black;" +   // Background
+                    "-fx-padding: 20px;" +              // Padding
+                    "-fx-background-radius: 15;" +
+                    "-fx-border-radius: 15;" +
+                    "-fx-border-color: darkred;" +
+                    "-fx-border-width: 3px;");
+
+        }
+        label.setLayoutX(300);
+        label.setLayoutY(100);
+
+        Pane root = new Pane(menuButton , label);
+        root.setStyle("-fx-background-color: #0d1b2a;");
+        Scene scene = new Scene(root);
+        Buttons.styler1(menuButton);
+        lvlOverStage.setScene(scene);
+
+        Platform.runLater(() -> lvlOverStage.showAndWait());
+
+        menuButton.setOnAction(e -> {
+            lvlOverStage.close();
+            Menu.menuConfig();
+        });
+
+        lvlOverStage.setOnCloseRequest(e ->{
+            lvlOverStage.close();
+            Menu.menuConfig();
+        });
+
+
+    }
+
+
+
+
+    public static void checkForCollison(){
         Timeline tl = new Timeline();
         ArrayList<Packet> packets = LevelsController.lvl.packets;
         KeyFrame kf = new KeyFrame((Duration.millis(1)),event -> {
+            if (!paused){
+                checkPacketLost();
 
-            if(!airyaman) {
+
+            if (!airyaman) {
                 int n = packets.size();
                 if (n > 1) {
-                    for (int i = 0; i < n  ; i++) {
+                    for (int i = 0; i < n; i++) {
                         for (int j = i + 1; j < n; j++) {
                             Packet p1 = packets.getFirst();
                             Packet p2 = packets.getLast();
 
                             try {
-                             p1 = packets.get(i);
-                            p2 = packets.get(j);
-                            }catch (Exception e){
+                                p1 = packets.get(i);
+                                p2 = packets.get(j);
+                            } catch (Exception e) {
 
                             }
 
-                            String id1 =  String.valueOf(p1.id) ;
-                            String id2 =  String.valueOf(p2.id);
+                            String id1 = String.valueOf(p1.id);
+                            String id2 = String.valueOf(p2.id);
                             String key = (id1.compareTo(id2) < 0) ? id1 + "-" + id2 : id2 + "-" + id1;
 
                             boolean isColliding = false;
@@ -122,7 +201,9 @@ public class LevelsController {
                                     double collisionY = collisionBounds.getMinY() + collisionBounds.getHeight() / 2;
 
                                     collison(p1, p2);
-                                    explosion(collisionX, collisionY , p1 , p2);
+                                    if(!atar){
+                                        explosion(collisionX, collisionY, p1, p2);
+                                    }
                                 }
                             } else {
                                 currentCollisions.remove(key);
@@ -133,7 +214,7 @@ public class LevelsController {
 
             }
 
-
+        }
         });
         tl.getKeyFrames().add(kf);
         tl.setCycleCount(Animation.INDEFINITE);
@@ -150,6 +231,7 @@ public class LevelsController {
         if(packet1.health == 0){
             killPacket(packet1);
 
+
         }
         if(packet2.health == 0){
             killPacket(packet2);
@@ -158,13 +240,11 @@ public class LevelsController {
 
     }
     public static void killPacket(Packet packet){
-
         lvl.lostPackets++;
         LevelsController.lvl.packets.remove(packet);
         packet.root.getChildren().remove(packet.shape);
         packet.timeline.stop();
         packet.wire.avaible = true;
-
     }
 
     public static void  explosion(double explosionX , double explosionY , Packet p1, Packet p2) {
@@ -221,8 +301,33 @@ public class LevelsController {
 
     }
 
+    public static void startTimer() {
+        Timeline timeline = new Timeline();
+        KeyFrame kf = new KeyFrame(Duration.seconds(1), e -> {
+            if(!paused){
+                lvl.time++;
+                lvl.currentTimeLabel.setText("Time: " + lvl.time + "s");
+                if (lvl.time >= 20) {
+                    timeline.stop();
+                    lvlIsOver(true);
+                }
+            }
+        });
+        timeline.getKeyFrames().add(kf);
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+    }
+    public static void checkPacketLost(){
+       double packetloss =(double) lvl.lostPackets/ lvl.generatedPackets;
+        NumberFormat percentFormat = NumberFormat.getPercentInstance();
+       percentFormat.setMaximumFractionDigits(1);
+        lvl.packetLossLabel.setText("Packet loss :" + percentFormat.format(packetloss));
+        if(packetloss > 0.5){
+            pauseLvl(lvl);
+            lvlIsOver(false);
+        }
 
-
+    }
 
 
 }

@@ -18,7 +18,6 @@ public class Buttons {
     }
 
     public static Button makeButton (String s, double lx, double ly){
-
         Button button = new Button();
         button.setText(s);
         double h = 150;
@@ -28,8 +27,6 @@ public class Buttons {
 
         button.setLayoutX(lx - w/2);
         button.setLayoutY(ly - h/2);
-
-
 
 
         return button;

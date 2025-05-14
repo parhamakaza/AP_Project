@@ -9,9 +9,11 @@ import javafx.beans.property.*;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 
 
 public class Level {
+    public  double time = 0;
     public  int generatedPackets = 0;
     public  int lostPackets = 0;
     public IntegerProperty coins = new SimpleIntegerProperty(10);
@@ -32,12 +35,55 @@ public class Level {
     public ArrayList<Computer> comps = new ArrayList<>();
     public DoubleProperty wireLength = new SimpleDoubleProperty();
     public  Port firstport = null;
+    //public Slider timelineSlider = new Slider(0, 30, 0);
+    public Label currentTimeLabel = new Label("Time: 0.0s");
+    public Label packetLossLabel = new Label("Packet loss :");
+    {
+
+        packetLossLabel.setLayoutX(1200);
+        packetLossLabel.setLayoutY(100);
+        packetLossLabel.setWrapText(true);
+
+        packetLossLabel.setScaleX(0.7);
+        packetLossLabel.setScaleX(0.5);
+
+        Labels.styler1(packetLossLabel);
+    }
     Label wirelabel = new Label();
     Label coinslabel = new Label();
     public ArrayList<Packet> packets = new ArrayList<>();
-
+    public boolean[] isDragging = {false};
 
     {
+        /*timelineSlider.setMajorTickUnit(5);
+        timelineSlider.setMinorTickCount(4);
+        timelineSlider.setShowTickMarks(true);
+        timelineSlider.setShowTickLabels(true);
+        timelineSlider.setBlockIncrement(1);
+        timelineSlider.setLayoutX(900);
+        timelineSlider.setLayoutY(100);*/
+        currentTimeLabel.setLayoutX(800);
+        Labels.styler1(currentTimeLabel);
+
+        /*timelineSlider.setOnMousePressed(event -> isDragging[0] = true);
+        timelineSlider.setOnMouseReleased(event -> isDragging[0] = false);
+
+
+        // Handle slider drag
+        timelineSlider.addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
+            double value = timelineSlider.getValue();
+            time = value;
+            currentTimeLabel.setText(String.format("Time: %.1fs", value));
+        });
+
+        // Optional: also update time on click
+        timelineSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            currentTimeLabel.setText(String.format("Time: %.1fs", newVal.doubleValue()));
+        });*/
+
+
+
+
         startButton.setDisable(true);
         shopButton.setDisable(true);
         shopButton.setOnAction(e -> {
@@ -51,6 +97,7 @@ public class Level {
         wirelabel.textProperty().bind(
                 Bindings.concat("Wire left: ", this.wireLength.asString("%.2f"))
         );
+
         coinslabel.textProperty().bind(
                 Bindings.concat("Coins : ", this.coins.asString())
         );
@@ -71,7 +118,7 @@ public class Level {
         Buttons.styler1(startButton);
         Buttons.styler1(shopButton);
         root.setStyle("-fx-background-color: #0d1b2a;");
-        root.getChildren().addAll(menuButton,startButton, wirelabel , coinslabel , shopButton);
+        root.getChildren().addAll(menuButton,startButton, wirelabel , coinslabel , shopButton ,currentTimeLabel , packetLossLabel);
 
 
 
@@ -81,10 +128,10 @@ public class Level {
         scene.setOnKeyPressed((KeyEvent event) -> {
             if (event.getCode() == KeyCode.P) {
                 LevelsController.paused = !LevelsController.paused;
-                if(LevelsController.paused == false){
+                if(!LevelsController.paused){
                     LevelsController.resumelvl(LevelsController.lvl);
                 }
-                if(LevelsController.paused == true){
+                if(LevelsController.paused ){
                         LevelsController.pauseLvl(LevelsController.lvl);
                 }
 
@@ -113,13 +160,11 @@ public class Level {
                 }
                 a = a & b;
             }
-            if( a ){
+            if(a){
                 startButton.setDisable(false);
             }else {
                 startButton.setDisable(true);
             }
-
-
 
 
         });
@@ -128,6 +173,7 @@ public class Level {
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
+
 
 
 }

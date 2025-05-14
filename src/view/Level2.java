@@ -32,7 +32,12 @@ public class Level2 extends Level{
             Server server1 = new Server(ports ,lvl);
             SystemController.drawServers(lvl.root,500,600,server1);
 
-            lvl.startButton.setOnAction(e -> LevelsController.start(server1));
+            lvl.startButton.setOnAction(e -> {
+                LevelsController.startTimer();
+                LevelsController.start(server1);
+                lvl.shopButton.setDisable(false);
+                lvl.startButton.setDisable(true);
+            });
 
             ArrayList<Port> ports2 = new ArrayList<>();
             //ports2.add(new SquarePort(PortType.INPUT,1));

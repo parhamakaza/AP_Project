@@ -128,7 +128,7 @@ public class TrianglePacket extends Packet {
                 timeline.stop();
                 root.getChildren().remove(triangle);
                 sPort.wire.avaible = true;
-
+                timeline2.stop();
                 try {
                     ((Gsystem) ePort.system).transferPacket(this); // Assuming `square` is the packet
                 } catch (Exception e) {

@@ -82,7 +82,6 @@ public class SquarePacket extends Packet {
         // Distance to move each frame
         double speed = 100;
         if(sPort instanceof TrianglePort){
-
             speed = speed * 2;
 
         }
@@ -111,9 +110,7 @@ public class SquarePacket extends Packet {
             // Check if reached or passed target
             double traveled = Math.sqrt((currentX[0] - x1) * (currentX[0] - x1) + (currentY[0] - y1) * (currentY[0] - y1));
             Shape intersection = Shape.intersect(square, sPort.wire.line);
-            if (    !( intersection.getBoundsInLocal().getWidth() > 0 &&  intersection.getBoundsInLocal().getHeight() > 0)) {
-                LevelsController.killPacket(this);
-            }
+
             if (traveled >= distance) {
                 // Snap to final position
                 square.setX(x2);
@@ -123,15 +120,19 @@ public class SquarePacket extends Packet {
                 timeline.stop();
                 root.getChildren().remove(square);
                 sPort.wire.avaible = true;
+                timeline2.stop();
 
                 try {
                     ((Gsystem) ePort.system).transferPacket(this); // Assuming `square` is the packet
                 } catch (Exception e) {
                     ServerControler.takePacket((Server) ePort.system, this, LevelsController.lvl);
                 }
+                return;
+            }
 
-
-
+            if (   !( intersection.getBoundsInLocal().getWidth() > 0 &&  intersection.getBoundsInLocal().getHeight() > 0)) {
+                System.out.println("salam");
+                LevelsController.killPacket(this);
             }
         });
 
