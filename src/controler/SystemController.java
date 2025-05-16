@@ -53,53 +53,66 @@ public class SystemController {
 
 
     }
+    public static void startPacketTransfer(Gsystem gsystem){
+        Timeline tl = new Timeline();
+        KeyFrame kf =new KeyFrame(Duration.millis(100), e -> {
+        transferPacket(gsystem);
+        });
+        tl.getKeyFrames().add(kf);
+        tl.setCycleCount(Animation.INDEFINITE);
+        tl.play();
+        gsystem.tl =tl;
+    }
 
-    public static void transferPacket(Gsystem gsystem,  Packet packet){
-        if(!gsystem.packets.isEmpty()){
-            Packet p = gsystem.packets.getFirst();
-            gsystem.packets.removeFirst();
-            transferPacket(gsystem , p);
+    public static void transferPacket(Gsystem gsystem){
+        if(!gsystem.packets.isEmpty()) {
+            Packet packet = gsystem.packets.getFirst();
+            if (gsystem.packets.size() > 5) {
+                gsystem.packets.remove(packet);
+                LevelsController.killPacket(packet);
+                return;
+            }
+
+            if (packet instanceof SquarePacket) {
+                for (Port i : gsystem.ports) {
+                    if ((i instanceof SquarePort) && (i.portType.equals(PortType.OUTPUT)) && (i.wire.avaible)) {
+                        packet.sendPacket(i, gsystem.root);
+                        gsystem.packets.remove(packet);
+                        return;
+                    }
+                }
+                for (Port i : gsystem.ports) {
+                    if (i.portType.equals(PortType.OUTPUT) && (i.wire.avaible)) {
+                        packet.sendPacket(i, gsystem.root);
+                        gsystem.packets.remove(packet);
+
+                        return;
+                    }
+                }
+            }
+
+            if (packet instanceof TrianglePacket) {
+                for (Port i : gsystem.ports) {
+                    if ((i instanceof TrianglePort) && i.portType.equals(PortType.OUTPUT) && (i.wire.avaible)) {
+                        gsystem.packets.remove(packet);
+
+
+                        packet.sendPacket(i, gsystem.root);
+                        return;
+                    }
+                }
+
+                for (Port i : gsystem.ports) {
+                    if (i.portType.equals(PortType.OUTPUT) && (i.wire.avaible)) {
+                        gsystem.packets.remove(packet);
+                        packet.sendPacket(i, gsystem.root);
+                        return;
+                    }
+                }
+
+            }
 
         }
-            if(packet instanceof SquarePacket){
-                for(Port i : gsystem.ports){
-                    if((i instanceof SquarePort ) && (i.portType.equals(PortType.OUTPUT) )&& (i.wire.avaible )){
-
-                        packet.sendPacket(i,gsystem.root);
-
-                        return;
-                    }
-                }
-                for(Port i : gsystem.ports){
-                    if( i.portType.equals(PortType.OUTPUT) && (i.wire.avaible)){
-                        packet.sendPacket(i , gsystem.root);
-                        return;
-                    }
-                }
-            }
-
-            if(packet instanceof TrianglePacket){
-                for(Port i : gsystem.ports){
-                    if((i instanceof TrianglePort ) && i.portType.equals(PortType.OUTPUT) && (i.wire.avaible )){
-
-                        packet.sendPacket(i,gsystem.root);
-                        return;
-                    }
-                }
-
-                for(Port i : gsystem.ports){
-                    if( i.portType.equals(PortType.OUTPUT) && (i.wire.avaible )){
-
-
-                        packet.sendPacket(i , gsystem.root);
-                        return;
-                    }
-                }
-
-            }
-
-            gsystem.packets.add(packet);
-        
 
     }
 

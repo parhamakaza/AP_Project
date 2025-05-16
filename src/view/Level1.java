@@ -40,7 +40,7 @@ public class Level1 extends Level{
 
         lvl.startButton.setOnAction(e -> {
             LevelsController.startTimer();
-            LevelsController.start(server1);
+            LevelsController.start();
             lvl.shopButton.setDisable(false);
             lvl.startButton.setDisable(true);
         });

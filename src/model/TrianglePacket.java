@@ -52,127 +52,6 @@ public class TrianglePacket extends Packet {
     }
 
 
-
-    /*public synchronized void movePacket(Pane root){
-        this.root=root;
-        double x1 = this.sPort.x;
-        double y1 = this.sPort.y;
-        double x2 = this.ePort.x;
-        double y2 = this.ePort.y;
-
-        Polygon triangle = new Polygon();
-        this.shape = triangle;
-        triangle.getPoints().addAll(
-                0.0, 0.0,    // Peak at (0,0)
-                10.0,20.0,// Bottom right point (slanted)
-                -10.0,20.0       // Bottom left point
-        );
-        triangle.setFill(Color.YELLOW);
-
-
-        triangle.setLayoutX(x1);
-        triangle.setLayoutY(y1);
-
-        Platform.runLater(() -> {
-            root.getChildren().add(triangle);
-        });
-
-
-        // Direction vector
-        double dx = x2 - x1;
-        double dy = y2 - y1;
-        double distance = Math.sqrt(dx * dx + dy * dy);
-        this.sPort.wire.avaible = false;
-
-        // Normalize direction
-        double unitX = dx / distance;
-        this.uniitX = unitX;
-
-        this.unitX[0] = unitX;
-
-        double unitY = dy / distance;
-        this.uniitY = unitY;
-        this.unitY[0] = unitY;
-
-        this.startTimeline2();
-
-
-        // Frame timing
-        double frameDuration = 16; // milliseconds (~60 FPS)
-
-
-        // Position tracker
-        final double[] currentX = {x1};
-        final double[] currentY = {y1};
-
-        Timeline timeline = new Timeline();
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(frameDuration), event -> {
-
-
-            if(!LevelsController.paused) {
-                this.sPort.wire.avaible = false;
-
-                // Recalculate movePerFrame using current game speed
-                double currentSpeed = 100;
-                if (sPort instanceof SquarePort) {
-                    currentSpeed += 5;
-                }
-                double movePerFrame = currentSpeed * (frameDuration / 1000.0) * LevelsController.gameSpeed;
-
-                // Move
-                currentX[0] += this.unitX[0] * movePerFrame;
-                currentY[0] += this.unitY[0] * movePerFrame;
-
-
-                // Update position
-                triangle.setLayoutX(currentX[0]);
-                triangle.setLayoutY(currentY[0]);
-                this.x = currentX[0];
-                this.y = currentY[0];
-
-
-                // Check if reached or passed target
-                double traveled = Math.sqrt((currentX[0] - x1) * (currentX[0] - x1) + (currentY[0] - y1) * (currentY[0] - y1));
-                Shape intersection = Shape.intersect(triangle, sPort.wire.line);
-                if (traveled >= distance) {
-                    // Snap to final position
-                    triangle.setLayoutX(x2);
-                    triangle.setLayoutY(y2);
-                    this.sPort.wire.avaible = true;
-
-
-                    timeline.stop();
-                    root.getChildren().remove(triangle);
-                    sPort.wire.avaible = true;
-                    timeline2.stop();
-
-                    try {
-                        ((Gsystem) ePort.system).transferPacket(this); // Assuming `square` is the packet
-                    } catch (Exception e) {
-                        ServerControler.takePacket((Server) ePort.system, this, LevelsController.lvl);
-                    }
-                    return;
-
-                }
-                if (!(intersection.getBoundsInLocal().getWidth() > 0 && intersection.getBoundsInLocal().getHeight() > 0)) {
-                    LevelsController.killPacket(this);
-                    System.out.println("kill trianglePacket");
-
-                }
-            }
-
-        });
-
-        timeline.getKeyFrames().add(keyFrame);
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
-        this.timeline = timeline;
-
-
-
-
-
-    }*/
     public synchronized void movePacket(Pane root) {
         this.root = root;
         Polygon triangle = new Polygon();
@@ -255,12 +134,9 @@ public class TrianglePacket extends Packet {
                     timeline2.stop();
 
                     try {
-                        SystemController.transferPacket((Gsystem) this.ePort.system,this);
-                    } catch (Exception e) {
-
-
+                        ((Gsystem) this.ePort.system).packets.add(this);
+                    } catch (ClassCastException e) {
                         ServerControler.takePacket((Server) this.ePort.system, this, LevelsController.lvl);
-
                     }
                     return;
                 }

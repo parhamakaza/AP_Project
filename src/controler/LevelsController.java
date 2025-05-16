@@ -52,9 +52,23 @@ public class LevelsController {
         return player;
     }
 
-    public synchronized static void start(Server server){
+    public synchronized static void start(){
         LevelsController.paused=false;
-        ServerControler.makePacket2(server);
+        ArrayList<Computer> compList= lvl.comps;
+        int n = compList .size();
+        for(int i = 0; i < n; i++){
+            if(i == 0){
+                ServerControler.makePacket2((Server) compList.getFirst());
+            }else{
+                try {
+                SystemController.startPacketTransfer((Gsystem)compList.get(i));
+                }catch (ClassCastException e){
+                    System.out.println(e.getMessage());
+                }
+            }
+
+        }
+
     }
 
     public static void pauseLvl(Level lvl){
@@ -193,13 +207,11 @@ public class LevelsController {
                         for (int j = i + 1; j < n; j++) {
                             Packet p1 = packets.getFirst();
                             Packet p2 = packets.getLast();
-
                             try {
                                 p1 = packets.get(i);
                                 p2 = packets.get(j);
                             } catch (Exception e) {
                                 System.out.println("who knows what");
-
                             }
 
                             String id1 = String.valueOf(p1.id);
@@ -336,7 +348,6 @@ public class LevelsController {
             }
         });
         timertl = timeline;
-
         timeline.getKeyFrames().add(kf);
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
@@ -366,7 +377,7 @@ public class LevelsController {
         }*/
 
         ServerControler.updatePacketGenerator((Server) lvl.comps.getFirst());
-        start((Server) lvl.comps.getFirst());
+        start();
         for(Packet p : lvl.packets){
             try{
                 ((SquarePacket)p).startTimeline2();
@@ -380,8 +391,9 @@ public class LevelsController {
         delay.setOnFinished(event -> {
             gameSpeed = 1;
             System.out.println(time);
+            lvl.currentTime = time;
             ServerControler.updatePacketGenerator((Server) lvl.comps.getFirst());
-            start((Server) lvl.comps.getFirst());
+            start();
             for(Packet p : lvl.packets){
                 try{
                     ((SquarePacket)p).startTimeline2();

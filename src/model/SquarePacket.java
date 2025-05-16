@@ -53,115 +53,6 @@ public class SquarePacket extends Packet {
     }
 
 
-
-    /*public synchronized void movePacket(Pane root){
-        this.root = root;
-
-        double x1 = this.sPort.x;
-        double y1 = this.sPort.y;
-        double x2 = this.ePort.x;
-        double y2 = this.ePort.y;
-
-        this.sPort.wire.avaible = false;
-
-
-        Rectangle square = new Rectangle(20, 20);
-        square.setFill(Color.GREEN);
-        square.setX(x1);
-        square.setY(y1);
-
-        this.shape = square;
-
-        Platform.runLater(() -> {
-            root.getChildren().add(square);
-        });
-
-        // Direction vector
-        double dx = x2 - x1;
-        double dy = y2 - y1;
-        double distance = Math.sqrt(dx * dx + dy * dy);
-        // Normalize direction
-        double unitX = dx / distance;
-        this.uniitX = unitX;
-        this.unitX[0] = unitX;
-        double unitY = dy / distance;
-        this.uniitY = unitY;
-        this.unitY[0] = unitY;
-
-        startTimeline2();
-
-        // Frame timing
-        double frameDuration = 16; // milliseconds (~60 FPS)
-
-
-
-        // Position tracker
-        final double[] currentX = {x1};
-        final double[] currentY = {y1};
-
-        Timeline timeline = new Timeline();
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(frameDuration), event -> {
-            if (!LevelsController.paused){
-                this.sPort.wire.avaible = false;
-
-                // Recalculate movePerFrame using current game speed
-                double currentSpeed = 100;
-                if (sPort instanceof TrianglePort) {
-                    currentSpeed *= 2;
-                }
-                double movePerFrame = currentSpeed * (frameDuration / 1000.0) * LevelsController.gameSpeed;
-
-                // Move
-                currentX[0] += this.unitX[0] * movePerFrame;
-                currentY[0] += this.unitY[0] * movePerFrame;
-
-
-            // Update position
-            square.setX(currentX[0]);
-            square.setY(currentY[0]);
-            this.x = currentX[0];
-            this.y = currentY[0];
-
-
-            // Check if reached or passed target
-            double traveled = Math.sqrt((currentX[0] - x1) * (currentX[0] - x1) + (currentY[0] - y1) * (currentY[0] - y1));
-
-            Shape intersection = Shape.intersect(square, sPort.wire.line);
-
-            if (traveled >= distance) {
-                // Snap to final position
-                square.setX(x2);
-                square.setY(y2);
-                this.sPort.wire.avaible = true;
-                timeline.stop();
-                root.getChildren().remove(square);
-                sPort.wire.avaible = true;
-                timeline2.stop();
-
-                try {
-                    ((Gsystem) ePort.system).transferPacket(this); // Assuming `square` is the packet
-                } catch (Exception e) {
-                    ServerControler.takePacket((Server) ePort.system, this, LevelsController.lvl);
-                }
-                return;
-            }
-
-            if (!(intersection.getBoundsInLocal().getWidth() > 0 && intersection.getBoundsInLocal().getHeight() > 0)) {
-                System.out.println("kill squarePacket");
-                LevelsController.killPacket(this);
-            }
-        }
-        });
-
-        timeline.getKeyFrames().add(keyFrame);
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
-        this.timeline = timeline;
-
-
-
-
-    }*/
     public synchronized void movePacket(Pane root) {
         this.root = root;
 
@@ -178,8 +69,11 @@ public class SquarePacket extends Packet {
         square.setX(x1);
         square.setY(y1);
         this.shape = square;
-
-        Platform.runLater(() -> root.getChildren().add(square));
+        if (root == null) {
+            System.err.println("Root is null!");
+        } else {
+            Platform.runLater(() -> root.getChildren().add(square));
+        }
 
         // Vector setup
         double dx = x2 - x1;
@@ -241,8 +135,8 @@ public class SquarePacket extends Packet {
 
 
                     try {
-                        SystemController.transferPacket((Gsystem) this.ePort.system,this);
-                    } catch (Exception e) {
+                        ((Gsystem) this.ePort.system).packets.add(this);
+                    } catch (ClassCastException e) {
                         ServerControler.takePacket((Server) this.ePort.system, this, LevelsController.lvl);
                     }
                     return;
