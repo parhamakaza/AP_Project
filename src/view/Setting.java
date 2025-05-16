@@ -77,9 +77,6 @@ public class Setting {
 
         root.setStyle("-fx-background-color: #0d1b2a;");
         root.getChildren().add(button);
-        //root.getChildren().add(volumeSlider);
-        //root.getChildren().add(label);
-        //root.getChildren().add(container);
 
         Main.theStage.setScene(settingScene);
 

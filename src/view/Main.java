@@ -20,12 +20,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
+
         theStage = stage;
         stage.setTitle("Blue print hell");
         Image StageIcon = new Image("resources/Icon.jpg");
         stage.getIcons().add(StageIcon);
-
-
         stage.setWidth(stageWidth);
         stage.setHeight(stageHeight);
         stage.setResizable(false);
@@ -34,27 +33,22 @@ public class Main extends Application {
         //stage.initStyle(StageStyle.UNDECORATED);
         //Scene scene =  Menu.menuConfig();
 
+
         Menu.menuConfig();
-        String musicUrl = Setting.class
-                .getResource("/resources/music.wav")
-                .toExternalForm();
+        String musicUrl = Setting.class.getResource("/resources/music.wav").toExternalForm();
         Media media = new Media(musicUrl);
         MediaPlayer player = new MediaPlayer(media);
         player.setVolume(0.2);
         player.setCycleCount(MediaPlayer.INDEFINITE);
 
-        //player.play();
+        player.play();
         backGroundMusicPlayer =player;
 
         //stage.setScene(scene);
         stage.setOnCloseRequest(event -> {event.consume();
-            MenuController.exitButton();});
+        MenuController.exitButton();});
         stage.show();
 
 
-
-
-
     }
-
 }

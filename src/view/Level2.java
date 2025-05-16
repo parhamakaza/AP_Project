@@ -73,10 +73,11 @@ public class Level2 extends Level{
 
             lvl.comps.addAll(Arrays.asList(server1,server2,system1));
 
-            lvl.menuButton.setOnAction(e -> {
 
+            lvl.menuButton.setOnAction(e -> {
+                LevelsController.lvlOver(lvl);
                 LevelsController.paused = true;
-                LevelsController.pauseLvl(lvl);
+
                 Menu.menuConfig();
 
             });

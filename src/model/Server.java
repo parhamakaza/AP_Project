@@ -9,8 +9,6 @@ import java.util.Timer;
 
 public class Server extends Computer {
 
-
-
     public Server(ArrayList<Port> ports , Level lvl ){
         this.root = lvl.root;
         this.lvl = lvl;

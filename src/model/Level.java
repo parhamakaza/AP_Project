@@ -1,7 +1,6 @@
 package model;
 
 import controler.LevelsController;
-import controler.PortsController;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
@@ -17,13 +16,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import view.Main;
-import view.Menu;
 
 import java.util.ArrayList;
 
 
 public class Level {
+    public  double currentTime = 0;
     public  double time = 0;
     public  int generatedPackets = 0;
     public  int lostPackets = 0;
@@ -34,52 +32,62 @@ public class Level {
     public Button shopButton = Buttons.makeButton("Shop",200,100,405,80);
     public ArrayList<Computer> comps = new ArrayList<>();
     public DoubleProperty wireLength = new SimpleDoubleProperty();
-    public  Port firstport = null;
-    //public Slider timelineSlider = new Slider(0, 30, 0);
+    public Slider timelineSlider = new Slider(0, 20, 0);
     public Label currentTimeLabel = new Label("Time: 0.0s");
     public Label packetLossLabel = new Label("Packet loss :");
-    {
-
-        packetLossLabel.setLayoutX(1200);
-        packetLossLabel.setLayoutY(100);
-        packetLossLabel.setWrapText(true);
-
-        packetLossLabel.setScaleX(0.7);
-        packetLossLabel.setScaleX(0.5);
-
-        Labels.styler1(packetLossLabel);
-    }
     Label wirelabel = new Label();
     Label coinslabel = new Label();
     public ArrayList<Packet> packets = new ArrayList<>();
     public boolean[] isDragging = {false};
-
     {
-        /*timelineSlider.setMajorTickUnit(5);
+        timelineSlider.setStyle("-fx-background-color: linear-gradient(to right, #002b36 0%, #003842 25%, #002b36 75%, #003842 100%); " +
+                "-fx-background-insets: 0; " +
+                "-fx-background-radius: 4; " +
+                "-fx-padding: 4 0 4 0; " +
+                "-fx-control-inner-background: transparent; " +        // ensure track shows through
+                "-fx-accent: #00ffff; " +                              // the default fill color
+                "-fx-focus-color: rgba(0,255,255,0.9,1); " +           // glow when focused
+                "-fx-faint-focus-color: rgba(0,255,255,0.4,0.5);"
+        );
+
+        packetLossLabel.setLayoutX(1200);
+        packetLossLabel.setLayoutY(100);
+        packetLossLabel.setWrapText(true);
+        packetLossLabel.setScaleY(0.5);
+        packetLossLabel.setScaleX(0.5);
+        Labels.styler1(packetLossLabel);
+
+        timelineSlider.setMajorTickUnit(5);
         timelineSlider.setMinorTickCount(4);
         timelineSlider.setShowTickMarks(true);
         timelineSlider.setShowTickLabels(true);
         timelineSlider.setBlockIncrement(1);
-        timelineSlider.setLayoutX(900);
-        timelineSlider.setLayoutY(100);*/
+        timelineSlider.setLayoutX(860);
+        timelineSlider.setLayoutY(120);
+        timelineSlider.setScaleX(1.5);
+        timelineSlider.setScaleY(1.2);
+
         currentTimeLabel.setLayoutX(800);
         Labels.styler1(currentTimeLabel);
 
-        /*timelineSlider.setOnMousePressed(event -> isDragging[0] = true);
+        timelineSlider.setOnMousePressed(event -> isDragging[0] = true);
         timelineSlider.setOnMouseReleased(event -> isDragging[0] = false);
 
 
         // Handle slider drag
         timelineSlider.addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
-            double value = timelineSlider.getValue();
+            int value = (int)timelineSlider.getValue();
             time = value;
-            currentTimeLabel.setText(String.format("Time: %.1fs", value));
+            currentTime = time;
+            currentTimeLabel.setText("Time: " + value);
+        });
+        timelineSlider.setOnMouseReleased(e -> {
+            LevelsController.resetMyLevel();
+            int value = (int) timelineSlider.getValue();
+            LevelsController.travelInTime(value);
         });
 
-        // Optional: also update time on click
-        timelineSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-            currentTimeLabel.setText(String.format("Time: %.1fs", newVal.doubleValue()));
-        });*/
+
 
 
 
@@ -118,7 +126,7 @@ public class Level {
         Buttons.styler1(startButton);
         Buttons.styler1(shopButton);
         root.setStyle("-fx-background-color: #0d1b2a;");
-        root.getChildren().addAll(menuButton,startButton, wirelabel , coinslabel , shopButton ,currentTimeLabel , packetLossLabel);
+        root.getChildren().addAll(menuButton,startButton, wirelabel , coinslabel , shopButton ,currentTimeLabel , packetLossLabel ,timelineSlider);
 
 
 
@@ -139,12 +147,13 @@ public class Level {
         });
     }
     {
+
         Timeline timeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), event -> {
 
             boolean a = true;
 
-            DropShadow glow = new DropShadow();
+            DropShadow glow ;
             for(Computer i : this.comps){
                 boolean b = LevelsController.compIsReady(i);
                 if( b ){
@@ -173,7 +182,4 @@ public class Level {
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
-
-
-
 }

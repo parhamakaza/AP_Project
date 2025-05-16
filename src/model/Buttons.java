@@ -12,8 +12,6 @@ public class Buttons {
         button.setPrefHeight(h);
 
 
-
-
         return button;
     }
 
@@ -53,7 +51,5 @@ public class Buttons {
         });
 
     }
-
-
 
 }

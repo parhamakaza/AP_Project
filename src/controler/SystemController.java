@@ -1,9 +1,13 @@
 package controler;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import model.*;
 
 
@@ -14,8 +18,6 @@ public class SystemController {
 
     //private final SystemManager systems = new SystemManager();
     public static void drawServers(Pane root, double x, double y,  Computer system){
-
-
 
         Rectangle module = new Rectangle(WIDTH , HEIGHT);
         module.setX(0);
@@ -31,11 +33,7 @@ public class SystemController {
                 PortsController.drawTrianglePort((TrianglePort) i , root);
             }
 
-            if(i.wire != null){
-                WireContoroller.drawWires(i.wire,root);
-            }
         }
-
 
         module.setArcWidth(10);   // rounded corners
         module.setArcHeight(10);
@@ -53,6 +51,50 @@ public class SystemController {
         root.getChildren().add(module);
         module.toBack();
 
+
+    }
+
+    public static void transferPacket(Gsystem gsystem,  Packet packet){
+        if(gsystem.packets.isEmpty()){
+            if(packet instanceof SquarePacket){
+                for(Port i : gsystem.ports){
+                    if((i instanceof SquarePort ) && (i.portType.equals(PortType.OUTPUT) )&& (i.wire.avaible )){
+
+                        packet.sendPacket(i,gsystem.root);
+
+                        return;
+                    }
+                }
+                for(Port i : gsystem.ports){
+                    if( i.portType.equals(PortType.OUTPUT) && (i.wire.avaible)){
+                        packet.sendPacket(i , gsystem.root);
+                        return;
+                    }
+                }
+            }
+
+            if(packet instanceof TrianglePacket){
+                for(Port i : gsystem.ports){
+                    if((i instanceof TrianglePort ) && i.portType.equals(PortType.OUTPUT) && (i.wire.avaible )){
+
+                        packet.sendPacket(i,gsystem.root);
+                        return;
+                    }
+                }
+
+                for(Port i : gsystem.ports){
+                    if( i.portType.equals(PortType.OUTPUT) && (i.wire.avaible )){
+
+
+                        packet.sendPacket(i , gsystem.root);
+                        return;
+                    }
+                }
+
+            }
+        }else {
+            gsystem.packets.add(packet);
+        }
 
     }
 

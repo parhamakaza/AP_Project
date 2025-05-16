@@ -37,8 +37,8 @@ public class WireContoroller {
         LevelsController.connectionPlayer.play();
 
         return line;
-
     }
+
     public static void professionalWiring(Port port){
         Shape shape = port.shape;
 
@@ -84,15 +84,16 @@ public class WireContoroller {
 
         shape.setOnMouseReleased((MouseEvent e3) -> {
 
-
-
             if (currentLine != null){
                 Port p = checkIsIndise(currentLine.getEndX(), currentLine.getEndY(), e3);
                 Wire w1 = null;
                 try {
+
                     w1 = new Wire(firstPort, p);
                     w1.line = WireContoroller.drawWires(w1, port.system.root);
+
                 } catch (Exception ex) {
+
                     try {
                         w1 = new Wire(p , firstPort);
                     w1.line = WireContoroller.drawWires(w1, port.system.root);
@@ -120,7 +121,6 @@ public class WireContoroller {
             for (Port p : i.ports){
                 Bounds bounds = p.shape.localToScene(p.shape.getBoundsInLocal());
                 if(bounds.contains(x, y)){
-
 
                     return  p;
                 }

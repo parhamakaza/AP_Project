@@ -2,6 +2,7 @@ package controler;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.geometry.Bounds;
@@ -16,7 +17,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+
 import javafx.util.Duration;
 import model.*;
 import view.Menu;
@@ -26,6 +27,7 @@ import java.text.NumberFormat;
 import java.util.*;
 
 public class LevelsController {
+    public static double gameSpeed = 1;
 
     public static  boolean airyaman = false;
     public static  boolean atar = false;
@@ -34,6 +36,8 @@ public class LevelsController {
     public static AudioClip connectionPlayer = mediaPlayerMaker("/resources/connection.mp3") ;
     public static AudioClip collisionPlayer = mediaPlayerMaker("/resources/packet_damage.mp3") ;
 
+    public static Timeline checkforcollisontl;
+    public static Timeline timertl;
 
     public static Level lvl;
     public static boolean paused;
@@ -41,57 +45,76 @@ public class LevelsController {
 
 
     public static AudioClip mediaPlayerMaker(String s){
-        String musicUrl = Setting.class
-                .getResource(s)
-                .toExternalForm();
+        String musicUrl = Setting.class.getResource(s).toExternalForm();
         AudioClip player = new AudioClip(musicUrl);
         player.setCycleCount(1);
         player.setVolume(0.5);
         return player;
-
     }
-    public synchronized static void start(Server server){
 
+    public synchronized static void start(Server server){
         LevelsController.paused=false;
         ServerControler.makePacket2(server);
-
-
-
-
     }
 
     public static void pauseLvl(Level lvl){
         LevelsController.paused = true;
         for (Packet i : lvl.packets){
             i.timeline.pause();
+        }
+
+        for (Computer comp : lvl.comps) {
+            try {
+                comp.tl.pause();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
 
         }
-        try {
-            lvl.comps.getFirst().tl.pause();
 
+    }
+    public static void lvlOver(Level lvl){
+        LevelsController.paused = true;
+        try {
+        timertl.stop();
         }catch (Exception e){
+
+        }
+        checkforcollisontl.stop();
+        for (Packet i : lvl.packets){
+            i.timeline.stop();
+        }
+        int i = 0;
+        for (Computer comp : lvl.comps) {
+            try {
+                i++;
+                comp.tl.stop();
+            } catch (Exception e) {
+                System.out.println(e.getMessage() + i);
+            }
 
         }
 
     }
 
-    public static void resumelvl(Level lvl){
+    public static void resumelvl(Level lvl) {
         LevelsController.paused = false;
-        for (Packet i : lvl.packets){
+        for (Packet i : lvl.packets) {
             i.timeline.play();
         }
-        try {
-            lvl.comps.getFirst().tl.play();
 
-        }catch (Exception e){
+        for (Computer comp : lvl.comps) {
+
+            try {
+                comp.tl.play();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
 
         }
-
     }
 
-    public static void recivelvl(Level lvl){
-        LevelsController.lvl = lvl;
-    }
 
 
 
@@ -99,7 +122,7 @@ public class LevelsController {
         Label label = new Label();
         LevelsController.pauseLvl(LevelsController.lvl);
         Stage lvlOverStage = new Stage();
-        lvlOverStage.initModality(Modality.APPLICATION_MODAL); ;// blocks input to other windows
+        lvlOverStage.initModality(Modality.APPLICATION_MODAL); // blocks input to other windows
         lvlOverStage.setWidth(800);
         lvlOverStage.setHeight(500);
         lvlOverStage.setResizable(false);
@@ -139,8 +162,10 @@ public class LevelsController {
         lvlOverStage.setScene(scene);
 
         Platform.runLater(() -> lvlOverStage.showAndWait());
+        lvlOver(lvl);
 
         menuButton.setOnAction(e -> {
+            lvlOver(lvl);
             lvlOverStage.close();
             Menu.menuConfig();
         });
@@ -153,16 +178,13 @@ public class LevelsController {
 
     }
 
-
-
-
     public static void checkForCollison(){
         Timeline tl = new Timeline();
+        checkforcollisontl = tl;
         ArrayList<Packet> packets = LevelsController.lvl.packets;
         KeyFrame kf = new KeyFrame((Duration.millis(1)),event -> {
             if (!paused){
                 checkPacketLost();
-
 
             if (!airyaman) {
                 int n = packets.size();
@@ -176,6 +198,7 @@ public class LevelsController {
                                 p1 = packets.get(i);
                                 p2 = packets.get(j);
                             } catch (Exception e) {
+                                System.out.println("who knows what");
 
                             }
 
@@ -199,7 +222,6 @@ public class LevelsController {
                                     Bounds collisionBounds = intersect.getBoundsInLocal();
                                     double collisionX = collisionBounds.getMinX() + collisionBounds.getWidth() / 2;
                                     double collisionY = collisionBounds.getMinY() + collisionBounds.getHeight() / 2;
-
                                     collison(p1, p2);
                                     if(!atar){
                                         explosion(collisionX, collisionY, p1, p2);
@@ -219,26 +241,24 @@ public class LevelsController {
         tl.getKeyFrames().add(kf);
         tl.setCycleCount(Animation.INDEFINITE);
         tl.play();
-
-
     }
+
     public static void collison(Packet packet1 , Packet packet2){
         collisionPlayer.play();
 
         packet1.health = packet1.health-1;
         packet2.health = packet2.health-1;
-        System.out.println( packet1.health + " - " +  packet2.health );
+
         if(packet1.health == 0){
             killPacket(packet1);
-
-
         }
+
         if(packet2.health == 0){
             killPacket(packet2);
-
         }
 
     }
+
     public static void killPacket(Packet packet){
         lvl.lostPackets++;
         LevelsController.lvl.packets.remove(packet);
@@ -247,7 +267,7 @@ public class LevelsController {
         packet.wire.avaible = true;
     }
 
-    public static void  explosion(double explosionX , double explosionY , Packet p1, Packet p2) {
+    public static void explosion(double explosionX , double explosionY , Packet p1, Packet p2) {
         double explosionRadius = 200;
         for(Packet i : lvl.packets) {
             if (i != p1 && i != p2) {
@@ -257,14 +277,15 @@ public class LevelsController {
                     Rectangle square = (Rectangle) i.shape;
                     packetCenterX = square.getX() + square.getWidth() / 2;
                     packetCenterY = square.getY() + square.getHeight() / 2;
-
                 }
+
                 if (i instanceof TrianglePacket) {
                     // + 10 is cus the tri angle height and width
                     packetCenterX = i.shape.getLayoutX() + 10;
                     packetCenterY = i.shape.getLayoutY() + 10;
 
                 }
+
                 double dxExplosion = packetCenterX - explosionX;
                 double dyExplosion = packetCenterY - explosionY;
                 double distanceToExplosion = Math.sqrt(dxExplosion * dxExplosion + dyExplosion * dyExplosion);
@@ -298,25 +319,29 @@ public class LevelsController {
         }
        return true;
 
-
     }
 
     public static void startTimer() {
         Timeline timeline = new Timeline();
-        KeyFrame kf = new KeyFrame(Duration.seconds(1), e -> {
+        double t = 1 /gameSpeed;
+        KeyFrame kf = new KeyFrame(Duration.seconds(t), e -> {
             if(!paused){
-                lvl.time++;
-                lvl.currentTimeLabel.setText("Time: " + lvl.time + "s");
-                if (lvl.time >= 20) {
+                lvl.currentTime++;
+                lvl.currentTimeLabel.setText("Time: " + lvl.currentTime + "s");
+                lvl.timelineSlider.setValue(lvl.timelineSlider.getValue() + 1);
+                if (lvl.currentTime >= 20) {
                     timeline.stop();
                     lvlIsOver(true);
                 }
             }
         });
+        timertl = timeline;
+
         timeline.getKeyFrames().add(kf);
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
+
     public static void checkPacketLost(){
        double packetloss =(double) lvl.lostPackets/ lvl.generatedPackets;
         NumberFormat percentFormat = NumberFormat.getPercentInstance();
@@ -326,6 +351,61 @@ public class LevelsController {
             pauseLvl(lvl);
             lvlIsOver(false);
         }
+
+    }
+    public static void travelInTime(int time){
+        gameSpeed = 10;
+        resumelvl(lvl);
+
+        /*for(Packet p : lvl.packets){
+            try {
+            ((SquarePacket)p).buildAndStartTimeline();
+            } catch (Exception e) {
+                ((TrianglePacket)p).buildAndStartTimeline();
+            }
+        }*/
+
+        ServerControler.updatePacketGenerator((Server) lvl.comps.getFirst());
+        start((Server) lvl.comps.getFirst());
+        for(Packet p : lvl.packets){
+            try{
+                ((SquarePacket)p).startTimeline2();
+            }catch (Exception e){
+                ((TrianglePacket)p).startTimeline2();
+            }
+        }
+
+        double t =  time  * 100;
+        PauseTransition delay = new PauseTransition(Duration.millis(t));
+        delay.setOnFinished(event -> {
+            gameSpeed = 1;
+            System.out.println(time);
+            ServerControler.updatePacketGenerator((Server) lvl.comps.getFirst());
+            start((Server) lvl.comps.getFirst());
+            for(Packet p : lvl.packets){
+                try{
+                    ((SquarePacket)p).startTimeline2();
+                }catch (Exception e){
+                    ((TrianglePacket)p).startTimeline2();
+                }
+            }
+        });
+        delay.play();
+
+    }
+
+    public static void resetMyLevel(){
+        pauseLvl(lvl);
+        lvl.time = 0;
+        lvl.coins.set(10);
+        lvl.currentTimeLabel.setText("Time: 0.0s");
+        int n = lvl.packets.size();
+        for(int i = 0; i < n; i++){
+           killPacket(lvl.packets.getFirst());
+        }
+        lvl.lostPackets = 0;
+        lvl.generatedPackets = 0;
+        lvl.packets.clear();
 
     }
 
