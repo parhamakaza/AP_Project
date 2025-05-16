@@ -55,7 +55,12 @@ public class SystemController {
     }
 
     public static void transferPacket(Gsystem gsystem,  Packet packet){
-        if(gsystem.packets.isEmpty()){
+        if(!gsystem.packets.isEmpty()){
+            Packet p = gsystem.packets.getFirst();
+            gsystem.packets.removeFirst();
+            transferPacket(gsystem , p);
+
+        }
             if(packet instanceof SquarePacket){
                 for(Port i : gsystem.ports){
                     if((i instanceof SquarePort ) && (i.portType.equals(PortType.OUTPUT) )&& (i.wire.avaible )){
@@ -92,9 +97,9 @@ public class SystemController {
                 }
 
             }
-        }else {
+
             gsystem.packets.add(packet);
-        }
+        
 
     }
 
