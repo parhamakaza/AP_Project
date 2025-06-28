@@ -23,8 +23,8 @@ public class Main extends Application {
 
         theStage = stage;
         stage.setTitle("Blue print hell");
-        Image StageIcon = new Image("resources/Icon.jpg");
-        stage.getIcons().add(StageIcon);
+       // Image StageIcon = new Image("resources/Icon.jpg");
+        //stage.getIcons().add(StageIcon);
         stage.setWidth(stageWidth);
         stage.setHeight(stageHeight);
         stage.setResizable(false);
@@ -35,7 +35,7 @@ public class Main extends Application {
 
 
         Menu.menuConfig();
-        String musicUrl = Setting.class.getResource("/resources/music.wav").toExternalForm();
+        String musicUrl = Setting.class.getResource("/music.wav").toExternalForm();
         Media media = new Media(musicUrl);
         MediaPlayer player = new MediaPlayer(media);
         player.setVolume(0.2);

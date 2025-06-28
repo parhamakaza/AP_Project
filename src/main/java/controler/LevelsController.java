@@ -33,8 +33,8 @@ public class LevelsController {
     public static  boolean atar = false;
     public static  boolean anahita = false;
 
-    public static AudioClip connectionPlayer = mediaPlayerMaker("/resources/connection.mp3") ;
-    public static AudioClip collisionPlayer = mediaPlayerMaker("/resources/packet_damage.mp3") ;
+    public static AudioClip connectionPlayer = mediaPlayerMaker("/connection.mp3") ;
+    public static AudioClip collisionPlayer = mediaPlayerMaker("/packet_damage.mp3") ;
 
     public static Timeline checkforcollisontl;
     public static Timeline timertl;
@@ -367,14 +367,6 @@ public class LevelsController {
     public static void travelInTime(int time){
         gameSpeed = 10;
         resumelvl(lvl);
-
-        /*for(Packet p : lvl.packets){
-            try {
-            ((SquarePacket)p).buildAndStartTimeline();
-            } catch (Exception e) {
-                ((TrianglePacket)p).buildAndStartTimeline();
-            }
-        }*/
 
         ServerControler.updatePacketGenerator((Server) lvl.comps.getFirst());
         start();
