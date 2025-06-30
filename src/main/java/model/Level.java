@@ -1,6 +1,6 @@
 package model;
 
-import controler.LevelsController;
+import controller.LevelsController;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;

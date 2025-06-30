@@ -1,6 +1,6 @@
 package model;
 
-import controler.LevelsController;
+import controller.LevelsController;
 import javafx.animation.PauseTransition;
 import javafx.event.Event;
 import javafx.scene.Scene;
@@ -9,7 +9,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import view.Level1;
 
 public class Shop {
 

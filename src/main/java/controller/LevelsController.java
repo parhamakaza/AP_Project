@@ -1,4 +1,4 @@
-package controler;
+package controller;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -20,6 +20,8 @@ import javafx.stage.Stage;
 
 import javafx.util.Duration;
 import model.*;
+import service.AudioManager;
+import service.SceneManager;
 import view.Menu;
 import view.Setting;
 
@@ -33,8 +35,8 @@ public class LevelsController {
     public static  boolean atar = false;
     public static  boolean anahita = false;
 
-    public static AudioClip connectionPlayer = mediaPlayerMaker("/connection.mp3") ;
-    public static AudioClip collisionPlayer = mediaPlayerMaker("/packet_damage.mp3") ;
+
+    public static AudioClip collisionPlayer = mediaPlayerMaker("/packet_damage.mp3");
 
     public static Timeline checkforcollisontl;
     public static Timeline timertl;
@@ -181,12 +183,12 @@ public class LevelsController {
         menuButton.setOnAction(e -> {
             lvlOver(lvl);
             lvlOverStage.close();
-            Menu.menuConfig();
+            SceneManager.showMenuView();
         });
 
         lvlOverStage.setOnCloseRequest(e ->{
             lvlOverStage.close();
-            Menu.menuConfig();
+           SceneManager.showMenuView();
         });
 
 
@@ -256,7 +258,7 @@ public class LevelsController {
     }
 
     public static void collison(Packet packet1 , Packet packet2){
-        collisionPlayer.play();
+        AudioManager.playCollison();
 
         packet1.health = packet1.health-1;
         packet2.health = packet2.health-1;
@@ -412,6 +414,5 @@ public class LevelsController {
         lvl.packets.clear();
 
     }
-
 
 }

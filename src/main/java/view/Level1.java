@@ -1,11 +1,12 @@
 package view;
 
 
-import controler.LevelsController;
-import controler.SystemController;
-import javafx.animation.Timeline;
+import controller.LevelsController;
+import controller.SystemController;
 import model.*;
 import model.Gsystem;
+import service.SceneManager;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -28,7 +29,7 @@ public class Level1 extends Level{
 
         LevelsController.lvl = lvl;
 
-        Main.theStage.setScene(lvl.scene);
+        //Main.theStage.setScene(lvl.scene);
 
         ArrayList<Port> ports = new ArrayList<>();
         ports.add(new SquarePort(PortType.OUTPUT,1));
@@ -70,7 +71,7 @@ public class Level1 extends Level{
             LevelsController.lvlOver(lvl);
             LevelsController.paused = true;
 
-            Menu.menuConfig();
+            SceneManager.showMenuView();
         });
 
         LevelsController.checkForCollison();

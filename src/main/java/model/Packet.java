@@ -1,6 +1,6 @@
 package model;
 
-import controler.LevelsController;
+import controller.LevelsController;
 import javafx.animation.Timeline;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;

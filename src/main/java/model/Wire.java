@@ -1,6 +1,6 @@
 package model;
 
-import controler.LevelsController;
+import controller.LevelsController;
 import javafx.scene.shape.Line;
 
 public class Wire {

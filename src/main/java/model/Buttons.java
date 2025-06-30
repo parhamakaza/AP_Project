@@ -2,7 +2,6 @@ package model;
 
 import javafx.scene.control.Button;
 
-import java.awt.*;
 
 public class Buttons {
 

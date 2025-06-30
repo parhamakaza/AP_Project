@@ -4,6 +4,9 @@ out/
 !**/src/test/**/out/
 target/
 .idea/
+1.txt
+Clean my Code.txt
+SOILD.txt
 
 ### Eclipse ###
 .apt_generated
@@ -33,4 +36,5 @@ bin/
 .out/
 .idea/
 Project.iml
+
 

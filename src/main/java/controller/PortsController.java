@@ -1,19 +1,13 @@
-package controler;
+package controller;
 
-import javafx.event.Event;
-import javafx.geometry.Bounds;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import model.*;
 import model.Gsystem;
 
-import static controler.WireContoroller.professionalWiring;
+import static controller.WireContoroller.professionalWiring;
 
 
 public class PortsController {

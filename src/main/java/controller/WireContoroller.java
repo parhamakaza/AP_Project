@@ -1,15 +1,14 @@
-package controler;
+package controller;
 
 import javafx.event.Event;
 import javafx.geometry.Bounds;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 import model.*;
-import view.*;
+import service.AudioManager;
 
 import java.lang.System;
 
@@ -34,7 +33,7 @@ public class WireContoroller {
 
         root.getChildren().add(line);
         line.toFront();
-        LevelsController.connectionPlayer.play();
+        AudioManager.playConnection();
 
         return line;
     }

@@ -9,25 +9,28 @@ import model.Labels;
 
 import static view.Setting.menuButton;
 
-public class Levels {
+public class LevelsMenu {
+    private static LevelsMenu levelsMenu;
+    private final Scene scene;
 
-    public static void setLevels(){
+    public LevelsMenu(){
+
         Pane root = new Pane();
         Scene scene = new Scene(root);
         root.setStyle("-fx-background-color: #0d1b2a;");
         Label label = new Label("Choose a level");
         label.setPrefWidth(470);
-        label.setLayoutX(Main.stageWidth/2 - 200);
+        label.setLayoutX(Main.STAGEWIDTH /2 - 200);
         label.setLayoutY(100);
         Labels.styler1(label);
         Button menuButton = Buttons.makeButton("Menu",200,100,200,80);
         Buttons.styler1(menuButton);
 
         menuButton.setOnAction(e -> menuButton());
-        Button lvl1 = Buttons.makeButton("Level1", Main.stageWidth/2,320);
+        Button lvl1 = Buttons.makeButton("Level1", Main.STAGEWIDTH /2,320);
         Buttons.styler1(lvl1);
         lvl1.setOnAction(e ->Level1.startLevel1());
-        Button lvl2 = Buttons.makeButton("Level2", Main.stageWidth/2,475);
+        Button lvl2 = Buttons.makeButton("Level2", Main.STAGEWIDTH /2,475);
         Buttons.styler1(lvl2);
         lvl2.setOnAction(e ->Level2.startLevel2());
 
@@ -36,9 +39,21 @@ public class Levels {
         root.getChildren().add(menuButton);
 
         root.getChildren().add(label);
-        Main.theStage.setScene(scene);
-
+        this.scene = scene;
     }
+
+    public Scene getScene() {
+        return scene;
+    }
+
+    public static LevelsMenu getLevelsMenu(){
+        if(levelsMenu == null){
+            levelsMenu = new LevelsMenu();
+        }
+        return levelsMenu;
+    }
+
+
 
 
 }

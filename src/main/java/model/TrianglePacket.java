@@ -1,8 +1,7 @@
 package model;
 
-import controler.LevelsController;
-import controler.ServerControler;
-import controler.SystemController;
+import controller.LevelsController;
+import controller.ServerControler;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -10,7 +9,6 @@ import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 

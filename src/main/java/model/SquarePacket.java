@@ -1,8 +1,7 @@
 package model;
 
-import controler.LevelsController;
-import controler.ServerControler;
-import controler.SystemController;
+import controller.LevelsController;
+import controller.ServerControler;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;

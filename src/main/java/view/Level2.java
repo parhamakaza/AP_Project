@@ -1,8 +1,9 @@
 package view;
 
-import controler.LevelsController;
-import controler.SystemController;
+import controller.LevelsController;
+import controller.SystemController;
 import model.*;
+import service.SceneManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +23,7 @@ public class Level2 extends Level{
 
             LevelsController.lvl = lvl;
 
-            Main.theStage.setScene(lvl.scene);
+            //Main.theStage.setScene(lvl.scene);
 
             ArrayList<Port> ports = new ArrayList<>();
             ports.add(new TrianglePort(PortType.OUTPUT,1));
@@ -78,7 +79,7 @@ public class Level2 extends Level{
                 LevelsController.lvlOver(lvl);
                 LevelsController.paused = true;
 
-                Menu.menuConfig();
+                SceneManager.showMenuView();
 
             });
             LevelsController.checkForCollison();

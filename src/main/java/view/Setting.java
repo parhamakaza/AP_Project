@@ -10,19 +10,26 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import model.Buttons;
 import model.Labels;
+import service.AudioManager;
+import service.File;
+import service.SceneManager;
 
-import static controler.LevelsController.collisionPlayer;
-import static controler.LevelsController.connectionPlayer;
 
 public class Setting {
-    private static double volume = 0.2;
+    private Scene scene;
+    private static double volume = File.getFromMap("volume");
+    private static Setting setting;
 
+    public Scene getScene() {
+        return scene;
+    }
 
-    public static void setSetting(){
+    private Setting(AudioManager audioManager){
+
         Pane root = new Pane();
-        Scene settingScene = new Scene(root);
+        Scene scene = new Scene(root);
         Button button = Buttons.makeButton("Menu",200,100,200,80);
-                Buttons.styler1(button);
+        Buttons.styler1(button);
 
         button.setOnAction(e -> menuButton());
 
@@ -32,27 +39,22 @@ public class Setting {
 
         volumeSlider.setPrefHeight(10);
         volumeSlider.setPrefWidth(500);
-
-        volumeSlider.setLayoutX(Main.stageWidth / 2 - volumeSlider.getPrefWidth()/2);
-        volumeSlider.setLayoutY(Main.stageHeight /2 - volumeSlider.getPrefHeight()/2 );
-        Main.backGroundMusicPlayer.volumeProperty().bind(volumeSlider.valueProperty());
-        connectionPlayer.volumeProperty().bind(volumeSlider.valueProperty());
-        collisionPlayer.volumeProperty().bind(volumeSlider.valueProperty());
+        audioManager.backgroundMusicPlayer.volumeProperty().bind(volumeSlider.valueProperty());
+        audioManager.connectionPlayer.volumeProperty().bind(volumeSlider.valueProperty());
+        audioManager.collisionPlayer.volumeProperty().bind(volumeSlider.valueProperty());
         volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-                        volume = (double) newVal;
-                });
+            volume = (double) newVal;
+        });
+        volumeSlider.setOnMouseReleased(event -> {
+            // This code now runs only WHEN the mouse is released
+            File.putToMap("volume", volumeSlider.getValue());
+        });
         volume = volumeSlider.getValue();
         Label label = new Label("Music Volume");
-
-        HBox container = new HBox(label);
-        container.setAlignment(Pos.CENTER);
-        container.prefWidth(500);
         label.setPrefWidth(500);
         label.setPrefHeight(50);
-        //container.setLayoutX(Main.stageWidth/2 - label.getPrefWidth());
-       // container.setLayoutY(100);
-        Labels.styler1(label);
 
+        Labels.styler1(label);
 
         volumeSlider.setStyle("-fx-background-color: linear-gradient(to right, #002b36 0%, #003842 25%, #002b36 75%, #003842 100%); " +
                 "-fx-background-insets: 0; " +
@@ -64,26 +66,27 @@ public class Setting {
                 "-fx-faint-focus-color: rgba(0,255,255,0.4,0.5);"
         );
 
-
         VBox vbox = new VBox(10, label, volumeSlider);
-
-        vbox.setLayoutX(Main.stageWidth/2 - volumeSlider.getPrefWidth()/2 + 30);
-        vbox.setLayoutY(Main.stageHeight/2  - (40 + volumeSlider.getPrefHeight() + label.getHeight()) );
+        vbox.setLayoutX(Main.STAGEWIDTH /2 - volumeSlider.getPrefWidth()/2 + 30);
+        vbox.setLayoutY(Main.stageheight /2  - (40 + volumeSlider.getPrefHeight() + label.getHeight()) );
         vbox.setAlignment(Pos.CENTER);
 
         root.getChildren().add(vbox);
-
-
-
         root.setStyle("-fx-background-color: #0d1b2a;");
         root.getChildren().add(button);
-
-        Main.theStage.setScene(settingScene);
-
+        this.scene =scene;
     }
-    public static void menuButton(){
-        Menu.menuConfig();
 
+    public static Setting getSetting(AudioManager audioManager){
+        if(setting == null){
+            setting = new Setting(audioManager);
+        }
+        return setting;
+    }
+
+
+    public static void menuButton(){
+        SceneManager.showMenuView();
     }
 
 
