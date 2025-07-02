@@ -1,7 +1,7 @@
 package model;
 
 import controller.LevelsController;
-import javafx.scene.shape.Line;
+import controller.WireController;
 
 public class Wire {
     public WireType type;
@@ -13,7 +13,6 @@ public class Wire {
     public double endY;
     public boolean avaible = true;
     public double length;
-    public Line line;
 
     public Wire(Port sPort , Port ePort)throws Exception{
         this.sPort = sPort;
@@ -31,14 +30,14 @@ public class Wire {
             sPort.wire = this;
             ePort.wire = this;
 
-            this.length = lengthcounter(this);
-            if(this.length >  LevelsController.lvl.wireLength.get()){
+            this.length = WireController.lengthcounter(this);
+            if(this.length >  LevelsController.lvl.wireLength){
                 sPort.wire = null;
                 ePort.wire = null;
                 throw new Exception("not enougth length");
             }
 
-            LevelsController.lvl.wireLength.set(LevelsController.lvl.wireLength.get() - this.length);
+            LevelsController.lvl.wireLength= (LevelsController.lvl.wireLength - this.length);
         }else{
             this.ePort=null;
             this.sPort =null;
@@ -52,28 +51,15 @@ public class Wire {
             this.type = WireType.SQUARE;
         }
     }
-    public double lengthcounter(Wire wire){
-        double x1 = wire.startX;
-        double y1 = wire.startY;
-        double x2 = wire.endX;
-        double y2 = wire.endY;
-        double l = Math.abs(x1 - x2);
-        double h = Math.abs(y2 - y1);
 
-        return Math.sqrt((l * l) + (h * h));
-
-
-    }
-
-    private static boolean checkPorts(Port p1, Port p2){
+    public static boolean checkPorts(Port p1, Port p2){
 
         boolean a = p1.getClass().getSimpleName().equals(p2.getClass().getSimpleName());
-        boolean b = !p1.system.equals(p2.system);
+        boolean b = !p1.computer.equals(p2.computer);
         boolean c =  p1.portType.equals(PortType.OUTPUT);
         boolean d = p2.portType.equals(PortType.INPUT);
 
         return a && b && c && d;
 
     }
-
 }

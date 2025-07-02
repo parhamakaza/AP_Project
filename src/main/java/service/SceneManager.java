@@ -1,5 +1,6 @@
 package service;
 
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import view.*;
 
@@ -8,6 +9,10 @@ import static view.LevelsMenu.getLevelsMenu;
 public class SceneManager {
     public static void setPrimaryStage(Stage primaryStage) {
         SceneManager.primaryStage = primaryStage;
+    }
+
+    public static Stage getPrimaryStage() {
+        return primaryStage;
     }
 
     private static Stage primaryStage;
@@ -30,6 +35,9 @@ public class SceneManager {
     public static void showSettingsView() {
         Setting setting = Setting.getSetting(audioManager);
         primaryStage.setScene(setting.getScene());
+    }
+    public static void goToLevel(Scene scene){
+        primaryStage.setScene(scene);
     }
 
 

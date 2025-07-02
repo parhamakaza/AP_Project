@@ -1,12 +1,13 @@
 package view;
 
+import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import model.Buttons;
-import controller.MenuController;
-import model.Labels;
+
 import service.SceneManager;
 
 
@@ -23,29 +24,29 @@ public class Menu {
             Scene scene = new Scene(root);
             Label label = new Label("Blue Print Hell");
             label.setPrefWidth(470);
-            label.setLayoutX(Main.STAGEWIDTH /2 - 200);
+            label.setLayoutX(Main.STAGE_WIDTH /2 - 200);
             label.setLayoutY(100);
-            Labels.styler1(label);
-            Button startButton = Buttons.makeButton("start", Main.STAGEWIDTH /2,320);
-            Buttons.styler1(startButton);
+            UI.styler1(label);
+            Button startButton = UI.makeButton("start", Main.STAGE_WIDTH /2,320);
+            UI.styler1(startButton);
             startButton.setOnAction(e -> {
                 Level1.startLevel1();
             });
-            Button levelButton = Buttons.makeButton("Levels", Main.STAGEWIDTH /2,475);
-            Buttons.styler1(levelButton);
+            Button levelButton = UI.makeButton("Levels", Main.STAGE_WIDTH /2,475);
+            UI.styler1(levelButton);
             levelButton.setOnAction(e -> {
                SceneManager.showLevelsMenuView();
             });
-            Button settingButton = Buttons.makeButton("Setting", Main.STAGEWIDTH /2,630 );
-            Buttons.styler1(settingButton);
+            Button settingButton = UI.makeButton("Setting", Main.STAGE_WIDTH /2,630 );
+            UI.styler1(settingButton);
             settingButton.setOnAction(e -> {
                 SceneManager.showSettingsView();
             });
 
-            Button exitButton = Buttons.makeButton("Exit", Main.STAGEWIDTH /2,785 );
-            Buttons.styler1(exitButton);
+            Button exitButton = UI.makeButton("Exit", Main.STAGE_WIDTH /2,785 );
+            UI.styler1(exitButton);
             exitButton.setOnAction(e -> {
-                MenuController.exitButton();
+              exitButton();
             });
 
 
@@ -65,6 +66,14 @@ public class Menu {
             menu = new Menu();
         }
         return menu;
+    }
+    public static void exitButton(){
+        Alert exitalert = new Alert(Alert.AlertType.CONFIRMATION);
+        exitalert.setTitle("Exit");
+        exitalert.setHeaderText("are you sure you want to exit");
+        if (exitalert.showAndWait().get() == ButtonType.OK) {
+            Platform.exit();
+        }
     }
 
 

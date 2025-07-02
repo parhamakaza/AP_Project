@@ -1,6 +1,5 @@
 package controller;
 
-import javafx.event.Event;
 import javafx.geometry.Bounds;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -8,38 +7,31 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 import model.*;
-import service.AudioManager;
+import view.PortView;
+import view.WireView;
 
 import java.lang.System;
+import java.util.HashMap;
 
 
-public class WireContoroller {
+public class WireController {
+
     private static Line currentLine = new Line();
     private static Port firstPort;
 
+    public static HashMap<Wire,WireView> wireMap = new HashMap<>();
 
-    public static Line drawWires(Wire wire , Pane root){
-        double x1 = wire.startX;
-        double y1 = wire.startY;
-        double x2 = wire.endX;
-        double y2 = wire.endY;
-        Line line = new Line(x1, y1, x2, y2);
-        line.setStrokeWidth(3);
-        if(wire.type.equals(WireType.SQUARE)){
-            line.setStroke(Color.GREEN);
-        } else {
-            line.setStroke(Color.YELLOW);
-        }
-
-        root.getChildren().add(line);
-        line.toFront();
-        AudioManager.playConnection();
-
-        return line;
+    public static WireView makeWire(Wire wire){
+        WireView wireView = new WireView(wire);
+        wireMap.put(wire,wireView);
+        return wireView;
     }
 
-    public static void professionalWiring(Port port){
-        Shape shape = port.shape;
+
+    public static void professionalWiring(PortView portView){
+        Shape shape = portView.getShape();
+        Port port = portView.getPort();
+        Pane pane = (Pane) shape.getParent();
 
 
 
@@ -53,15 +45,15 @@ public class WireContoroller {
                 currentLine.setStartY(port.centerY());
                 currentLine.setEndX(e.getSceneX());
                 currentLine.setEndY(e.getSceneY());
-                ((Pane) shape.getParent()).getChildren().add(currentLine);
+                pane.getChildren().add(currentLine);
             }else{
                 Wire wire = port.wire;
-                ((Pane) port.wire.line.getParent()).getChildren().remove(port.wire.line);
-                port.wire.line = null;
+                WireView wireView = wireMap.get(wire);
+                pane.getChildren().remove(wireView.getLine());
+                wireView.setLine(null);
                 wire.sPort.wire =null;
                 wire.ePort.wire= null;
-                LevelsController.lvl.wireLength.set(LevelsController.lvl.wireLength.get() + wire.length);
-
+                LevelsController.lvl.wireLength = LevelsController.lvl.wireLength + wire.length;
             }
         });
 
@@ -72,7 +64,7 @@ public class WireContoroller {
                 double dx = currentLine.getEndX() - currentLine.getStartX();
                 double dy = currentLine.getEndY() - currentLine.getStartY();
                 double length = Math.sqrt(dx * dx + dy * dy);
-                if(length > LevelsController.lvl.wireLength.get()){
+                if(length > LevelsController.lvl.wireLength){
                     currentLine.setStroke(Color.RED);
                 }else {
                     currentLine.setStroke(Color.WHITE);
@@ -82,20 +74,19 @@ public class WireContoroller {
         });
 
         shape.setOnMouseReleased((MouseEvent e3) -> {
-
             if (currentLine != null){
-                Port p = checkIsIndise(currentLine.getEndX(), currentLine.getEndY(), e3);
-                Wire w1 = null;
+                Port p = checkIsIndise(currentLine.getEndX(), currentLine.getEndY());
                 try {
 
-                    w1 = new Wire(firstPort, p);
-                    w1.line = WireContoroller.drawWires(w1, port.system.root);
+                    makeWire(new Wire(firstPort, p));
+
+
 
                 } catch (Exception ex) {
 
                     try {
-                        w1 = new Wire(p , firstPort);
-                    w1.line = WireContoroller.drawWires(w1, port.system.root);
+                        makeWire(new Wire(p , firstPort));
+
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
@@ -114,18 +105,16 @@ public class WireContoroller {
 
 
     }
-    private static Port checkIsIndise(double x , double y , Event mouseEvent){
-
-        for(Computer i : LevelsController.lvl.comps){
-            for (Port p : i.ports){
-                Bounds bounds = p.shape.localToScene(p.shape.getBoundsInLocal());
+    private static Port checkIsIndise(double x , double y){
+            for (PortView p : PortController.portMap.values()){
+                Bounds bounds = p.getShape().localToScene(p.getShape().getBoundsInLocal());
                 if(bounds.contains(x, y)){
 
-                    return  p;
+                    return  p.getPort();
                 }
             }
 
-        }
+
         return null;
 
 
@@ -133,5 +122,18 @@ public class WireContoroller {
 
     }
 
+
+    public static double lengthcounter(Wire wire){
+        double x1 = wire.startX;
+        double y1 = wire.startY;
+        double x2 = wire.endX;
+        double y2 = wire.endY;
+        double l = Math.abs(x1 - x2);
+        double h = Math.abs(y2 - y1);
+
+        return Math.sqrt((l * l) + (h * h));
+
+
+    }
 
 }

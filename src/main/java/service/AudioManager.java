@@ -61,7 +61,7 @@ public class AudioManager {
         audioManager.connectionPlayer.play();
     }
     public static void playCollison(){
-        audioManager.connectionPlayer.play();
+        audioManager.collisionPlayer.play();
     }
 
 }

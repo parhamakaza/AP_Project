@@ -1,80 +1,41 @@
 package view;
 
 
-import controller.LevelsController;
-import controller.SystemController;
+import controller.*;
 import model.*;
-import model.Gsystem;
 import service.SceneManager;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+public class Level1 extends LevelView{
 
-
-
-public class Level1 extends Level{
 
 
     public Level1 (double x){
-
-        this.wireLength.set(x);
-
+        super(new Level());
+        this.getLevel().wireLength = x;
     }
 
 
     public static void startLevel1(){
 
-        Level lvl = new Level1(1290);
+        LevelView lvl = LevelController.makeLevel(new Level(10000));
+
+        LevelsController.lvl = lvl.getLevel();
+        SceneManager.goToLevel(lvl.getScene());
+        Server server = new Server(500 , 500);
+        ComputerController.MakeComputer(server);
+        PortController.makePort(new SquarePort(PortType.OUTPUT,server, 1));
+        PortController.makePort(new SquarePort(PortType.OUTPUT,server, 2));
+        PortController.makePort(new TrianglePort(PortType.OUTPUT,server, 3));
+
+        Server server2 = new Server(1200 , 500);
+        ComputerController.MakeComputer(server2);
+        PortController.makePort(new SquarePort(PortType.INPUT, server2, 1));
+
+        PortController.makePort(new SquarePort(PortType.INPUT, server2, 2));
+        PortController.makePort(new TrianglePort(PortType.INPUT, server2, 3));
 
 
-        LevelsController.lvl = lvl;
 
-        //Main.theStage.setScene(lvl.scene);
-
-        ArrayList<Port> ports = new ArrayList<>();
-        ports.add(new SquarePort(PortType.OUTPUT,1));
-        ports.add(new TrianglePort(PortType.OUTPUT,2));
-        ports.add(new SquarePort(PortType.OUTPUT,3));
-
-        Server server1 = new Server(ports ,lvl);
-        SystemController.drawServers(lvl.root,500,500,server1);
-
-        lvl.startButton.setOnAction(e -> {
-            LevelsController.startTimer();
-            LevelsController.start();
-            lvl.shopButton.setDisable(false);
-            lvl.startButton.setDisable(true);
-        });
-
-        ArrayList<Port> ports2 = new ArrayList<>();
-        ports2.add(new SquarePort(PortType.INPUT,1));
-        ports2.add(new TrianglePort(PortType.INPUT,2));
-        ports2.add(new SquarePort(PortType.INPUT,3));
-        ports2.add(new TrianglePort(PortType.OUTPUT,1));
-        ports2.add(new SquarePort(PortType.OUTPUT,2));
-        ports2.add(new TrianglePort(PortType.OUTPUT,3));
-
-        Gsystem system1 = new Gsystem(ports2 , lvl);
-        SystemController.drawServers(lvl.root,800,500,system1);
-
-        ArrayList<Port> ports3 = new ArrayList<>();
-        ports3.add(new TrianglePort(PortType.INPUT,1));
-        ports3.add(new SquarePort(PortType.INPUT,2));
-        ports3.add(new TrianglePort(PortType.INPUT,3));
-
-        Server server2 = new Server(ports3, lvl);
-        SystemController.drawServers(lvl.root,1100,500,server2);
-
-        lvl.comps.addAll(Arrays.asList(server1,server2,system1));
-
-        lvl.menuButton.setOnAction(e -> {
-            LevelsController.lvlOver(lvl);
-            LevelsController.paused = true;
-
-            SceneManager.showMenuView();
-        });
-
-        LevelsController.checkForCollison();
 
 
 

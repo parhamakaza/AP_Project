@@ -1,5 +1,6 @@
-package model;
+package view;
 
+import controller.GameLoopController;
 import controller.LevelsController;
 import javafx.animation.PauseTransition;
 import javafx.event.Event;
@@ -9,12 +10,15 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.Packet;
+import model.SquarePacket;
+import model.TrianglePacket;
 
 public class Shop {
 
-    public Button atar = Buttons.makeButton("O' Atar  \n     -3", 200, 100, 220, 250);
-    public Button airyaman = Buttons.makeButton("O’ Airyaman \n     -4", 200, 100, 485, 250);
-    public Button anahita = Buttons.makeButton("O' Anahita \n     -5", 200, 100, 770, 250);
+    public Button atar = UI.makeButton("O' Atar  \n     -3", 200, 100, 220, 250);
+    public Button airyaman = UI.makeButton("O’ Airyaman \n     -4", 200, 100, 485, 250);
+    public Button anahita = UI.makeButton("O' Anahita \n     -5", 200, 100, 770, 250);
     Pane root = new Pane();
         {
             root.setStyle("-fx-background-color: #0d1b2a;");
@@ -33,7 +37,7 @@ public class Shop {
             shop.closeShop();
         });
         shop.atar.setOnAction(e2 -> {
-            if(LevelsController.lvl.coins.get() >= 3) {
+            if(LevelsController.lvl.coins >= 3) {
                 atar();
                 shopStage.close();
                 shop.closeShop();
@@ -42,7 +46,7 @@ public class Shop {
 
         });
         shop.airyaman.setOnAction(e3 -> {
-            if(LevelsController.lvl.coins.get() >= 4) {
+            if(LevelsController.lvl.coins >= 4) {
                 airyaman();
                 shopStage.close();
                 shop.closeShop();
@@ -52,7 +56,7 @@ public class Shop {
 
         });
         shop.anahita.setOnAction(e3 -> {
-            if(LevelsController.lvl.coins.get() >= 5) {
+            if(LevelsController.lvl.coins >= 5) {
                 anahita();
                 shopStage.close();
                 shop.closeShop();
@@ -64,9 +68,9 @@ public class Shop {
 
 
 
-        Buttons.styler1(shop.atar);
-        Buttons.styler1(shop.anahita);
-        Buttons.styler1(shop.airyaman);
+        UI.styler1(shop.atar);
+        UI.styler1(shop.anahita);
+        UI.styler1(shop.airyaman);
 
 
         shop.root.getChildren().addAll(shop.atar, shop.airyaman, shop.anahita);
@@ -76,7 +80,7 @@ public class Shop {
 
     }
     public static void atar(){
-        LevelsController.lvl.coins.set(LevelsController.lvl.coins.get() - 3);
+        LevelsController.lvl.coins = LevelsController.lvl.coins - 3;
 
         LevelsController.atar=true;
         PauseTransition delay = new PauseTransition(Duration.seconds(10));
@@ -92,7 +96,7 @@ public class Shop {
 
     }
     public static void airyaman(){
-        LevelsController.lvl.coins.set(LevelsController.lvl.coins.get() - 4);
+        LevelsController.lvl.coins -= 4;
 
             LevelsController.airyaman=true;
             PauseTransition delay = new PauseTransition(Duration.seconds(5));
@@ -108,7 +112,7 @@ public class Shop {
 
     }
     public static void anahita(){
-        LevelsController.lvl.coins.set(LevelsController.lvl.coins.get() - 5);
+        LevelsController.lvl.coins -= 5;
 
         for(Packet i :LevelsController.lvl.packets ){
             if(i instanceof TrianglePacket){
@@ -127,7 +131,6 @@ public class Shop {
     }
 
         private void closeShop() {
-            LevelsController.paused = false;
-            LevelsController.resumelvl(LevelsController.lvl);
+            GameLoopController.pauseAndResume(false);
         }
 }
