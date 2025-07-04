@@ -1,13 +1,20 @@
-package controller;
+package manager;
 
+import controller.PacketContoller;
 import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.util.Duration;
 import model.*;
+import model.computer.Server;
+import model.packet.Packet;
+import model.packet.SquarePacket;
+import model.packet.TrianglePacket;
+import model.port.Port;
+import model.port.SquarePort;
+import model.port.TrianglePort;
 
 import static view.PacketView.movePacket;
 
-public  class ServerControler {
+public  class ServerManager {
 
     public static void takePacket(Packet packet , Level lvl){
         if(packet instanceof TrianglePacket){
@@ -26,20 +33,20 @@ public  class ServerControler {
         final int[] i = {0};
 
 
-        KeyFrame keyFrame = new KeyFrame(Duration.seconds(1 / LevelsController.gameSpeed), e -> {
+        KeyFrame keyFrame = new KeyFrame(Duration.seconds(1 / LevelManager.gameSpeed), e -> {
             Port port = server.ports.get(i[0]);
 
             if (port instanceof SquarePort && port.wire.avaible) {
                 SquarePacket sq = new SquarePacket(port);
                 PacketContoller.makePacket(sq);
                 movePacket(sq);
-                LevelsController.lvl.generatedPackets++;
+                LevelManager.lvl.generatedPackets++;
             }
             if (port instanceof TrianglePort && port.wire.avaible) {
                 TrianglePacket tri = new TrianglePacket(port);
                 PacketContoller.makePacket(tri);
                 movePacket(tri);
-                LevelsController.lvl.generatedPackets++;
+                LevelManager.lvl.generatedPackets++;
             }
 
             i[0]++;
@@ -52,20 +59,20 @@ public  class ServerControler {
 
     }
     public  static KeyFrame makePacket2(Server server) {
-        KeyFrame keyFrame = new KeyFrame(Duration.seconds(1  / LevelsController.gameSpeed), e -> {
+        KeyFrame keyFrame = new KeyFrame(Duration.seconds(1  / LevelManager.gameSpeed), e -> {
 
             for(Port port : server.ports) {
                 if (port instanceof SquarePort && port.wire.avaible ) {
                     SquarePacket sq = new SquarePacket(port);
                     PacketContoller.makePacket(sq);
                     movePacket(sq);
-                    LevelsController.lvl.generatedPackets++;
+                    LevelManager.lvl.generatedPackets++;
                 }
                 if (port instanceof TrianglePort && port.wire.avaible ) {
                     TrianglePacket tri = new TrianglePacket(port);
                     PacketContoller.makePacket(tri);
                     movePacket(tri);
-                    LevelsController.lvl.generatedPackets++;
+                    LevelManager.lvl.generatedPackets++;
                 }
             }
         });

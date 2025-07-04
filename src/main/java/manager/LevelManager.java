@@ -1,10 +1,10 @@
-package controller;
+package manager;
 
-import javafx.animation.Timeline;
+import controller.*;
 import model.*;
 import view.PacketView;
 
-public class LevelsController {
+public class LevelManager {
     public static double gameSpeed = 1;
     public static  boolean airyaman = false;
     public static  boolean atar = false;
@@ -90,7 +90,7 @@ public class LevelsController {
     }
 
     public static void resetMyLevel(){
-        GameLoopController.pauseAndResume(true);
+        GameLoopManager.pauseAndResume(true);
         lvl.currentTime = 0;
         lvl.coins = 10;
         int n = lvl.packets.size();

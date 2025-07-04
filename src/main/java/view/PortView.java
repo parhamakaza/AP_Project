@@ -3,9 +3,12 @@ package view;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import model.*;
+import model.computer.Computer;
+import model.port.Port;
+import model.port.PortType;
+import model.port.SquarePort;
+import model.port.TrianglePort;
 import service.SceneManager;
 
 
@@ -31,7 +34,7 @@ public class PortView {
         }
 
         if (port.portType.equals(PortType.OUTPUT)) {
-            port.x = port.computer.x + (Gsystem.WIDTH);
+            port.x = port.computer.x + (Computer.WIDTH);
             shape.setLayoutX(port.x);
 
         } else if (port.portType.equals(PortType.INPUT)) {

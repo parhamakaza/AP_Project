@@ -1,27 +1,28 @@
-package controller;
+package manager;
 
+import controller.PacketContoller;
 import javafx.animation.KeyFrame;
 
 import javafx.animation.PauseTransition;
 import javafx.geometry.Bounds;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
-import model.Packet;
+import model.packet.Packet;
 import service.AudioManager;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CollisonController {
+public class CollisonManager {
     static Set<String> currentCollisions = new HashSet<>();
 
 
     public static void checkForCollison() {
-        ArrayList<Packet> packets = LevelsController.lvl.packets;
+        ArrayList<Packet> packets = LevelManager.lvl.packets;
         KeyFrame keyFrame = new KeyFrame((Duration.millis(16)), event -> {
 
-            if (!LevelsController.airyaman && !GameLoopController.paused) {
+            if (!LevelManager.airyaman && !GameLoopManager.paused) {
 
                 // 1. Create a copy of the list to iterate over
                 ArrayList<Packet> packetsThisFrame = new ArrayList<>(packets);
@@ -57,7 +58,7 @@ public class CollisonController {
                                     double collisionX = collisionBounds.getMinX() + collisionBounds.getWidth() / 2;
                                     double collisionY = collisionBounds.getMinY() + collisionBounds.getHeight() / 2;
                                     collison(p1, p2);
-                                    if (!LevelsController.atar) {
+                                    if (!LevelManager.atar) {
                                         explosion(collisionX, collisionY, p1, p2);
                                     }
                                 }
@@ -71,7 +72,7 @@ public class CollisonController {
             }
 
         });
-        GameLoopController.addKeyFrame(keyFrame);
+        GameLoopManager.addKeyFrame(keyFrame);
     }
 
     public static void collison(Packet packet1, Packet packet2) {
@@ -92,7 +93,7 @@ public class CollisonController {
 
     public static void explosion(double explosionX, double explosionY, Packet p1, Packet p2) {
         double explosionRadius = 200;
-        for (Packet i : LevelsController.lvl.packets) {
+        for (Packet i : LevelManager.lvl.packets) {
             if (i != p1 && i != p2) {
                 double packetCenterX = PacketContoller.packetMap.get(i).getShape().getLayoutX() + 10;
                 double packetCenterY = PacketContoller.packetMap.get(i).getShape().getLayoutY() + 10;

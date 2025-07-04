@@ -2,6 +2,8 @@ package model;
 
 
 
+import model.computer.Computer;
+import model.packet.Packet;
 import java.util.ArrayList;
 
 

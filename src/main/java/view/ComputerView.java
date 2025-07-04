@@ -1,17 +1,16 @@
 package view;
 
-import controller.SystemController;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import model.Computer;
+import model.computer.Computer;
 
 import service.SceneManager;
 
-import static model.Computer.HEIGHT;
-import static model.Computer.WIDTH;
+import static model.computer.Computer.HEIGHT;
+import static model.computer.Computer.WIDTH;
 
 public class ComputerView {
     private Computer computer;

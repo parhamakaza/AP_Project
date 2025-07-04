@@ -1,7 +1,7 @@
 package view;
 
-import controller.GameLoopController;
-import controller.LevelsController;
+import manager.GameLoopManager;
+import manager.LevelManager;
 import javafx.animation.PauseTransition;
 import javafx.event.Event;
 import javafx.scene.Scene;
@@ -10,9 +10,9 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import model.Packet;
-import model.SquarePacket;
-import model.TrianglePacket;
+import model.packet.Packet;
+import model.packet.SquarePacket;
+import model.packet.TrianglePacket;
 
 public class Shop {
 
@@ -37,7 +37,7 @@ public class Shop {
             shop.closeShop();
         });
         shop.atar.setOnAction(e2 -> {
-            if(LevelsController.lvl.coins >= 3) {
+            if(LevelManager.lvl.coins >= 3) {
                 atar();
                 shopStage.close();
                 shop.closeShop();
@@ -46,7 +46,7 @@ public class Shop {
 
         });
         shop.airyaman.setOnAction(e3 -> {
-            if(LevelsController.lvl.coins >= 4) {
+            if(LevelManager.lvl.coins >= 4) {
                 airyaman();
                 shopStage.close();
                 shop.closeShop();
@@ -56,7 +56,7 @@ public class Shop {
 
         });
         shop.anahita.setOnAction(e3 -> {
-            if(LevelsController.lvl.coins >= 5) {
+            if(LevelManager.lvl.coins >= 5) {
                 anahita();
                 shopStage.close();
                 shop.closeShop();
@@ -80,12 +80,12 @@ public class Shop {
 
     }
     public static void atar(){
-        LevelsController.lvl.coins = LevelsController.lvl.coins - 3;
+        LevelManager.lvl.coins = LevelManager.lvl.coins - 3;
 
-        LevelsController.atar=true;
+        LevelManager.atar=true;
         PauseTransition delay = new PauseTransition(Duration.seconds(10));
         delay.setOnFinished(event -> {
-            LevelsController.atar=false;
+            LevelManager.atar=false;
 
 
         });
@@ -96,12 +96,12 @@ public class Shop {
 
     }
     public static void airyaman(){
-        LevelsController.lvl.coins -= 4;
+        LevelManager.lvl.coins -= 4;
 
-            LevelsController.airyaman=true;
+            LevelManager.airyaman=true;
             PauseTransition delay = new PauseTransition(Duration.seconds(5));
             delay.setOnFinished(event -> {
-                LevelsController.airyaman=false;
+                LevelManager.airyaman=false;
 
 
             });
@@ -112,9 +112,9 @@ public class Shop {
 
     }
     public static void anahita(){
-        LevelsController.lvl.coins -= 5;
+        LevelManager.lvl.coins -= 5;
 
-        for(Packet i :LevelsController.lvl.packets ){
+        for(Packet i : LevelManager.lvl.packets ){
             if(i instanceof TrianglePacket){
                 i.health = 3;
             }
@@ -131,6 +131,6 @@ public class Shop {
     }
 
         private void closeShop() {
-            GameLoopController.pauseAndResume(false);
+            GameLoopManager.pauseAndResume(false);
         }
 }

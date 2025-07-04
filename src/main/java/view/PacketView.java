@@ -7,7 +7,14 @@ import javafx.animation.Timeline;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
-import model.*;
+import manager.LevelManager;
+import manager.ServerManager;
+import model.computer.Transferer;
+import model.packet.Packet;
+import model.packet.SquarePacket;
+import model.packet.TrianglePacket;
+import model.port.Port;
+import model.port.PortType;
 import service.SceneManager;
 
 import java.util.HashSet;
@@ -78,7 +85,7 @@ public class PacketView {
                 // Calculate speed with multiplier
                 double currentSpeed = 100;
 
-                double movePerFrame = currentSpeed * (PacketView.FRAME_DURATION /1000) * LevelsController.gameSpeed ;
+                double movePerFrame = currentSpeed * (PacketView.FRAME_DURATION /1000) * LevelManager.gameSpeed ;
 
                 // Move
                 packet.currentX[0] += packet.unitX[0] * movePerFrame;
@@ -101,9 +108,9 @@ public class PacketView {
 
 
                     try {
-                        ((Gsystem) packet.ePort.computer).packets.add(packet);
+                        ((Transferer) packet.ePort.computer).packets.add(packet);
                     } catch (ClassCastException e) {
-                        ServerControler.takePacket(packet, LevelsController.lvl);
+                        ServerManager.takePacket(packet, LevelManager.lvl);
                     }
                     return;
                 }

@@ -1,5 +1,7 @@
-package model;
+package model.computer;
 
+
+import model.port.Port;
 
 import java.util.ArrayList;
 

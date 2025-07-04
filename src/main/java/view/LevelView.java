@@ -1,8 +1,8 @@
 
 package view;
 import controller.ComputerController;
-import controller.GameLoopController;
-import controller.LevelsController;
+import manager.GameLoopManager;
+import manager.LevelManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
@@ -18,7 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import model.Computer;
+import model.computer.Computer;
 import model.Level;
 
 import static service.SceneManager.showMenuView;
@@ -59,21 +59,21 @@ public class LevelView {
 
         scene.setOnKeyPressed((KeyEvent event) -> {
             if (event.getCode() == KeyCode.P) {
-                GameLoopController.paused = !GameLoopController.paused;
-                GameLoopController.pauseAndResume(GameLoopController.paused);
+                GameLoopManager.paused = !GameLoopManager.paused;
+                GameLoopManager.pauseAndResume(GameLoopManager.paused);
             }
         });
 
         // --- Create all UI components ---
         menuButton = UI.createHUDButton("Menu");
         menuButton.setOnAction(e->{showMenuView();
-        GameLoopController.pauseAndResume(true);
+        GameLoopManager.pauseAndResume(true);
         timeline.stop();
-        LevelsController.reset();
+        LevelManager.reset();
         });
 
         startButton = UI.createHUDButton("Start");
-        startButton.setOnAction(e->GameLoopController.start());
+        startButton.setOnAction(e-> GameLoopManager.start());
         shopButton = UI.createHUDButton("Shop");
         shopButton.setOnAction(e-> Shop.openShop(e));
 
@@ -114,7 +114,7 @@ public class LevelView {
         });
 
         timelineSlider.setOnMouseReleased(e -> {
-            LevelsController.resetMyLevel();
+            //LevelManager.resetMyLevel();
             int value = (int) timelineSlider.getValue();
             //LevelsController.travelInTime(value);
         });

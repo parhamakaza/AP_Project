@@ -1,4 +1,4 @@
-package model;
+package model.computer;
 
 
 public class Server extends Computer {

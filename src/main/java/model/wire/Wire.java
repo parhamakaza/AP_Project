@@ -1,7 +1,9 @@
-package model;
+package model.wire;
 
-import controller.LevelsController;
-import controller.WireController;
+import manager.LevelManager;
+import manager.WireManager;
+import model.port.Port;
+import model.port.PortType;
 
 public class Wire {
     public WireType type;
@@ -30,14 +32,14 @@ public class Wire {
             sPort.wire = this;
             ePort.wire = this;
 
-            this.length = WireController.lengthcounter(this);
-            if(this.length >  LevelsController.lvl.wireLength){
+            this.length = WireManager.lengthcounter(this);
+            if(this.length >  LevelManager.lvl.wireLength){
                 sPort.wire = null;
                 ePort.wire = null;
                 throw new Exception("not enougth length");
             }
 
-            LevelsController.lvl.wireLength= (LevelsController.lvl.wireLength - this.length);
+            LevelManager.lvl.wireLength= (LevelManager.lvl.wireLength - this.length);
         }else{
             this.ePort=null;
             this.sPort =null;

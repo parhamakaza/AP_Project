@@ -1,6 +1,8 @@
-package model;
+package model.packet;
 
-import controller.LevelsController;
+import manager.LevelManager;
+import model.port.Port;
+import model.wire.Wire;
 
 
 public abstract class Packet {
@@ -27,7 +29,7 @@ public abstract class Packet {
         this.sPort = sPort;
         theID++;
         this.id= theID;
-        LevelsController.lvl.packets.add(this);
+        LevelManager.lvl.packets.add(this);
         this.sPort=sPort;
         this.wire = sPort.wire;
         this.ePort = sPort.wire.ePort;

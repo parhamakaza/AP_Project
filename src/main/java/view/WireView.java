@@ -3,8 +3,8 @@ package view;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import model.Wire;
-import model.WireType;
+import model.wire.Wire;
+import model.wire.WireType;
 import service.AudioManager;
 import service.SceneManager;
 

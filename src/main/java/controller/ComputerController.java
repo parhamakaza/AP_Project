@@ -1,9 +1,8 @@
 package controller;
 
-import model.Computer;
-import model.Port;
+import manager.LevelManager;
+import model.computer.Computer;
 import view.ComputerView;
-import view.LevelView;
 
 import java.util.HashMap;
 
@@ -14,7 +13,7 @@ public class ComputerController {
 
        ComputerView computerView = new ComputerView(computer);
        computerMap.put(computer,computerView);
-       LevelsController.lvl.comps.add(computer);
+       LevelManager.lvl.comps.add(computer);
        return computerView;
 
 

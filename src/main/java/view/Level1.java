@@ -2,7 +2,12 @@ package view;
 
 
 import controller.*;
+import manager.LevelManager;
 import model.*;
+import model.computer.Server;
+import model.port.PortType;
+import model.port.SquarePort;
+import model.port.TrianglePort;
 import service.SceneManager;
 
 public class Level1 extends LevelView{
@@ -14,12 +19,11 @@ public class Level1 extends LevelView{
         this.getLevel().wireLength = x;
     }
 
-
     public static void startLevel1(){
 
         LevelView lvl = LevelController.makeLevel(new Level(10000));
 
-        LevelsController.lvl = lvl.getLevel();
+        LevelManager.lvl = lvl.getLevel();
         SceneManager.goToLevel(lvl.getScene());
         Server server = new Server(500 , 500);
         ComputerController.MakeComputer(server);

@@ -1,6 +1,7 @@
-package model;
+package model.packet;
 
 
+import model.port.Port;
 
 public class TrianglePacket extends Packet {
 

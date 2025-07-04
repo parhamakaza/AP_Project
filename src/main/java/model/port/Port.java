@@ -1,5 +1,8 @@
-package model;
+package model.port;
 
+
+import model.wire.Wire;
+import model.computer.Computer;
 
 public abstract class Port {
     public static final double SIZE = 20;
@@ -27,8 +30,6 @@ public abstract class Port {
     public double centerY(){
         return (this.y) + SIZE/2;
     }
-
-
 
 
 
