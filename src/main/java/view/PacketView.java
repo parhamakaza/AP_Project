@@ -80,7 +80,6 @@ public class PacketView {
     public PacketView(Packet packet){
         this.packet = packet;
         this.draw();
-
     }
 
 
@@ -93,7 +92,6 @@ public class PacketView {
 
                 packet.sPort.wire.avaible = false;
 
-                // Calculate speed with multiplier
                 double currentSpeed = 100;
 
                 double movePerFrame = currentSpeed * (PacketView.FRAME_DURATION /1000) * LevelManager.gameSpeed ;
@@ -141,7 +139,6 @@ public class PacketView {
     }
 
     public static void movePacket(Packet packet){
-
         PacketAnimatorManager packetAnimatorManager = new PacketAnimatorManager(packetMap.get(packet),WireController.wireMap.get(packet.sPort.wire).getCurves(),100);
         packetAnimatorManager.start();
     }

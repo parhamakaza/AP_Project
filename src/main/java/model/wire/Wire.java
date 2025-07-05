@@ -4,6 +4,7 @@ import manager.LevelManager;
 import manager.WireManager;
 import model.port.Port;
 import model.port.PortType;
+import model.port.TrianglePort;
 
 public class Wire {
     public WireType type;
@@ -48,7 +49,7 @@ public class Wire {
             throw new Exception("wires ports type mismatch");
 
         }
-        if(sPort.getClass().getSimpleName().equals("TrianglePort")){
+        if(sPort instanceof TrianglePort){
             this.type = WireType.TRIANGLE;
         }else {
             this.type = WireType.SQUARE;

@@ -222,7 +222,7 @@ public class PacketAnimatorManager extends AnimationTimer {
     }
 
 
-    public record Point2D(double x, double y) {
+    private record Point2D(double x, double y) {
 
         public double distance(Point2D other) {
 
