@@ -15,8 +15,7 @@ public class Level1 extends LevelView{
 
 
     public Level1 (double x){
-        super(new Level());
-        this.getLevel().wireLength = x;
+        super(new Level(x));
     }
 
     public static void startLevel1(){
@@ -34,11 +33,11 @@ public class Level1 extends LevelView{
         Server server2 = new Server(1200 , 500);
         ComputerController.MakeComputer(server2);
         PortController.makePort(new SquarePort(PortType.INPUT, server2, 1));
-
         PortController.makePort(new SquarePort(PortType.INPUT, server2, 2));
-        PortController.makePort(new TrianglePort(PortType.INPUT, server2, 3));
 
-
+        Server server3 = new Server(1600 , 500);
+        ComputerController.MakeComputer(server3);
+        PortController.makePort(new TrianglePort(PortType.INPUT, server3, 3));
 
 
 

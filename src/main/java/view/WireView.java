@@ -35,7 +35,6 @@ public class WireView {
         return wire;
     }
 
-
     public WireView(Wire wire) {
         Pane root = (Pane) SceneManager.getPrimaryStage().getScene().getRoot();
         this.wire = wire;
@@ -52,7 +51,7 @@ public class WireView {
 
         curves = List.of(curve1, curve2, curve3);
 
-        initialCurvesControles.addAll(List.of(  setControlToMidpoint(curve1), setControlToMidpoint(curve2), setControlToMidpoint(curve3)));
+        initialCurvesControles.addAll(List.of(setControlToMidpoint(curve1), setControlToMidpoint(curve2), setControlToMidpoint(curve3)));
 
         // Style the curves
         curves.forEach(curve -> {
@@ -60,7 +59,7 @@ public class WireView {
             curve.setFill(null);
             if (wire.type.equals(WireType.SQUARE)) {
                 curve.setStroke(Color.GREEN);
-            }else if (wire.type.equals(WireType.TRIANGLE)){
+            } else if (wire.type.equals(WireType.TRIANGLE)) {
                 curve.setStroke(Color.YELLOW);
             }
             curve.setOnMouseDragged(event -> {
@@ -69,15 +68,15 @@ public class WireView {
                 int i = curves.indexOf(draggedCurve);
 
                 // 2. Get the current mouse coordinates.
-               double controlX = event.getX();
-               double controlY = event.getY();
-               if( distance(new Point2D(controlX,controlY) , initialCurvesControles.get(i)) <= 120) {
+                double controlX = event.getX();
+                double controlY = event.getY();
+                if (distance(new Point2D(controlX, controlY), initialCurvesControles.get(i)) <= 120) {
 
 
-                   draggedCurve.setControlX(controlX);
-                   draggedCurve.setControlY(controlY);
-                   smoother(i, draggedCurve);
-               }
+                    draggedCurve.setControlX(controlX);
+                    draggedCurve.setControlY(controlY);
+                    smoother(i, draggedCurve);
+                }
 
             });
             curve.setOnMouseClicked(e -> wire.curved++);
@@ -94,7 +93,7 @@ public class WireView {
         double controlY = (curve.getStartY() + curve.getEndY()) / 2;
         curve.setControlX(controlX);
         curve.setControlY(controlY);
-        return new Point2D(controlX , controlY);
+        return new Point2D(controlX, controlY);
     }
 
     private double average(double a, double b) {
@@ -144,8 +143,8 @@ public class WireView {
         draggedCurve.setEndY(y);
     }
 
-    private double distance(Point2D p1 , Point2D p2){
-        return Math.sqrt(Math.pow(p1.getX() - p2.getX() , 2) + Math.pow(p1.getY() - p2.getY(),2));
+    private double distance(Point2D p1, Point2D p2) {
+        return Math.sqrt(Math.pow(p1.getX() - p2.getX(), 2) + Math.pow(p1.getY() - p2.getY(), 2));
     }
 
 }

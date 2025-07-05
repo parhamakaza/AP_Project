@@ -25,8 +25,7 @@ public class PacketAnimatorManager extends AnimationTimer {
     private static final double SPEED_PIXELS_PER_SECOND = 150.0;
 
 
-    private record ArcLengthData(int curveIndex, double t, double cumulativeDistance) {
-    }
+    private record ArcLengthData(int curveIndex, double t, double cumulativeDistance) {}
 
 
     private PacketView packetView;

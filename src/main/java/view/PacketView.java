@@ -21,10 +21,9 @@ import service.SceneManager;
 import java.util.HashSet;
 import java.util.Set;
 
-import static controller.PacketContoller.killPacket;
 import static controller.PacketContoller.packetMap;
 
-public class PacketView {
+public class PacketView implements Drawable{
     public static  final double FRAME_DURATION = 16;
     public static Set<Timeline> packetTimelines = new HashSet<>();
     private Packet packet;
@@ -64,12 +63,13 @@ public class PacketView {
         this.packet = packet;
     }
 
-    private Shape draw(){
+    @Override
+    public Shape draw(){
         Packet packet1 = this.packet;
         if(packet1 instanceof SquarePacket){
-            this.shape = PortView.createRectangleAsPolygon();
+            this.shape = Drawable.createRectangleAsPolygon();
         }else if(packet1 instanceof TrianglePacket){
-            this.shape = PortView.createTriangleAsPolygon();
+            this.shape = Drawable.createTriangleAsPolygon();
         }
         shape.setLayoutX(packet1.x);
         shape.setLayoutY(packet1.y);

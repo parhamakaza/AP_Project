@@ -12,7 +12,7 @@ import service.SceneManager;
 import static model.computer.Computer.HEIGHT;
 import static model.computer.Computer.WIDTH;
 
-public class ComputerView {
+public class ComputerView implements Drawable{
     private Computer computer;
 
     public Computer getComputer() {
@@ -25,21 +25,14 @@ public class ComputerView {
 
     private Shape shape;
 
-
-    public  ComputerView(Computer computer){
-        this.computer = computer;
-        Pane root = (Pane) SceneManager. getPrimaryStage().getScene().getRoot();
-        double x = computer.x;
-        double y = computer.y;
+    @Override
+    public Shape draw() {
 
         Rectangle module = new Rectangle(WIDTH , HEIGHT);
         module.setX(0);
         module.setY(0);
-        module.setLayoutX(x);
-        module.setLayoutY(y);
-        this.shape = module;
-
-
+        module.setLayoutX(this.computer.x);
+        module.setLayoutY(this.computer.y);
         module.setArcWidth(10);   // rounded corners
         module.setArcHeight(10);
 
@@ -51,8 +44,19 @@ public class ComputerView {
         glow.setSpread(0.2);
         module.setEffect(glow);
 
-        root.getChildren().add(module);
-        module.toBack();
+    }
+
+    public  ComputerView(Computer computer){
+        this.computer = computer;
+        Pane root = (Pane) SceneManager. getPrimaryStage().getScene().getRoot();
+        double x = computer.x;
+        double y = computer.y;
+
+
+        this.shape = draw();
+
+        root.getChildren().add(shape);
+        shape.toBack();
 
 
     }

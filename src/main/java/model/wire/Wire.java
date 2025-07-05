@@ -4,6 +4,7 @@ import manager.LevelManager;
 import manager.WireManager;
 import model.port.Port;
 import model.port.PortType;
+import model.port.SquarePort;
 import model.port.TrianglePort;
 
 public class Wire {
@@ -51,7 +52,7 @@ public class Wire {
         }
         if(sPort instanceof TrianglePort){
             this.type = WireType.TRIANGLE;
-        }else {
+        }else if(sPort instanceof SquarePort) {
             this.type = WireType.SQUARE;
         }
     }
