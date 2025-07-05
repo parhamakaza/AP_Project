@@ -7,6 +7,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Shape;
 import model.port.Port;
 import model.wire.Wire;
@@ -35,13 +36,16 @@ public class WireManager {
                 currentLine.setEndX(e.getSceneX());
                 currentLine.setEndY(e.getSceneY());
                 pane.getChildren().add(currentLine);
-            }else{
+            } else {
                 Wire wire = port.wire;
                 WireView wireView = WireController.wireMap.get(wire);
-                pane.getChildren().remove(wireView.getLine());
-                wireView.setLine(null);
-                wire.sPort.wire =null;
-                wire.ePort.wire= null;
+                for (QuadCurve qc : WireController.wireMap.get(wire).getCurves()) {
+                    pane.getChildren().remove(qc);
+                }
+
+                wireView.setCurves(null);
+                wire.sPort.wire = null;
+                wire.ePort.wire = null;
                 LevelManager.lvl.wireLength = LevelManager.lvl.wireLength + wire.length;
             }
         });
@@ -111,6 +115,7 @@ public class WireManager {
 
 
     }
+
 
     public static double lengthcounter(Wire wire){
         double x1 = wire.startX;

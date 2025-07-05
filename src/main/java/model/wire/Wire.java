@@ -15,6 +15,7 @@ public class Wire {
     public double endY;
     public boolean avaible = true;
     public double length;
+    public int curved = 0;
 
     public Wire(Port sPort , Port ePort)throws Exception{
         this.sPort = sPort;

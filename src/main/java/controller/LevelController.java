@@ -1,7 +1,7 @@
 package controller;
 
 import model.Level;
-import view.*;
+import view.LevelView;
 
 import java.util.HashMap;
 

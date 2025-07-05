@@ -8,6 +8,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 import manager.LevelManager;
+import manager.PacketAnimatorManager;
 import manager.ServerManager;
 import model.computer.Transferer;
 import model.packet.Packet;
@@ -28,6 +29,15 @@ public class PacketView {
     public static Set<Timeline> packetTimelines = new HashSet<>();
     private Packet packet;
     private Shape shape;
+
+    public Timeline getTimeline() {
+        return timeline;
+    }
+
+    public static Set<Timeline> getPacketTimelines() {
+        return packetTimelines;
+    }
+
     Timeline timeline = new Timeline();
 
 
@@ -37,7 +47,8 @@ public class PacketView {
             packet.sPort = sPort;
             packet.wire = sPort.wire;
             packet.ePort = sPort.wire.ePort;
-            movePacket(packet);
+            PacketAnimatorManager packetAnimatorManager = new PacketAnimatorManager(packetMap.get(packet),WireController.wireMap.get(sPort.wire).getCurves(),100);
+            packetAnimatorManager.start();
         }
     }
 
@@ -96,7 +107,7 @@ public class PacketView {
                 packet.x = packet.currentX[0];
                 packet.y = packet.currentY[0];
                 double traveled = Math.sqrt((packet.currentX[0] - packet.x1) * (packet.currentX[0] -packet. x1) + (packet.currentY[0] -packet. y1) * (packet.currentY[0] - packet.y1));
-                Shape intersection = Shape.intersect(shape, (WireController.wireMap.get(packet.sPort.wire)).getLine());
+                //Shape intersection = Shape.intersect(shape, (WireController.wireMap.get(packet.sPort.wire)).getCurves());
 
                 if (traveled >= packet.distance) {
 
@@ -115,9 +126,9 @@ public class PacketView {
                     return;
                 }
 
-                if (!(intersection.getBoundsInLocal().getWidth() > 0 && intersection.getBoundsInLocal().getHeight() > 0)) {
-                    killPacket(packet);
-                }
+                //if (!(intersection.getBoundsInLocal().getWidth() > 0 && intersection.getBoundsInLocal().getHeight() > 0)) {
+                    //killPacket(packet);
+               // }
 
         });
         timeline.getKeyFrames().add(keyFrame);
@@ -128,7 +139,13 @@ public class PacketView {
 
 
     }
+
     public static void movePacket(Packet packet){
+
+        PacketAnimatorManager packetAnimatorManager = new PacketAnimatorManager(packetMap.get(packet),WireController.wireMap.get(packet.sPort.wire).getCurves(),100);
+        packetAnimatorManager.start();
+    }
+    public static void movePacket2(Packet packet){
         PacketView packetView= PacketContoller.makePacket(packet);
         packet.x1 = packet.sPort.x;
         packet.y1 = packet.sPort.y;
@@ -152,7 +169,7 @@ public class PacketView {
         packet.currentX = new double[]{packet.x1};
         packet.currentY = new double[]{packet.y1};
 
-        packetView.buildAndStartKeyFrame(packet);
+        //packetView.buildAndStartKeyFrame(packet);
 
 
 
