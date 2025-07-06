@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import static manager.GameLoopManager.gameLoopManager;
+
 public class CollisonManager {
     static Set<String> currentCollisions = new HashSet<>();
 
@@ -22,7 +24,7 @@ public class CollisonManager {
         ArrayList<Packet> packets = LevelManager.lvl.packets;
         KeyFrame keyFrame = new KeyFrame((Duration.millis(16)), event -> {
 
-            if (!LevelManager.airyaman && !GameLoopManager.paused) {
+            if (!LevelManager.airyaman && !gameLoopManager.paused) {
 
                 // 1. Create a copy of the list to iterate over
                 ArrayList<Packet> packetsThisFrame = new ArrayList<>(packets);
@@ -72,7 +74,7 @@ public class CollisonManager {
             }
 
         });
-        GameLoopManager.addKeyFrame(keyFrame);
+        gameLoopManager.addKeyFrame(keyFrame);
     }
 
     public static void collison(Packet packet1, Packet packet2) {

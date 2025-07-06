@@ -1,7 +1,9 @@
 package controller;
 
 import manager.LevelManager;
+import manager.TransfererManager;
 import model.computer.Computer;
+import model.computer.Transferer;
 import view.ComputerView;
 
 import java.util.HashMap;
@@ -14,6 +16,11 @@ public class ComputerController {
        ComputerView computerView = new ComputerView(computer);
        computerMap.put(computer,computerView);
        LevelManager.lvl.comps.add(computer);
+
+       if(computer instanceof Transferer){
+           Transferer transferer = (Transferer)computer;
+           new TransfererManager(transferer);
+       }
        return computerView;
 
 

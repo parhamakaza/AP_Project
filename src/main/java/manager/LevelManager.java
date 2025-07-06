@@ -4,6 +4,8 @@ import controller.*;
 import model.*;
 import view.PacketView;
 
+import static manager.GameLoopManager.gameLoopManager;
+
 public class LevelManager {
     public static double gameSpeed = 1;
     public static  boolean airyaman = false;
@@ -90,7 +92,7 @@ public class LevelManager {
     }
 
     public static void resetMyLevel(){
-        GameLoopManager.pauseAndResume(true);
+        gameLoopManager.pauseAndResume(true);
         lvl.currentTime = 0;
         lvl.coins = 10;
         int n = lvl.packets.size();

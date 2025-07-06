@@ -21,6 +21,7 @@ import javafx.util.Duration;
 import model.computer.Computer;
 import model.Level;
 
+import static manager.GameLoopManager.gameLoopManager;
 import static service.SceneManager.showMenuView;
 
 public class LevelView {
@@ -59,21 +60,20 @@ public class LevelView {
 
         scene.setOnKeyPressed((KeyEvent event) -> {
             if (event.getCode() == KeyCode.P) {
-                GameLoopManager.paused = !GameLoopManager.paused;
-                GameLoopManager.pauseAndResume(GameLoopManager.paused);
+                gameLoopManager.paused = !gameLoopManager.paused;
+                gameLoopManager.pauseAndResume(gameLoopManager.paused);
             }
         });
 
         // --- Create all UI components ---
         menuButton = UI.createHUDButton("Menu");
-        menuButton.setOnAction(e->{showMenuView();
-        GameLoopManager.pauseAndResume(true);
+        menuButton.setOnAction(e->{showMenuView();gameLoopManager.pauseAndResume(true);
         timeline.stop();
         LevelManager.reset();
         });
 
         startButton = UI.createHUDButton("Start");
-        startButton.setOnAction(e-> GameLoopManager.start());
+        startButton.setOnAction(e-> gameLoopManager.start());
         shopButton = UI.createHUDButton("Shop");
         shopButton.setOnAction(e-> Shop.openShop(e));
 

@@ -41,7 +41,7 @@ public class PacketView implements Drawable{
 
 
 
-    public  static  void sendPacket(Port sPort , Packet packet){
+    public static  void sendPacket(Port sPort , Packet packet){
         if(sPort.portType.equals(PortType.OUTPUT)) {
             packet.sPort = sPort;
             packet.wire = sPort.wire;
@@ -84,7 +84,7 @@ public class PacketView implements Drawable{
 
 
 
-    public void buildAndStartKeyFrame(Packet packet) {
+    /*public void buildAndStartKeyFrame(Packet packet) {
         Shape shape = packetMap.get(packet).getShape();
         packetTimelines.add(timeline);
 
@@ -137,7 +137,7 @@ public class PacketView implements Drawable{
 
 
     }
-
+*/
     public static void movePacket(Packet packet){
         PacketAnimatorManager packetAnimatorManager = new PacketAnimatorManager(packetMap.get(packet),WireController.wireMap.get(packet.sPort.wire).getCurves(),100);
         packetAnimatorManager.start();

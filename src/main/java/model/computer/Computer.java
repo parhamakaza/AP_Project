@@ -24,4 +24,7 @@ public abstract class Computer {
         }
        return true;
     }
+    public Computer(){
+
+    }
 }

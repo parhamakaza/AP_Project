@@ -5,6 +5,7 @@ import controller.*;
 import manager.LevelManager;
 import model.*;
 import model.computer.Server;
+import model.computer.Transferer;
 import model.port.PortType;
 import model.port.SquarePort;
 import model.port.TrianglePort;
@@ -34,10 +35,12 @@ public class Level1 extends LevelView{
         ComputerController.MakeComputer(server2);
         PortController.makePort(new SquarePort(PortType.INPUT, server2, 1));
         PortController.makePort(new SquarePort(PortType.INPUT, server2, 2));
+        PortController.makePort(new TrianglePort(PortType.INPUT, server2, 3));
 
-        Server server3 = new Server(1600 , 500);
-        ComputerController.MakeComputer(server3);
-        PortController.makePort(new TrianglePort(PortType.INPUT, server3, 3));
+        Transferer transferer = new Transferer(800 , 500);
+        ComputerController.MakeComputer(transferer);
+        PortController.makePort(new TrianglePort(PortType.INPUT, transferer, 3));
+        PortController.makePort(new TrianglePort(PortType.OUTPUT, transferer, 3));
 
 
 

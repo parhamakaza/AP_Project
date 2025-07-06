@@ -12,11 +12,13 @@ import model.port.Port;
 import model.port.SquarePort;
 import model.port.TrianglePort;
 
+import static manager.LevelManager.lvl;
 import static view.PacketView.movePacket;
 
 public  class ServerManager {
 
-    public static void takePacket(Packet packet , Level lvl){
+    public static void takePacket(Packet packet){
+        Level level = lvl;
         if(packet instanceof TrianglePacket){
             lvl.coins = lvl.coins + 2;
         }
@@ -40,13 +42,13 @@ public  class ServerManager {
                 SquarePacket sq = new SquarePacket(port);
                 PacketContoller.makePacket(sq);
                 movePacket(sq);
-                LevelManager.lvl.generatedPackets++;
+                lvl.generatedPackets++;
             }
             if (port instanceof TrianglePort && port.wire.avaible) {
                 TrianglePacket tri = new TrianglePacket(port);
                 PacketContoller.makePacket(tri);
                 movePacket(tri);
-                LevelManager.lvl.generatedPackets++;
+                lvl.generatedPackets++;
             }
 
             i[0]++;
@@ -66,13 +68,13 @@ public  class ServerManager {
                     SquarePacket sq = new SquarePacket(port);
                     PacketContoller.makePacket(sq);
                     movePacket(sq);
-                    LevelManager.lvl.generatedPackets++;
+                    lvl.generatedPackets++;
                 }
                 if (port instanceof TrianglePort && port.wire.avaible ) {
                     TrianglePacket tri = new TrianglePacket(port);
                     PacketContoller.makePacket(tri);
                     movePacket(tri);
-                    LevelManager.lvl.generatedPackets++;
+                    lvl.generatedPackets++;
                 }
             }
         });

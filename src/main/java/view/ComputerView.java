@@ -43,14 +43,12 @@ public class ComputerView implements Drawable{
         DropShadow glow = new DropShadow(10, Color.web("#00ffff"));
         glow.setSpread(0.2);
         module.setEffect(glow);
-
+        return module;
     }
 
     public  ComputerView(Computer computer){
         this.computer = computer;
         Pane root = (Pane) SceneManager. getPrimaryStage().getScene().getRoot();
-        double x = computer.x;
-        double y = computer.y;
 
 
         this.shape = draw();

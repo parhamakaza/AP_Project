@@ -9,22 +9,25 @@ import model.computer.Transferer;
 import model.computer.Server;
 import view.PacketView;
 
+import static manager.TransfererManager.transfererMap;
+
 public class GameLoopManager {
-    public static boolean paused;
-    private static Timeline mainTimeLine ;
+    public static GameLoopManager gameLoopManager = new GameLoopManager();
+    public  boolean paused;
+    private  Timeline mainTimeLine = new Timeline();;
     public static void addKeyFrame(KeyFrame keyFrame){
-        mainTimeLine.getKeyFrames().add(keyFrame);
+        gameLoopManager.mainTimeLine.getKeyFrames().add(keyFrame);
 
     }
 
 
     public static void removeKeyFrame(KeyFrame keyFrame){
-        mainTimeLine.getKeyFrames().remove(keyFrame);
+        gameLoopManager.mainTimeLine.getKeyFrames().remove(keyFrame);
 
 
     }
 
-    public static void pauseAndResume(boolean p){
+    public  void pauseAndResume(boolean p){
         paused = p;
         if(mainTimeLine == null){
             return;
@@ -56,11 +59,10 @@ public class GameLoopManager {
         }
     }
 
-    public static void start(){
-        mainTimeLine = new Timeline();
+    public  void start(){
         for(Computer computer : LevelManager.lvl.comps){
             if (computer instanceof Transferer){
-                addKeyFrame(SystemManager.startPacketTransfer((Transferer) computer));
+
             }else if(computer instanceof Server){
                 addKeyFrame(ServerManager.makePacket2((Server) computer));
             }

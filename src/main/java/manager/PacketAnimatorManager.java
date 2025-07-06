@@ -7,6 +7,9 @@ import javafx.scene.shape.QuadCurve;
 
 import javafx.scene.shape.Shape;
 
+import model.computer.Computer;
+import model.computer.Server;
+import model.computer.Transferer;
 import model.packet.Packet;
 
 import view.PacketView;
@@ -41,7 +44,6 @@ public class PacketAnimatorManager extends AnimationTimer {
     private final List<ArcLengthData> lookupTable = new ArrayList<>();
 
     private double totalPathLength;
-
 
     private long lastUpdate = 0;
 
@@ -88,17 +90,11 @@ public class PacketAnimatorManager extends AnimationTimer {
         distanceTraveled += speed * elapsedSeconds;
 
 
-        if (distanceTraveled > totalPathLength) {
-
-            distanceTraveled %= totalPathLength; // Loop animation
-
-        }
-
 
         ArcLengthData targetData = getPathDataForDistance(distanceTraveled);
 
 
-// Use 't' and the curve index to find the position
+
 
         Point2D position = evaluateCurve(targetData.curveIndex(), targetData.t());
 
@@ -108,6 +104,18 @@ public class PacketAnimatorManager extends AnimationTimer {
         shape.setLayoutY(position.y - (double) Packet.SIZE / 2);
 
         bindToModule(shape);
+
+        if(distanceTraveled >= totalPathLength){
+            packet.wire.avaible = true;
+            Computer computer = packet.wire.ePort.computer;
+            if(computer instanceof Server){
+
+                ServerManager.takePacket(packet);
+            } else if (computer instanceof Transferer) {
+               ((Transferer) computer).packets.add(packet);
+            }
+            stop();
+        }
 
     }
 

@@ -13,19 +13,32 @@ import model.port.SquarePort;
 import model.port.TrianglePort;
 import view.PacketView;
 
-public class SystemManager {
+import java.util.HashMap;
 
+public class TransfererManager {
+    public static HashMap<Transferer, TransfererManager> transfererMap = new HashMap<>();
+    private Transferer transferer;
+    private KeyFrame keyFrame;
 
-    public static KeyFrame startPacketTransfer(Transferer transferer){
-        KeyFrame kf =new KeyFrame(Duration.millis(100), e -> {
-        transferPacket(transferer);
-        });
-        return kf;
+    public TransfererManager(Transferer transferer) {
+        this.transferer = transferer;
+        keyFrame = startPacketTransfer();
+        transfererMap.put(transferer, this);
     }
 
-    public static void transferPacket(Transferer transferer){
-        if(!transferer.packets.isEmpty()) {
-            Packet packet = transferer.packets.getFirst();
+    public KeyFrame startPacketTransfer() {
+        keyFrame = new KeyFrame(Duration.millis(100), e -> {
+            transferPacket();
+        });
+        GameLoopManager.addKeyFrame(keyFrame);
+        return keyFrame;
+    }
+
+    public void transferPacket() {
+        if (!transferer.packets.isEmpty()) {
+            Packet packet = transferer.packets.getLast();
+
+
             if (transferer.packets.size() > 5) {
                 transferer.packets.remove(packet);
                 PacketContoller.killPacket(packet);
@@ -35,14 +48,14 @@ public class SystemManager {
             if (packet instanceof SquarePacket) {
                 for (Port i : transferer.ports) {
                     if ((i instanceof SquarePort) && (i.portType.equals(PortType.OUTPUT)) && (i.wire.avaible)) {
-                        PacketView.sendPacket(i,packet);
+                        PacketView.sendPacket(i, packet);
                         transferer.packets.remove(packet);
                         return;
                     }
                 }
                 for (Port i : transferer.ports) {
                     if (i.portType.equals(PortType.OUTPUT) && (i.wire.avaible)) {
-                        PacketView.sendPacket(i,packet);
+                        PacketView.sendPacket(i, packet);
                         transferer.packets.remove(packet);
 
                         return;

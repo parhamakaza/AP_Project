@@ -1,5 +1,6 @@
 package model.computer;
 
+import manager.TransfererManager;
 import model.packet.Packet;
 
 import java.util.ArrayList;
