@@ -5,11 +5,9 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import model.computer.Computer;
-import model.computer.Transferer;
+import model.computer.Transformer;
 import model.computer.Server;
 import view.PacketView;
-
-import static manager.TransfererManager.transfererMap;
 
 public class GameLoopManager {
     public static GameLoopManager gameLoopManager = new GameLoopManager();
@@ -59,12 +57,14 @@ public class GameLoopManager {
         }
     }
 
-    public  void start(){
-        for(Computer computer : LevelManager.lvl.comps){
-            if (computer instanceof Transferer){
+    public void start() {
+        for (Computer computer : LevelManager.lvl.comps) {
+            if (computer instanceof Server server) {
 
-            }else if(computer instanceof Server){
-                addKeyFrame(ServerManager.makePacket2((Server) computer));
+                addKeyFrame(ServerManager.makePacket2(server));
+            } else if (computer instanceof Transformer transformer) {
+                addKeyFrame(TransformerManager.transferPacket(transformer));
+
             }
         }
         CollisonManager.checkForCollison();

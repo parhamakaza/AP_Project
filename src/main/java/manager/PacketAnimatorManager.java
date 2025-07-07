@@ -1,6 +1,7 @@
 package manager;
 
 
+import controller.PacketContoller;
 import javafx.animation.AnimationTimer;
 
 import javafx.scene.shape.QuadCurve;
@@ -9,7 +10,7 @@ import javafx.scene.shape.Shape;
 
 import model.computer.Computer;
 import model.computer.Server;
-import model.computer.Transferer;
+import model.computer.Transformer;
 import model.packet.Packet;
 
 import view.PacketView;
@@ -50,9 +51,9 @@ public class PacketAnimatorManager extends AnimationTimer {
     private double distanceTraveled = 0;
 
 
-    public PacketAnimatorManager(PacketView packetView, List<QuadCurve> path, double speed) {
+    public PacketAnimatorManager(Packet packet, List<QuadCurve> path, double speed) {
 
-        this.packetView = packetView;
+        this.packetView = PacketContoller.packetMap.get(packet);
 
         packetView.getPacket().wire.avaible = false;
 
@@ -111,8 +112,9 @@ public class PacketAnimatorManager extends AnimationTimer {
             if(computer instanceof Server){
 
                 ServerManager.takePacket(packet);
-            } else if (computer instanceof Transferer) {
-               ((Transferer) computer).packets.add(packet);
+            } else if (computer instanceof Transformer) {
+               ((Transformer) computer).packets.add(packet);
+
             }
             stop();
         }

@@ -1,16 +1,10 @@
 package view;
 
 import controller.*;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
-import javafx.util.Duration;
-import manager.LevelManager;
 import manager.PacketAnimatorManager;
-import manager.ServerManager;
-import model.computer.Transferer;
 import model.packet.Packet;
 import model.packet.SquarePacket;
 import model.packet.TrianglePacket;
@@ -46,7 +40,7 @@ public class PacketView implements Drawable{
             packet.sPort = sPort;
             packet.wire = sPort.wire;
             packet.ePort = sPort.wire.ePort;
-            PacketAnimatorManager packetAnimatorManager = new PacketAnimatorManager(packetMap.get(packet),WireController.wireMap.get(sPort.wire).getCurves(),100);
+            PacketAnimatorManager packetAnimatorManager = new PacketAnimatorManager(packet,WireController.wireMap.get(sPort.wire).getCurves(),100);
             packetAnimatorManager.start();
         }
     }
@@ -139,7 +133,7 @@ public class PacketView implements Drawable{
     }
 */
     public static void movePacket(Packet packet){
-        PacketAnimatorManager packetAnimatorManager = new PacketAnimatorManager(packetMap.get(packet),WireController.wireMap.get(packet.sPort.wire).getCurves(),100);
+        PacketAnimatorManager packetAnimatorManager = new PacketAnimatorManager(packet,WireController.wireMap.get(packet.sPort.wire).getCurves(),100);
         packetAnimatorManager.start();
     }
     public static void movePacket2(Packet packet){
