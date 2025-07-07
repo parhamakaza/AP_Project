@@ -61,7 +61,7 @@ public class CollisonManager {
                                     double collisionY = collisionBounds.getMinY() + collisionBounds.getHeight() / 2;
                                     collison(p1, p2);
                                     if (!LevelManager.atar) {
-                                        explosion(collisionX, collisionY, p1, p2);
+                                        //explosion(collisionX, collisionY, p1, p2);
                                     }
                                 }
                             } else {
@@ -93,46 +93,5 @@ public class CollisonManager {
 
     }
 
-    public static void explosion(double explosionX, double explosionY, Packet p1, Packet p2) {
-        double explosionRadius = 200;
-        for (Packet i : LevelManager.lvl.packets) {
-            if (i != p1 && i != p2) {
-                double packetCenterX = PacketContoller.packetMap.get(i).getShape().getLayoutX() + 10;
-                double packetCenterY = PacketContoller.packetMap.get(i).getShape().getLayoutY() + 10;
 
-                double dxExplosion = packetCenterX - explosionX;
-                double dyExplosion = packetCenterY - explosionY;
-                double distanceToExplosion = Math.sqrt(dxExplosion * dxExplosion + dyExplosion * dyExplosion);
-
-                if (distanceToExplosion <= explosionRadius) {
-
-                    final double originalUnitX = i.unitX[0];
-                    final double originalUnitY = i.unitY[0];
-
-                    // --- STEP 2: Apply the deflection (your existing code) ---
-                    double deflectX = dxExplosion / distanceToExplosion;
-                    double deflectY = dyExplosion / distanceToExplosion;
-                    double blendFactor = 0.25;
-                    i.unitX[0] = (1 - blendFactor) * originalUnitX + blendFactor * deflectX;
-                    i.unitY[0] = (1 - blendFactor) * originalUnitY + blendFactor * deflectY;
-
-                    // Normalize the new vector
-                    double magnitude = Math.sqrt(i.unitX[0] * i.unitX[0] + i.unitY[0] * i.unitY[0]);
-                    if (magnitude > 0) {
-                        i.unitX[0] /= magnitude;
-                        i.unitY[0] /= magnitude;
-                    }
-
-
-                    PauseTransition resetDelay = new PauseTransition(Duration.millis(300));
-                    resetDelay.setOnFinished(event -> {
-
-                        i.unitX[0] = originalUnitX;
-                        i.unitY[0] = originalUnitY;
-                    });
-                    resetDelay.play();
-                }
-            }
-        }
-    }
 }

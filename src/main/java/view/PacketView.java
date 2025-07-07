@@ -36,6 +36,7 @@ public class PacketView implements Drawable{
 
 
     public static  void sendPacket(Port sPort , Packet packet){
+        System.out.println("salammmm");
         if(sPort.portType.equals(PortType.OUTPUT)) {
             packet.sPort = sPort;
             packet.wire = sPort.wire;
@@ -78,92 +79,10 @@ public class PacketView implements Drawable{
 
 
 
-    /*public void buildAndStartKeyFrame(Packet packet) {
-        Shape shape = packetMap.get(packet).getShape();
-        packetTimelines.add(timeline);
 
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(PacketView.FRAME_DURATION) , event -> {
-
-                packet.sPort.wire.avaible = false;
-
-                double currentSpeed = 100;
-
-                double movePerFrame = currentSpeed * (PacketView.FRAME_DURATION /1000) * LevelManager.gameSpeed ;
-
-                // Move
-                packet.currentX[0] += packet.unitX[0] * movePerFrame;
-                packet.currentY[0] += packet.unitY[0] * movePerFrame;
-
-                shape.setLayoutX(packet.currentX[0]);
-                shape.setLayoutY(packet.currentY[0]);
-                packet.x = packet.currentX[0];
-                packet.y = packet.currentY[0];
-                double traveled = Math.sqrt((packet.currentX[0] - packet.x1) * (packet.currentX[0] -packet. x1) + (packet.currentY[0] -packet. y1) * (packet.currentY[0] - packet.y1));
-                //Shape intersection = Shape.intersect(shape, (WireController.wireMap.get(packet.sPort.wire)).getCurves());
-
-                if (traveled >= packet.distance) {
-
-                    packet.sPort.wire.avaible = true;
-
-
-                    ((Pane)SceneManager.getPrimaryStage().getScene().getRoot()).getChildren().remove(shape);
-                    timeline.stop();
-
-
-                    try {
-                        ((Transferer) packet.ePort.computer).packets.add(packet);
-                    } catch (ClassCastException e) {
-                        ServerManager.takePacket(packet, LevelManager.lvl);
-                    }
-                    return;
-                }
-
-                //if (!(intersection.getBoundsInLocal().getWidth() > 0 && intersection.getBoundsInLocal().getHeight() > 0)) {
-                    //killPacket(packet);
-               // }
-
-        });
-        timeline.getKeyFrames().add(keyFrame);
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
-
-
-
-
-    }
-*/
     public static void movePacket(Packet packet){
         PacketAnimatorManager packetAnimatorManager = new PacketAnimatorManager(packet,WireController.wireMap.get(packet.sPort.wire).getCurves(),100);
         packetAnimatorManager.start();
     }
-    public static void movePacket2(Packet packet){
-        PacketView packetView= PacketContoller.makePacket(packet);
-        packet.x1 = packet.sPort.x;
-        packet.y1 = packet.sPort.y;
-        packet.x2 = packet.ePort.x;
-        packet.y2 = packet.ePort.y;
 
-        packet.sPort.wire.avaible = false;
-
-        double dx = packet.x2 - packet.x1;
-        double dy = packet.y2 - packet.y1;
-        packet.distance = Math.sqrt(dx * dx + dy * dy);
-
-        double unitX = dx / packet.distance;
-        packet.uniitX = unitX;
-        packet.unitX[0] = unitX;
-        double unitY = dy / packet.distance;
-        packet.uniitY = unitY;
-        packet.unitY[0] = unitY;
-
-
-        packet.currentX = new double[]{packet.x1};
-        packet.currentY = new double[]{packet.y1};
-
-        //packetView.buildAndStartKeyFrame(packet);
-
-
-
-
-    }
 }

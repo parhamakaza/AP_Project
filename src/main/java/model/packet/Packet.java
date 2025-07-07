@@ -14,17 +14,9 @@ public abstract class Packet {
     public Port ePort;
     public double x;
     public double y;
-
-    public double[] currentX;
-    public double[] currentY;
-    public double x1, y1, x2, y2, distance;
-
-
     public int health;
-    public double uniitX;
-    public double uniitY;
-    public double[] unitX =  {0};
-    public double[] unitY =  {0};
+    public int value;
+
     public Packet(Port sPort){
         this.sPort = sPort;
         theID++;

@@ -1,7 +1,10 @@
 package manager;
 
 import controller.PacketContoller;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import model.computer.Transformer;
 import model.packet.Packet;
@@ -11,14 +14,16 @@ import model.port.Port;
 import model.port.PortType;
 import model.port.SquarePort;
 import model.port.TrianglePort;
+import service.SceneManager;
 import view.PacketView;
 
 public class TransformerManager {
 
-    public static KeyFrame transferPacket(Transformer transformer) {
-       return new KeyFrame(Duration.millis(500), event -> {
+    public static Timeline transferPacket(Transformer transformer) {
+       KeyFrame keyFrame =  new KeyFrame(Duration.millis(1), event -> {
+           System.out.println("salam");
             // Make sure the transformer object and its packets list are accessible here
-            if (transformer != null && !transformer.packets.isEmpty()) {
+            if (!transformer.packets.isEmpty()) {
                 Packet packet = transformer.packets.getLast();
 
                 // 1. If the transformer is overloaded, destroy the packet.
@@ -70,10 +75,16 @@ public class TransformerManager {
 
                 // 4. If the packet could not be sent (e.g., no available ports), remove it.
                 // This line is only reached if none of the 'return' statements above were triggered.
-                transformer.packets.remove(packet);
             }
         });
-
+        Timeline timeline = new Timeline(keyFrame);
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+        return timeline;
+    }
+    public static void takePacket(Packet packet , Transformer transformer){
+        ((Pane) SceneManager.getPrimaryStage().getScene().getRoot()).getChildren().remove(PacketContoller.packetMap.get(packet).getShape());
+        transformer.packets.add(packet);
     }
 
 }

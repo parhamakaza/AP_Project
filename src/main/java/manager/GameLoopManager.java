@@ -9,10 +9,14 @@ import model.computer.Transformer;
 import model.computer.Server;
 import view.PacketView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameLoopManager {
     public static GameLoopManager gameLoopManager = new GameLoopManager();
-    public  boolean paused;
-    private  Timeline mainTimeLine = new Timeline();;
+    public boolean paused;
+    private Timeline mainTimeLine = new Timeline();
+    private List<Timeline> computersTimeLine = new ArrayList<>();
     public static void addKeyFrame(KeyFrame keyFrame){
         gameLoopManager.mainTimeLine.getKeyFrames().add(keyFrame);
 
@@ -60,11 +64,10 @@ public class GameLoopManager {
     public void start() {
         for (Computer computer : LevelManager.lvl.comps) {
             if (computer instanceof Server server) {
-
                 addKeyFrame(ServerManager.makePacket2(server));
             } else if (computer instanceof Transformer transformer) {
-                addKeyFrame(TransformerManager.transferPacket(transformer));
-
+               // addKeyFrame(TransformerManager.transferPacket(transformer));
+                TransformerManager.transferPacket(transformer);
             }
         }
         CollisonManager.checkForCollison();

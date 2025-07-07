@@ -10,7 +10,7 @@ public abstract class Computer {
     public double x;
     public double y;
     public ArrayList<Port> ports = new ArrayList<>();
-    abstract void takePacket();
+
     public boolean ready = false;
 
     public Computer(double x , double y){

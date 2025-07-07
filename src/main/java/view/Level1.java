@@ -39,6 +39,8 @@ public class Level1 extends LevelView{
 
         Transformer transformer = new Transformer(800 , 500);
         ComputerController.MakeComputer(transformer);
+        PortController.makePort(new SquarePort(PortType.OUTPUT,transformer, 1));
+        PortController.makePort(new SquarePort(PortType.INPUT, transformer, 2));
         PortController.makePort(new TrianglePort(PortType.INPUT, transformer, 3));
         PortController.makePort(new TrianglePort(PortType.OUTPUT, transformer, 3));
 
