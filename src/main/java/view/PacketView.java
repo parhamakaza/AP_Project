@@ -2,6 +2,7 @@ package view;
 
 import controller.*;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -76,6 +77,8 @@ public class PacketView implements Drawable{
         Pane root = SceneManager.getCurrentPane();
         root.getChildren().add(shape);
 
+
+        ;
     }
 
     public PacketView(Packet packet){

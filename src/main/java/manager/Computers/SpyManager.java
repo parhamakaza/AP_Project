@@ -1,6 +1,8 @@
-package manager;
+package manager.Computers;
 
-import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
+import javafx.util.Duration;
+import manager.TransformerManager;
 import model.computer.Computer;
 import model.computer.Spy;
 
@@ -11,10 +13,24 @@ import java.util.Random;
 public class SpyManager extends ComputerManager {
     private static Random random = new Random();
     public static List<Spy> spyList = new ArrayList<>();
-
-    public static Timeline SpyTransferPacket(Spy spy) {
-        return TransformerManager.transferPacket(spy);
+    public SpyManager(Computer computer){
+        super(computer);
+        spyList.add((Spy) this.getComputer());
+        transfer();
     }
+
+
+    public void transfer(){
+        KeyFrame keyFramee = new KeyFrame(
+                // This is the TIMING. Change this duration to what you need (e.g., Duration.millis(500)).
+                Duration.seconds(1), e -> {
+            TransformerManager.transferPacket(this.getComputer());
+        });
+        timeline.getKeyFrames().add(keyFramee);
+    }
+
+
+
 
     public static Spy getRandomSpy() {
 

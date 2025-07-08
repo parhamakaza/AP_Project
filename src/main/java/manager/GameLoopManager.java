@@ -4,10 +4,7 @@ import controller.LevelController;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import model.computer.Computer;
-import model.computer.Spy;
-import model.computer.Transformer;
-import model.computer.Server;
+import manager.Computers.ComputerManager;
 import view.PacketView;
 
 import java.util.ArrayList;
@@ -63,15 +60,8 @@ public class GameLoopManager {
     }
 
     public void start() {
-        for (Computer computer : LevelManager.lvl.comps) {
-            if (computer instanceof Server server) {
-                addKeyFrame(ServerManager.makePacket2(server));
-            } else if (computer instanceof Transformer transformer) {
-               // addKeyFrame(TransformerManager.transferPacket(transformer));
-                TransformerManager.transferPacket(transformer);
-            } else if (computer instanceof Spy spy) {
-                SpyManager.SpyTransferPacket(spy);
-            }
+        for (ComputerManager computer : ComputerManager.computerManagerMap.values()) {
+            computer.timeline.play();
         }
         CollisonManager.checkForCollison();
         mainTimeLine.setCycleCount(Animation.INDEFINITE);

@@ -11,8 +11,8 @@ public abstract class Computer {
     public static final int WIDTH = 100, HEIGHT = 150;
     public double x;
     public double y;
-    public ArrayList<Port> ports = new ArrayList<>();
     public  ComputerTypes computerType ;
+    public ArrayList<Port> ports = new ArrayList<>();
     public List<Packet> packets = new ArrayList<>();
 
     public boolean ready = false;

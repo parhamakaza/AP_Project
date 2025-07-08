@@ -9,6 +9,9 @@ import javafx.scene.shape.QuadCurve;
 
 import javafx.scene.shape.Shape;
 
+import manager.Computers.ComputerManager;
+import manager.Computers.ServerManager;
+import manager.Computers.SpyManager;
 import model.computer.Computer;
 import model.computer.Server;
 import model.computer.Spy;
@@ -57,9 +60,6 @@ public class PacketAnimatorManager extends AnimationTimer {
     public PacketAnimatorManager(Packet packet, List<QuadCurve> path, double speed) {
         Shape shape1 = PacketContoller.packetMap.get(packet).getShape();
         Pane pane =SceneManager.getCurrentPane();
-        if(! pane.getChildren().contains(shape1)){
-            pane.getChildren().add(shape1);
-        }
 
         this.packetView = PacketContoller.packetMap.get(packet);
 
@@ -72,6 +72,10 @@ public class PacketAnimatorManager extends AnimationTimer {
         this.path = path;
 
         this.speed = speed;
+
+        if(!pane.getChildren().contains(shape1)){
+            pane.getChildren().add(shape1);
+        }
 
         buildLookupTable();
 
@@ -125,7 +129,7 @@ public class PacketAnimatorManager extends AnimationTimer {
 
             }else if(computer instanceof Spy ){
                 Spy spy = SpyManager.getRandomSpy();
-                ComputerManager.takePacket( packet , spy);
+                ComputerManager.takePacket(packet , spy);
             }
             stop();
         }
