@@ -17,6 +17,15 @@ public abstract class Packet {
     public int health;
     public int value;
     public boolean insideSystem = false;
+    private boolean trozhan = false;
+
+    public void setTrozhan(boolean trozhan) {
+        this.trozhan = trozhan;
+    }
+
+    public boolean isTrozhan() {
+        return trozhan;
+    }
 
     public Packet(Port sPort){
         this.sPort = sPort;

@@ -42,8 +42,11 @@ public class PacketView implements Drawable{
         packet.insideSystem =false;
         if(sPort.portType.equals(PortType.OUTPUT)) {
             packet.sPort = sPort;
+            packet.x = sPort.centerX();
+            packet.y = sPort.centerY();
             packet.wire = sPort.wire;
             packet.ePort = sPort.wire.ePort;
+
             PacketAnimatorManager packetAnimatorManager = new PacketAnimatorManager(packet,WireController.wireMap.get(sPort.wire).getCurves(),100);
             packetAnimatorManager.start();
         }

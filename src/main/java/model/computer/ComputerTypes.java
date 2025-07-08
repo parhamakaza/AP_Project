@@ -2,7 +2,7 @@ package model.computer;
 
 public enum ComputerTypes {
     SERVER,
-    TRANSFOMER,
+    TRANSFORMER,
     SPY,
     DDOS,
     VPN,

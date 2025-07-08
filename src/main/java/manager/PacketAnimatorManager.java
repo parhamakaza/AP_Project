@@ -12,10 +12,7 @@ import javafx.scene.shape.Shape;
 import manager.Computers.ComputerManager;
 import manager.Computers.ServerManager;
 import manager.Computers.SpyManager;
-import model.computer.Computer;
-import model.computer.Server;
-import model.computer.Spy;
-import model.computer.Transformer;
+import model.computer.*;
 import model.packet.Packet;
 
 import service.SceneManager;
@@ -68,6 +65,9 @@ public class PacketAnimatorManager extends AnimationTimer {
         this.packet = packetView.getPacket();
 
         this.shape = packetView.getShape();
+
+        shape.setLayoutX(packet.x);
+        shape.setLayoutY(packet.y - (double) Packet.SIZE / 2);
 
         this.path = path;
 
@@ -123,13 +123,14 @@ public class PacketAnimatorManager extends AnimationTimer {
             (SceneManager.getCurrentPane()).getChildren().remove(PacketContoller.packetMap.get(packet).getShape());
             Computer computer = packet.wire.ePort.computer;
             if(computer instanceof Server){
-                ServerManager.takePacket(packet);
-            } else if (computer instanceof Transformer transformer) {
-                ComputerManager.takePacket(packet , transformer);
-
+                ComputerManager.computerManagerMap.get(computer).takePacket(packet);
+            } else if (computer instanceof Transformer ) {
+                ComputerManager.computerManagerMap.get(computer).takePacket(packet);
             }else if(computer instanceof Spy ){
                 Spy spy = SpyManager.getRandomSpy();
-                ComputerManager.takePacket(packet , spy);
+                ComputerManager.computerManagerMap.get(spy).takePacket(packet);
+            }else  if (computer instanceof DDOS){
+                ComputerManager.computerManagerMap.get(computer).takePacket(packet);
             }
             stop();
         }

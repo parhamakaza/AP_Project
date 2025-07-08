@@ -2,7 +2,6 @@ package manager.Computers;
 
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
-import manager.TransformerManager;
 import model.computer.Computer;
 import model.computer.Spy;
 
@@ -19,14 +18,14 @@ public class SpyManager extends ComputerManager {
         transfer();
     }
 
-
+    @Override
     public void transfer(){
-        KeyFrame keyFramee = new KeyFrame(
+        KeyFrame keyFrame = new KeyFrame(
                 // This is the TIMING. Change this duration to what you need (e.g., Duration.millis(500)).
                 Duration.seconds(1), e -> {
             TransformerManager.transferPacket(this.getComputer());
         });
-        timeline.getKeyFrames().add(keyFramee);
+        timeline.getKeyFrames().add(keyFrame);
     }
 
 

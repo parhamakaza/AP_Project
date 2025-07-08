@@ -19,22 +19,18 @@ import static view.PacketView.movePacket;
 public  class ServerManager extends ComputerManager {
     public ServerManager(Computer computer){
         super(computer);
-        makePacket();
+        transfer();
     }
 
-    public static void takePacket(Packet packet){
+    public  void takePacket(Packet packet){
         lvl.coins = lvl.coins + packet.value;
         SceneManager.getCurrentPane().getChildren().remove(PacketContoller.packetMap.get(packet).getShape());
         lvl.packets.remove(packet);
     }
-
-    public void makePacket(){
+    @Override
+    public void transfer(){
         Computer computer = getComputer();
-        KeyFrame packetCreationKeyFrame = new KeyFrame(
-                // This is the TIMING. Change this duration to what you need (e.g., Duration.millis(500)).
-                Duration.seconds(1),
-
-                // This is the ACTION. The code to be executed at the specified time.
+        KeyFrame packetCreationKeyFrame = new KeyFrame(Duration.seconds(1),
                 event -> {
                     for (Port port : computer.ports) {
                         if (port.wire.avaible && port.portType == PortType.OUTPUT) {

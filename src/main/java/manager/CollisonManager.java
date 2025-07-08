@@ -81,8 +81,8 @@ public class CollisonManager {
     }
 
     public static void collison(Packet packet1, Packet packet2) {
-        System.out.println(packet1.x + "" +packet1.y);
-        System.out.println(packet2.x + "" +packet2.y);
+        System.out.println(packet1.x + "   " +packet1.y );
+        System.out.println(packet2.x + "  " +packet2.y);
 
         AudioManager.playCollison();
 

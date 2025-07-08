@@ -23,8 +23,12 @@ public abstract class ComputerManager {
         timeline.setCycleCount(Animation.INDEFINITE);
     }
 
-    public static void takePacket (Packet packet , Computer computer){
+    public void takePacket (Packet packet ){
         packet.insideSystem= true;
-        computer.packets.add(packet);
+        this.computer.packets.add(packet);
     }
+
+    abstract void transfer();
+
+
 }
