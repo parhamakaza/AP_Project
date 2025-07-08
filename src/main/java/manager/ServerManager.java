@@ -13,6 +13,7 @@ import model.port.Port;
 import model.port.PortType;
 import model.port.SquarePort;
 import model.port.TrianglePort;
+import service.SceneManager;
 
 import static manager.LevelManager.lvl;
 import static view.PacketView.movePacket;
@@ -27,7 +28,7 @@ public  class ServerManager {
         if(packet instanceof SquarePacket){
             lvl.coins= lvl.coins + 1;
         }
-
+        SceneManager.getCurrentPane().getChildren().remove(PacketContoller.packetMap.get(packet).getShape());
         lvl.packets.remove(packet);
     }
 

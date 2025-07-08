@@ -1,6 +1,8 @@
 package service;
 
+import controller.PacketContoller;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import view.*;
 
@@ -39,7 +41,9 @@ public class SceneManager {
     public static void goToLevel(Scene scene){
         primaryStage.setScene(scene);
     }
-
+    public static Pane getCurrentPane(){
+        return (Pane) SceneManager.primaryStage.getScene().getRoot();
+    }
 
 
 

@@ -5,6 +5,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import model.computer.Computer;
+import model.computer.Spy;
 import model.computer.Transformer;
 import model.computer.Server;
 import view.PacketView;
@@ -68,6 +69,8 @@ public class GameLoopManager {
             } else if (computer instanceof Transformer transformer) {
                // addKeyFrame(TransformerManager.transferPacket(transformer));
                 TransformerManager.transferPacket(transformer);
+            } else if (computer instanceof Spy spy) {
+                SpyManager.SpyTransferPacket(spy);
             }
         }
         CollisonManager.checkForCollison();

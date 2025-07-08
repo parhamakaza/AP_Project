@@ -70,10 +70,6 @@ public class Setting {
     }
 
 
-    public static void menuButton(){
-        SceneManager.showMenuView();
-    }
-
 
 
 

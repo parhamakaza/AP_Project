@@ -16,6 +16,7 @@ public abstract class Packet {
     public double y;
     public int health;
     public int value;
+    public boolean insideSystem = false;
 
     public Packet(Port sPort){
         this.sPort = sPort;

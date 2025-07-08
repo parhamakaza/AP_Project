@@ -2,7 +2,9 @@ package view;
 
 import controller.*;
 import javafx.animation.Timeline;
+import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import manager.PacketAnimatorManager;
 import model.packet.Packet;
@@ -36,7 +38,7 @@ public class PacketView implements Drawable{
 
 
     public static  void sendPacket(Port sPort , Packet packet){
-        System.out.println("salammmm");
+        packet.insideSystem =false;
         if(sPort.portType.equals(PortType.OUTPUT)) {
             packet.sPort = sPort;
             packet.wire = sPort.wire;
@@ -59,17 +61,21 @@ public class PacketView implements Drawable{
     }
 
     @Override
-    public Shape draw(){
+    public void draw(){
         Packet packet1 = this.packet;
         if(packet1 instanceof SquarePacket){
             this.shape = Drawable.createRectangleAsPolygon();
+            shape.fillProperty().setValue(Color.PINK);
         }else if(packet1 instanceof TrianglePacket){
             this.shape = Drawable.createTriangleAsPolygon();
+            shape.fillProperty().setValue(Color.PINK);
+
         }
         shape.setLayoutX(packet1.x);
         shape.setLayoutY(packet1.y);
-        ((Pane)SceneManager.getPrimaryStage().getScene().getRoot()).getChildren().add(shape);
-        return shape;
+        Pane root = SceneManager.getCurrentPane();
+        root.getChildren().add(shape);
+
     }
 
     public PacketView(Packet packet){
@@ -81,6 +87,7 @@ public class PacketView implements Drawable{
 
 
     public static void movePacket(Packet packet){
+        packet.insideSystem =false;
         PacketAnimatorManager packetAnimatorManager = new PacketAnimatorManager(packet,WireController.wireMap.get(packet.sPort.wire).getCurves(),100);
         packetAnimatorManager.start();
     }

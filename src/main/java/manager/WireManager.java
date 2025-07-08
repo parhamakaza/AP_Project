@@ -11,6 +11,8 @@ import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Shape;
 import model.port.Port;
 import model.wire.Wire;
+import service.SceneManager;
+import view.LevelView;
 import view.PortView;
 import view.WireView;
 
@@ -21,7 +23,8 @@ public class WireManager {
     public static void professionalWiring(PortView portView){
         Shape shape = portView.getShape();
         Port port = portView.getPort();
-        Pane pane = (Pane) shape.getParent();
+        Pane pane = SceneManager.getCurrentPane();
+
 
 
 

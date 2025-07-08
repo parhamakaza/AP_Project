@@ -22,7 +22,7 @@ public class PacketContoller {
     }
 
     public static void killPacket(Packet packet){
-        Pane root =((Pane) SceneManager.getPrimaryStage().getScene().getRoot());
+        Pane root =(SceneManager.getCurrentPane());
         LevelManager.lvl.lostPackets++;
         packet.wire.avaible = true;
         LevelManager.lvl.packets.remove(packet);

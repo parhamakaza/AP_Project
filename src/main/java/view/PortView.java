@@ -1,5 +1,6 @@
 package view;
 
+import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 import model.computer.Computer;
@@ -25,7 +26,7 @@ public class PortView implements Drawable{
     }
 
     @Override
-    public Shape draw() {
+    public void draw() {
         Port port = this.getPort();
         if (port instanceof SquarePort) {
             this.shape = Drawable.createRectangleAsPolygon();
@@ -62,7 +63,7 @@ public class PortView implements Drawable{
         shape.setLayoutY(port.y);
         shape.setOnMouseEntered(event -> shape.setOpacity(0.5));
         shape.setOnMouseExited(event -> shape.setOpacity(1));
-        return shape;
+
 
     }
 
@@ -70,10 +71,10 @@ public class PortView implements Drawable{
 
     public PortView(Port port) {
         this.port = port;
-        Pane pane = (Pane) SceneManager.getPrimaryStage().getScene().getRoot();
-        this.shape = this.draw();
+        Pane root = SceneManager.getCurrentPane();
+        draw();
         shape.toFront();
-        pane.getChildren().add(shape);
+        root.getChildren().add(shape);
     }
 
 }

@@ -36,7 +36,7 @@ public class WireView {
     }
 
     public WireView(Wire wire) {
-        Pane root = (Pane) SceneManager.getPrimaryStage().getScene().getRoot();
+        Pane root = SceneManager.getCurrentPane();
         this.wire = wire;
 
         Point2D p0 = new Point2D(wire.startX, wire.startY);  // Start Point

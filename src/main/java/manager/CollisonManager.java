@@ -37,6 +37,9 @@ public class CollisonManager {
                             // 2. Get packets from the copy
                             Packet p1 = packetsThisFrame.get(i);
                             Packet p2 = packetsThisFrame.get(j);
+                            if(p1.insideSystem || p2.insideSystem){
+                                continue;
+                            }
 
 
                             String id1 = String.valueOf(p1.id);
@@ -51,7 +54,7 @@ public class CollisonManager {
                                 e.printStackTrace(); // Always log exceptions in dev
                             }
 
-                            if (isColliding) {
+                            if (isColliding ) {
                                 if (!currentCollisions.contains(key)) {
                                    currentCollisions.add(key);
 
@@ -78,6 +81,9 @@ public class CollisonManager {
     }
 
     public static void collison(Packet packet1, Packet packet2) {
+        System.out.println(packet1.x + "" +packet1.y);
+        System.out.println(packet2.x + "" +packet2.y);
+
         AudioManager.playCollison();
 
         packet1.health = packet1.health - 1;

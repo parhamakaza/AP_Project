@@ -1,5 +1,6 @@
 package view;
 
+import javafx.scene.Parent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
@@ -54,7 +55,7 @@ public interface Drawable {
          return triangle;
      }
 
-     Shape draw();
+     void draw();
 
 
 }

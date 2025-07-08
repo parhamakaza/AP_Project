@@ -11,6 +11,7 @@ import javafx.scene.shape.Shape;
 
 import model.computer.Computer;
 import model.computer.Server;
+import model.computer.Spy;
 import model.computer.Transformer;
 import model.packet.Packet;
 
@@ -55,7 +56,7 @@ public class PacketAnimatorManager extends AnimationTimer {
 
     public PacketAnimatorManager(Packet packet, List<QuadCurve> path, double speed) {
         Shape shape1 = PacketContoller.packetMap.get(packet).getShape();
-        Pane pane =(Pane) SceneManager.getPrimaryStage().getScene().getRoot();
+        Pane pane =SceneManager.getCurrentPane();
         if(! pane.getChildren().contains(shape1)){
             pane.getChildren().add(shape1);
         }
@@ -115,12 +116,16 @@ public class PacketAnimatorManager extends AnimationTimer {
 
         if(distanceTraveled >= totalPathLength){
             packet.wire.avaible = true;
+            (SceneManager.getCurrentPane()).getChildren().remove(PacketContoller.packetMap.get(packet).getShape());
             Computer computer = packet.wire.ePort.computer;
             if(computer instanceof Server){
                 ServerManager.takePacket(packet);
             } else if (computer instanceof Transformer transformer) {
-                TransformerManager.takePacket(packet , transformer);
+                ComputerManager.takePacket(packet , transformer);
 
+            }else if(computer instanceof Spy ){
+                Spy spy = SpyManager.getRandomSpy();
+                ComputerManager.takePacket( packet , spy);
             }
             stop();
         }
