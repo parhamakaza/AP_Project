@@ -3,6 +3,7 @@ package manager.computers;
 import controller.PacketContoller;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
+import manager.packets.PacketManager;
 import model.computer.Computer;
 import model.packet.Packet;
 import model.packet.SquarePacket;
@@ -11,7 +12,6 @@ import model.port.Port;
 import model.port.PortType;
 import model.port.SquarePort;
 import model.port.TrianglePort;
-import view.packets.PacketView;
 
 import java.util.Optional;
 
@@ -67,7 +67,7 @@ public class TransformerManager extends ComputerManager {
 
         Port portToSendFrom = Optional.ofNullable(bestFitPort).orElse(firstAvailablePort);
         if (portToSendFrom != null) {
-            PacketView.sendPacket(portToSendFrom, packet);
+            PacketManager.sendPacket(portToSendFrom, packet);
             computer.packets.remove(packet);
         }
 

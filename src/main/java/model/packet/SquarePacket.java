@@ -5,8 +5,8 @@ import model.port.Port;
 
 public class SquarePacket extends Packet {
 
-    public SquarePacket (Port sPort){
-        super(sPort);
+    public SquarePacket (){
+        super();
         this.health = 2;
         value = health;
     }

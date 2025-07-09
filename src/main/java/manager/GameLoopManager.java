@@ -34,30 +34,19 @@ public class GameLoopManager {
         }
         if ( p && mainTimeLine.getStatus() == Animation.Status.RUNNING) {
             mainTimeLine.pause();
-            pauseAndResumePackets(p);
+
             LevelController.levelMap.get(LevelManager.lvl).timeline.pause();
 
         }
         if(!p && mainTimeLine.getStatus() == Animation.Status.PAUSED){
             mainTimeLine.play();
-            pauseAndResumePackets(p);
+
             LevelController.levelMap.get(LevelManager.lvl).timeline.play();
 
         }
     }
 
-    private static void pauseAndResumePackets(boolean p){
-        for (Timeline timeLine : PacketView.packetTimelines){
-            if ( p && timeLine.getStatus() == Animation.Status.RUNNING) {
-                timeLine.pause();
 
-            }
-            if(!p && timeLine.getStatus() == Animation.Status.PAUSED){
-                timeLine.play();
-
-            }
-        }
-    }
 
     public void start() {
         for (ComputerManager computer : ComputerManager.computerManagerMap.values()) {

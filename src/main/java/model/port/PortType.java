@@ -1,6 +1,6 @@
 package model.port;
 
-public enum PortType{
+public enum PortType {
     OUTPUT,
     INPUT
-            }
+}

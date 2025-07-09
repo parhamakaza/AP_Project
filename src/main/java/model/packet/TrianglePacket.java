@@ -6,8 +6,8 @@ import model.port.Port;
 public class TrianglePacket extends Packet {
 
 
-    public TrianglePacket (Port sPort){
-        super(sPort);
+    public TrianglePacket (){
+        super();
         this.health = 3;
         value = health;
     }

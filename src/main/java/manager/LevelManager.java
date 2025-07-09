@@ -21,7 +21,7 @@ public class LevelManager {
         PacketContoller.packetMap.clear();
         PortController.portMap.clear();
         WireController.wireMap.clear();
-        PacketView.packetTimelines.clear();
+
 
 
 

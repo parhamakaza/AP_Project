@@ -2,6 +2,7 @@ package manager.packets;
 
 
 import controller.PacketContoller;
+import controller.WireController;
 import javafx.animation.AnimationTimer;
 
 import javafx.scene.layout.Pane;
@@ -14,6 +15,8 @@ import manager.computers.SpyManager;
 import model.computer.*;
 import model.packet.Packet;
 
+import model.port.Port;
+import model.port.PortType;
 import service.SceneManager;
 import view.packets.PacketView;
 
@@ -30,6 +33,18 @@ public class PacketManager extends AnimationTimer {
 
     private static final double SPEED_PIXELS_PER_SECOND = 150.0;
 
+    public static void sendPacket(Port sPort , Packet packet){
+        sPort.wire.avaible = false;
+        packet.insideSystem =false;
+        if(sPort.portType.equals(PortType.OUTPUT)) {
+            packet.x = sPort.x;
+            packet.y = sPort.y;
+            packet.wire = sPort.wire;
+            PacketManager packetManager = new PacketManager(packet, WireController.wireMap.get(sPort.wire).getCurves(),100);
+            packetManager.start();
+        }
+    }
+
 
     private record ArcLengthData(int curveIndex, double t, double cumulativeDistance) {}
 
@@ -42,7 +57,7 @@ public class PacketManager extends AnimationTimer {
 
     private final List<QuadCurve> path;
 
-    private final double speed;
+    private double speed;
 
     private final List<ArcLengthData> lookupTable = new ArrayList<>();
 
@@ -66,7 +81,7 @@ public class PacketManager extends AnimationTimer {
         this.shape = packetView.getShape();
 
         shape.setLayoutX(packet.x);
-        shape.setLayoutY(packet.y - (double) Packet.SIZE / 2);
+        shape.setLayoutY(packet.y -  Packet.SIZE / 2);
 
         this.path = path;
 
@@ -258,7 +273,6 @@ public class PacketManager extends AnimationTimer {
     private void bindToModule(Shape shape) {
 
         packet.x = shape.getLayoutX();
-
         packet.y = shape.getLayoutY();
 
     }

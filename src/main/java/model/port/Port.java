@@ -14,8 +14,7 @@ public abstract class Port {
     public Wire wire;
 
 
-
-    public Port(PortType portType , Computer computer ,int portNum ){
+    public Port(PortType portType, Computer computer, int portNum) {
         this.portType = portType;
         this.computer = computer;
         this.portNum = portNum;
@@ -23,15 +22,13 @@ public abstract class Port {
 
     }
 
-    public double centerX(){
-        return (this.x) ;
+    public double centerX() {
+        return (this.x);
     }
 
-    public double centerY(){
-        return (this.y) + SIZE/2;
+    public double centerY() {
+        return (this.y) + SIZE / 2;
     }
-
-
 
 
 }

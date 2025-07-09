@@ -14,7 +14,7 @@ import model.port.TrianglePort;
 import service.SceneManager;
 
 import static manager.LevelManager.lvl;
-import static view.packets.PacketView.movePacket;
+import static manager.packets.PacketManager.sendPacket;
 
 public  class ServerManager extends ComputerManager {
     public ServerManager(Computer computer){
@@ -34,19 +34,16 @@ public  class ServerManager extends ComputerManager {
                 event -> {
                     for (Port port : computer.ports) {
                         if (port.wire.avaible && port.portType == PortType.OUTPUT) {
-
+                            Packet packet = null;
                             if (port instanceof SquarePort) {
-                                SquarePacket sq = new SquarePacket(port);
-                                PacketContoller.makePacket(sq);
-                                movePacket(sq);
-                                lvl.generatedPackets++;
+                                packet = new SquarePacket();
                             }
                             if (port instanceof TrianglePort) {
-                                TrianglePacket tri = new TrianglePacket(port);
-                                PacketContoller.makePacket(tri);
-                                movePacket(tri);
-                                lvl.generatedPackets++;
+                                packet = new TrianglePacket();
                             }
+                            PacketContoller.makePacket(packet);
+                            lvl.generatedPackets++;
+                            sendPacket(port , packet);
                         }
                     }
                 }

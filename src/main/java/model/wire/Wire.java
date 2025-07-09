@@ -46,7 +46,6 @@ public class Wire {
         }else{
             this.ePort=null;
             this.sPort =null;
-
             throw new Exception("wires ports type mismatch");
 
         }
@@ -59,7 +58,7 @@ public class Wire {
 
     public static boolean checkPorts(Port p1, Port p2){
 
-        boolean a = p1.getClass().getSimpleName().equals(p2.getClass().getSimpleName());
+        boolean a = p1.getClass() == p2 .getClass();
         boolean b = !p1.computer.equals(p2.computer);
         boolean c =  p1.portType.equals(PortType.OUTPUT);
         boolean d = p2.portType.equals(PortType.INPUT);
