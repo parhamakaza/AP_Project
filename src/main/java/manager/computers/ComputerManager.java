@@ -1,4 +1,4 @@
-package manager.Computers;
+package manager.computers;
 
 import javafx.animation.Animation;
 import javafx.animation.Timeline;

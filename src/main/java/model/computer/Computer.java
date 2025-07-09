@@ -33,4 +33,10 @@ public abstract class Computer {
     public Computer(){
 
     }
+    public double getCenterX(){
+        return x + WIDTH/2;
+    }
+    public double getCenterY(){
+        return y + HEIGHT/2;
+    }
 }

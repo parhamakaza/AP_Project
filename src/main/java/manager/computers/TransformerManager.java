@@ -1,4 +1,4 @@
-package manager.Computers;
+package manager.computers;
 
 import controller.PacketContoller;
 import javafx.animation.KeyFrame;
@@ -11,7 +11,7 @@ import model.port.Port;
 import model.port.PortType;
 import model.port.SquarePort;
 import model.port.TrianglePort;
-import view.PacketView;
+import view.packets.PacketView;
 
 import java.util.Optional;
 

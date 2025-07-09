@@ -4,10 +4,7 @@ package view;
 import controller.*;
 import manager.LevelManager;
 import model.*;
-import model.computer.DDOS;
-import model.computer.Server;
-import model.computer.Spy;
-import model.computer.Transformer;
+import model.computer.*;
 import model.port.PortType;
 import model.port.SquarePort;
 import model.port.TrianglePort;
@@ -42,11 +39,16 @@ public class Level1 extends LevelView{
         DDOS ddos = new DDOS(800 , 500);
         ComputerController.MakeComputer(ddos);
         PortController.makePort(new SquarePort(PortType.INPUT,ddos, 1));
-        PortController.makePort(new SquarePort(PortType.INPUT,ddos, 2));
+
         PortController.makePort(new TrianglePort(PortType.INPUT,ddos, 3));
         PortController.makePort(new SquarePort(PortType.OUTPUT, ddos, 1));
-        PortController.makePort(new SquarePort(PortType.OUTPUT, ddos, 2));
         PortController.makePort(new TrianglePort(PortType.OUTPUT, ddos, 3));
+
+        AntiVirus antiVirus = new AntiVirus(1000, 700);
+        ComputerController.MakeComputer(antiVirus);
+        PortController.makePort(new SquarePort(PortType.OUTPUT,antiVirus, 2));
+        PortController.makePort(new SquarePort(PortType.INPUT, antiVirus, 2));
+
 
 
     }

@@ -12,8 +12,7 @@ import javafx.scene.shape.Shape;
 import model.port.Port;
 import model.wire.Wire;
 import service.SceneManager;
-import view.LevelView;
-import view.PortView;
+import view.port.PortView;
 import view.WireView;
 
 public class WireManager {

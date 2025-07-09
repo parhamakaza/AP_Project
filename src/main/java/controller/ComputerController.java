@@ -1,6 +1,6 @@
 package controller;
 
-import manager.Computers.ComputerManagerFactory;
+import manager.computers.ComputerManagerFactory;
 import manager.LevelManager;
 import model.computer.Computer;
 import view.ComputerView;

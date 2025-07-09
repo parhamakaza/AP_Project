@@ -1,4 +1,4 @@
-package manager.Computers;
+package manager.computers;
 
 import controller.PacketContoller;
 import javafx.animation.KeyFrame;
@@ -14,7 +14,7 @@ import model.port.TrianglePort;
 import service.SceneManager;
 
 import static manager.LevelManager.lvl;
-import static view.PacketView.movePacket;
+import static view.packets.PacketView.movePacket;
 
 public  class ServerManager extends ComputerManager {
     public ServerManager(Computer computer){

@@ -1,0 +1,59 @@
+package manager.computers;
+
+import controller.PacketContoller;
+import javafx.animation.KeyFrame;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
+import manager.LevelManager;
+import model.computer.Computer;
+import model.packet.Packet;
+
+import static manager.computers.TransformerManager.transferPacket;
+import static model.packet.Packet.SIZE;
+
+public class AntiVirusManager extends ComputerManager{
+    private  static  final double RADIUS = 200;
+    public AntiVirusManager(Computer computer) {
+        super(computer);
+        transfer();
+        detectTrozhan();
+    }
+
+    @Override
+    public void transfer(){
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(10), event ->  transferPacket(this.getComputer()));
+        timeline.getKeyFrames().add(keyFrame);
+    }
+
+    private void detectTrozhan() {
+        double centerX = computer.getCenterX();
+        double centerY = computer.getCenterY();
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(10),event -> {
+            for (Packet packet : LevelManager.lvl.packets) {
+                double packetCenterX = packet.x;
+                double packetCenterY = packet.y +  SIZE / 2;
+                double distance = distance(centerX - packetCenterX, centerY - packetCenterY);
+
+                if (distance <= RADIUS &&packet.isTrozhan()) {
+                        killTrozhan(packet);
+
+
+
+
+                }
+
+            }
+        });
+        timeline.getKeyFrames().add(keyFrame);
+
+    }
+    private void killTrozhan(Packet packet){
+        packet.setTrozhan(false);
+        PacketContoller.packetMap.get(packet).getShape().setFill(Color.rgb(255, 255, 0, 0.2));;
+    }
+
+    private  double distance(double x , double y){
+        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    }
+
+}

@@ -6,7 +6,7 @@ import model.wire.Wire;
 
 
 public abstract class Packet {
-    public static final int SIZE = 20;
+    public static final double SIZE = 20;
     public static int theID = 0;
     public int id;
     public Wire wire;

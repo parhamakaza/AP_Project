@@ -1,4 +1,4 @@
-package manager.Computers;
+package manager.computers;
 
 import model.computer.*;
 
@@ -14,13 +14,13 @@ public class ComputerManagerFactory {
         managerRegistry.put(Spy.class,         comp -> new SpyManager((Spy) comp));
         managerRegistry.put(Server.class,      comp -> new ServerManager((Server) comp));
         managerRegistry.put(DDOS.class , comp -> new DDOSManager((DDOS)comp));
+        managerRegistry.put(AntiVirus.class , comp -> new AntiVirusManager((AntiVirus)comp));
+
     }
 
     public static ComputerManager createManager(Computer computer) {
 
         Function<Computer, ComputerManager> managerCreator = managerRegistry.get(computer.getClass());
-
-
         return managerCreator.apply(computer);
 
 

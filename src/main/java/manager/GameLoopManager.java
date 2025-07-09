@@ -4,8 +4,8 @@ import controller.LevelController;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import manager.Computers.ComputerManager;
-import view.PacketView;
+import manager.computers.ComputerManager;
+import view.packets.PacketView;
 
 import java.util.ArrayList;
 import java.util.List;

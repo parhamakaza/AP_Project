@@ -7,7 +7,7 @@ import javafx.scene.shape.Shape;
 import model.port.Port;
 
 public interface Drawable {
-     static Shape createRectangleAsPolygon() {
+     default Shape createRectangleAsPolygon() {
          //this method is used for ports and packets rectangle and not computers
          double width = Port.SIZE;
          double height = Port.SIZE;
@@ -41,7 +41,7 @@ public interface Drawable {
          return rectangle;
      }
 
-     static Shape createTriangleAsPolygon() {
+     default Shape createTriangleAsPolygon() {
          Polygon triangle = new Polygon();
          triangle.getPoints().addAll(
                  0.0, 0.0,    // Peak at (0,0)
@@ -52,6 +52,7 @@ public interface Drawable {
          triangle.setFill(Color.rgb(255, 255, 0, 0.2)); // semi-transparent yellow fill
          triangle.setStroke(Color.YELLOW);
          triangle.setStrokeWidth(4);
+
          return triangle;
      }
 

@@ -1,4 +1,4 @@
-package manager.Computers;
+package manager.computers;
 
 import controller.PacketContoller;
 import javafx.animation.KeyFrame;
@@ -12,7 +12,7 @@ import model.port.Port;
 import model.port.PortType;
 import model.port.SquarePort;
 import model.port.TrianglePort;
-import view.PacketView;
+import view.packets.PacketView;
 
 import java.util.Optional;
 
@@ -28,7 +28,7 @@ public class DDOSManager extends ComputerManager{
         KeyFrame sabotageKeyFrame = new KeyFrame(
                 // 1. The Timing: When this code should run.
                 // Change this duration to what you need, e.g., Duration.millis(100).
-                Duration.seconds(1),
+                Duration.millis(500),
 
                 // 2. The Action: The code to execute at the specified time.
                 event -> {
@@ -39,8 +39,10 @@ public class DDOSManager extends ComputerManager{
                     Packet packet = computer.packets.getLast();
 
                     if (computer.packets.size() > 5) {
+                        System.out.println("system is full");
                         computer.packets.remove(packet);
                         PacketContoller.killPacket(packet);
+
                         return;
                     }
 

@@ -1,4 +1,4 @@
-package manager;
+package manager.packets;
 
 
 import controller.PacketContoller;
@@ -9,14 +9,13 @@ import javafx.scene.shape.QuadCurve;
 
 import javafx.scene.shape.Shape;
 
-import manager.Computers.ComputerManager;
-import manager.Computers.ServerManager;
-import manager.Computers.SpyManager;
+import manager.computers.ComputerManager;
+import manager.computers.SpyManager;
 import model.computer.*;
 import model.packet.Packet;
 
 import service.SceneManager;
-import view.PacketView;
+import view.packets.PacketView;
 
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ import java.util.List;
  * This class manages the animation for a single packet on a path of curves.
  */
 
-public class PacketAnimatorManager extends AnimationTimer {
+public class PacketManager extends AnimationTimer {
 
     private static final double SPEED_PIXELS_PER_SECOND = 150.0;
 
@@ -54,7 +53,7 @@ public class PacketAnimatorManager extends AnimationTimer {
     private double distanceTraveled = 0;
 
 
-    public PacketAnimatorManager(Packet packet, List<QuadCurve> path, double speed) {
+    public PacketManager(Packet packet, List<QuadCurve> path, double speed) {
         Shape shape1 = PacketContoller.packetMap.get(packet).getShape();
         Pane pane =SceneManager.getCurrentPane();
 
@@ -98,6 +97,8 @@ public class PacketAnimatorManager extends AnimationTimer {
         double elapsedSeconds = (now - lastUpdate) / 1_000_000_000.0;
 
         lastUpdate = now;
+        packet.wire.avaible = false;
+
 
 
         distanceTraveled += speed * elapsedSeconds;
@@ -114,7 +115,7 @@ public class PacketAnimatorManager extends AnimationTimer {
 
         shape.setLayoutX(position.x);
 
-        shape.setLayoutY(position.y - (double) Packet.SIZE / 2);
+        shape.setLayoutY(position.y - Packet.SIZE / 2);
 
         bindToModule(shape);
 
@@ -122,14 +123,10 @@ public class PacketAnimatorManager extends AnimationTimer {
             packet.wire.avaible = true;
             (SceneManager.getCurrentPane()).getChildren().remove(PacketContoller.packetMap.get(packet).getShape());
             Computer computer = packet.wire.ePort.computer;
-            if(computer instanceof Server){
-                ComputerManager.computerManagerMap.get(computer).takePacket(packet);
-            } else if (computer instanceof Transformer ) {
-                ComputerManager.computerManagerMap.get(computer).takePacket(packet);
-            }else if(computer instanceof Spy ){
+           if(computer instanceof Spy ){
                 Spy spy = SpyManager.getRandomSpy();
                 ComputerManager.computerManagerMap.get(spy).takePacket(packet);
-            }else  if (computer instanceof DDOS){
+            }else {
                 ComputerManager.computerManagerMap.get(computer).takePacket(packet);
             }
             stop();

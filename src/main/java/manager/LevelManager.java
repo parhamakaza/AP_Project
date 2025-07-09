@@ -2,7 +2,7 @@ package manager;
 
 import controller.*;
 import model.*;
-import view.PacketView;
+import view.packets.PacketView;
 
 import static manager.GameLoopManager.gameLoopManager;
 

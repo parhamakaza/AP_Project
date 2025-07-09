@@ -1,6 +1,5 @@
-package view;
+package view.port;
 
-import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 import model.computer.Computer;
@@ -9,11 +8,11 @@ import model.port.PortType;
 import model.port.SquarePort;
 import model.port.TrianglePort;
 import service.SceneManager;
+import view.Drawable;
 
 
-
-public class PortView implements Drawable{
-    private Shape shape;
+public abstract class PortView implements Drawable {
+    protected Shape shape;
 
     public Port getPort() {
         return port;
@@ -25,15 +24,8 @@ public class PortView implements Drawable{
         return shape;
     }
 
-    @Override
-    public void draw() {
-        Port port = this.getPort();
-        if (port instanceof SquarePort) {
-            this.shape = Drawable.createRectangleAsPolygon();
-        } else if (port instanceof TrianglePort) {
-            this.shape = Drawable.createTriangleAsPolygon();
-        }
 
+    protected void setPortCordination(){
         if (port.portType.equals(PortType.OUTPUT)) {
             port.x = port.computer.x + (Computer.WIDTH);
             shape.setLayoutX(port.x);
@@ -42,7 +34,6 @@ public class PortView implements Drawable{
             port.x = port.computer.x;
             shape.setLayoutX(port.x);
         }
-
 
         switch (port.portNum) {
 
@@ -59,11 +50,9 @@ public class PortView implements Drawable{
                 break;
 
         }
-
         shape.setLayoutY(port.y);
         shape.setOnMouseEntered(event -> shape.setOpacity(0.5));
         shape.setOnMouseExited(event -> shape.setOpacity(1));
-
 
     }
 
