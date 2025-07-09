@@ -2,11 +2,10 @@ package view;
 
 
 import javafx.geometry.Point2D;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.QuadCurve;
 import model.wire.Wire;
-import model.wire.WireType;
+import model.Type;
 import service.AudioManager;
 import service.SceneManager;
 
@@ -36,7 +35,7 @@ public class WireView {
     }
 
     public WireView(Wire wire) {
-        Pane root = SceneManager.getCurrentPane();
+
         this.wire = wire;
 
         Point2D p0 = new Point2D(wire.startX, wire.startY);  // Start Point
@@ -57,10 +56,12 @@ public class WireView {
         curves.forEach(curve -> {
             curve.setStrokeWidth(4);
             curve.setFill(null);
-            if (wire.type.equals(WireType.SQUARE)) {
+            if (wire.type.equals(Type.SQUARE)) {
                 curve.setStroke(Color.GREEN);
-            } else if (wire.type.equals(WireType.TRIANGLE)) {
+            } else if (wire.type.equals(Type.TRIANGLE)) {
                 curve.setStroke(Color.YELLOW);
+            }else if(wire.type.equals(Type.MATIC)){
+                curve.setStroke(Color.GRAY);
             }
             curve.setOnMouseDragged(event -> {
                 // 1. Get the specific curve that was the source of the drag event.
@@ -80,7 +81,7 @@ public class WireView {
 
             });
             curve.setOnMouseClicked(e -> wire.curved++);
-            root.getChildren().add(curve);
+            SceneManager.addComponent(curve);
         });
 
 

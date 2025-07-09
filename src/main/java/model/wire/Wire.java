@@ -2,13 +2,11 @@ package model.wire;
 
 import manager.LevelManager;
 import manager.WireManager;
-import model.port.Port;
-import model.port.PortType;
-import model.port.SquarePort;
-import model.port.TrianglePort;
+import model.Type;
+import model.port.*;
 
 public class Wire {
-    public WireType type;
+    public Type type;
     public Port sPort;
     public Port ePort;
     public double startX;
@@ -50,9 +48,11 @@ public class Wire {
 
         }
         if(sPort instanceof TrianglePort){
-            this.type = WireType.TRIANGLE;
+            this.type = Type.TRIANGLE;
         }else if(sPort instanceof SquarePort) {
-            this.type = WireType.SQUARE;
+            this.type = Type.SQUARE;
+        }else if(sPort instanceof MaticPort){
+            this.type = Type.MATIC;
         }
     }
 

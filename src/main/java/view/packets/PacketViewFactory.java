@@ -3,6 +3,7 @@ package view.packets;
 import manager.computers.*;
 import manager.packets.PacketManager;
 import model.computer.*;
+import model.packet.MaticPacket;
 import model.packet.Packet;
 import model.packet.SquarePacket;
 import model.packet.TrianglePacket;
@@ -16,8 +17,7 @@ public class PacketViewFactory {
     static {
         managerRegistry.put(SquarePacket.class, packet-> new SquarePacketView(packet));
         managerRegistry.put(TrianglePacket.class, packet -> new TrianglePacketView(packet));
-
-
+        managerRegistry.put(MaticPacket.class, packet -> new MaticPacketView(packet));
     }
     public static PacketView creatView(Packet packet) {
 

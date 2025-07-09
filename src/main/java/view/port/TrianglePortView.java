@@ -7,7 +7,7 @@ public class TrianglePortView extends  PortView {
         super(port);
     }
     public void draw(){
-        this.shape = this.createTriangleAsPolygon();
+        this.shape = this.createTriangleShape();
         setPortCordination();
     }
 }

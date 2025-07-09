@@ -25,11 +25,10 @@ public class PacketContoller {
     public static void killPacket(Packet packet){
         System.out.println("packet dead :" + packet);
         packet.wire.avaible = true;
-        Pane root =(SceneManager.getCurrentPane());
         LevelManager.lvl.lostPackets++;
         LevelManager.lvl.packets.remove(packet);
         PacketView packetView = packetMap.get(packet);
-        root.getChildren().remove(packetView.getShape());
+        SceneManager.removeComponent(packetView.getShape());
     }
 
 

@@ -4,13 +4,11 @@ import controller.PacketContoller;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 import model.computer.Computer;
+import model.packet.MaticPacket;
 import model.packet.Packet;
 import model.packet.SquarePacket;
 import model.packet.TrianglePacket;
-import model.port.Port;
-import model.port.PortType;
-import model.port.SquarePort;
-import model.port.TrianglePort;
+import model.port.*;
 import service.SceneManager;
 
 import static manager.LevelManager.lvl;
@@ -21,10 +19,10 @@ public  class ServerManager extends ComputerManager {
         super(computer);
         transfer();
     }
-
+    @Override
     public  void takePacket(Packet packet){
         lvl.coins = lvl.coins + packet.value;
-        SceneManager.getCurrentPane().getChildren().remove(PacketContoller.packetMap.get(packet).getShape());
+        SceneManager.removeComponent(PacketContoller.packetMap.get(packet).getShape());
         lvl.packets.remove(packet);
     }
     @Override
@@ -40,6 +38,9 @@ public  class ServerManager extends ComputerManager {
                             }
                             if (port instanceof TrianglePort) {
                                 packet = new TrianglePacket();
+                            }
+                            if(port instanceof MaticPort){
+                                packet = new MaticPacket();
                             }
                             PacketContoller.makePacket(packet);
                             lvl.generatedPackets++;

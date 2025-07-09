@@ -86,7 +86,10 @@ public class LevelView {
         currentTimeLabel = UI.createHUDLabel("Time: 0.0s");
         packetLossLabel = UI.createHUDLabel("Packet Loss: 0.0%");
         wireLabel = UI.createHUDLabel("Wire Left: 0.0");
-        coinsLabel = UI.createHUDLabel("Coins: 10");
+         coinsLabel = UI.createHUDLabel("Coins: 10");
+
+        //coinsLabel = new Label("Coins: 10");
+        //coinsLabel.setStyle("-fx-text-fill: yellow; -fx-font-size: 16px; -fx-font-weight: bold;");
 
         // --- Event Handlers for Slider ---
         timelineSlider.setOnMousePressed(event -> isDragging[0] = true);

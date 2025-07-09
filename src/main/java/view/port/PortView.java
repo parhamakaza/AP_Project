@@ -60,10 +60,9 @@ public abstract class PortView implements Drawable {
 
     public PortView(Port port) {
         this.port = port;
-        Pane root = SceneManager.getCurrentPane();
         draw();
         shape.toFront();
-        root.getChildren().add(shape);
+        SceneManager.addComponent(shape);
     }
 
 }

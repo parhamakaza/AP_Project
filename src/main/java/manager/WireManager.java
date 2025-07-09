@@ -22,7 +22,6 @@ public class WireManager {
     public static void professionalWiring(PortView portView){
         Shape shape = portView.getShape();
         Port port = portView.getPort();
-        Pane pane = SceneManager.getCurrentPane();
 
 
 
@@ -37,12 +36,12 @@ public class WireManager {
                 currentLine.setStartY(port.centerY());
                 currentLine.setEndX(e.getSceneX());
                 currentLine.setEndY(e.getSceneY());
-                pane.getChildren().add(currentLine);
+                SceneManager.addComponent(currentLine);
             } else {
                 Wire wire = port.wire;
                 WireView wireView = WireController.wireMap.get(wire);
                 for (QuadCurve qc : WireController.wireMap.get(wire).getCurves()) {
-                    pane.getChildren().remove(qc);
+                    SceneManager.removeComponent(qc);
                 }
 
                 wireView.setCurves(null);

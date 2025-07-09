@@ -1,6 +1,7 @@
 package model.packet;
 
 import manager.LevelManager;
+import model.Type;
 import model.wire.Wire;
 
 
@@ -14,7 +15,13 @@ public abstract class Packet {
     public int health;
     public int value;
     public boolean insideSystem = false;
-    private boolean trozhan = false;
+    protected boolean trozhan = false;
+
+    public Type getType() {
+        return type;
+    }
+
+    protected Type type;
 
     public void setTrozhan(boolean trozhan) {
         this.trozhan = trozhan;

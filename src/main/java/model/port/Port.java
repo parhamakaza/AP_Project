@@ -1,6 +1,7 @@
 package model.port;
 
 
+import model.Type;
 import model.wire.Wire;
 import model.computer.Computer;
 
@@ -12,7 +13,11 @@ public abstract class Port {
     public double y;
     public int portNum;
     public Wire wire;
+    protected Type type;
 
+    public Type getType() {
+        return type;
+    }
 
     public Port(PortType portType, Computer computer, int portNum) {
         this.portType = portType;

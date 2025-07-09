@@ -25,56 +25,7 @@ public class DDOSManager extends ComputerManager{
 
     @Override
     public void transfer(){
-        KeyFrame sabotageKeyFrame = new KeyFrame(
-                // 1. The Timing: When this code should run.
-                // Change this duration to what you need, e.g., Duration.millis(100).
-                Duration.millis(500),
-
-                // 2. The Action: The code to execute at the specified time.
-                event -> {
-                    if (computer.packets.isEmpty()) {
-                        return;
-                    }
-
-                    Packet packet = computer.packets.getLast();
-
-                    if (computer.packets.size() > 5) {
-                        System.out.println("system is full");
-                        computer.packets.remove(packet);
-                        PacketContoller.killPacket(packet);
-
-                        return;
-                    }
-
-                    Port bestFitPort = null;
-                    Port firstAvailablePort = null;
-
-                    for (Port port : computer.ports) {
-                        if (port.portType != PortType.OUTPUT || !port.wire.avaible) {
-                            continue;
-                        }
-
-                        if (firstAvailablePort == null) {
-                            firstAvailablePort = port;
-                        }
-
-                        // This logic finds a mismatched port for sabotage
-                        boolean isPerfectMatch = (packet instanceof SquarePacket && port instanceof TrianglePort) || (packet instanceof TrianglePacket && port instanceof SquarePort);
-
-                        if (isPerfectMatch) {
-                            bestFitPort = port;
-                            break;
-                        }
-                    }
-
-                    Port portToSendFrom = Optional.ofNullable(bestFitPort).orElse(firstAvailablePort);
-
-                    if (portToSendFrom != null) {
-                        PacketManager.sendPacket(portToSendFrom, packet);
-                        computer.packets.remove(packet);
-                    }
-                }
-        );
+        KeyFrame sabotageKeyFrame = new KeyFrame(Duration.millis(500), e-> standardtransfer());
         timeline.getKeyFrames().add(sabotageKeyFrame);
     }
 
@@ -88,7 +39,11 @@ public class DDOSManager extends ComputerManager{
         if (probability()) {
             makeTrojan(packet);
         }
+    }
 
+    @Override
+    public boolean isPerfect(Packet packet, Port port){
+       return packet.getType() != port.getType();
     }
     // 30% chance
     private boolean probability() {

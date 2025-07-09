@@ -1,6 +1,7 @@
 package service;
 
 import controller.PacketContoller;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -38,13 +39,27 @@ public class SceneManager {
         Setting setting = Setting.getSetting(audioManager);
         primaryStage.setScene(setting.getScene());
     }
-    public static void goToLevel(Scene scene){
+
+    public static void goToLevel(Scene scene) {
         primaryStage.setScene(scene);
     }
-    public static Pane getCurrentPane(){
+
+    public static Pane getCurrentPane() {
         return (Pane) SceneManager.primaryStage.getScene().getRoot();
     }
 
+    public static void addComponent(Node node) {
+        Pane pane = getCurrentPane();
+        if (!pane.getChildren().contains(node)) {
+            pane.getChildren().add(node);
+
+        }
+
+    }
+
+    public static void removeComponent(Node node) {
+        getCurrentPane().getChildren().remove(node);
+    }
 
 
 }

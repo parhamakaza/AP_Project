@@ -22,16 +22,14 @@ public class SpyManager extends ComputerManager {
     public void transfer(){
         KeyFrame keyFrame = new KeyFrame(
                 // This is the TIMING. Change this duration to what you need (e.g., Duration.millis(500)).
-                Duration.seconds(1), e -> {
-            TransformerManager.transferPacket(this.getComputer());
-        });
+                Duration.seconds(1), e -> standardtransfer() );
         timeline.getKeyFrames().add(keyFrame);
     }
 
 
 
 
-    public static Spy getRandomSpy() {
+    public  static Spy getRandomSpy() {
 
         // 1. Handle edge cases: If the list is null or empty, there's nothing to choose.
         if (spyList == null || spyList.isEmpty()) {

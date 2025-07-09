@@ -70,7 +70,6 @@ public class PacketManager extends AnimationTimer {
 
     public PacketManager(Packet packet, List<QuadCurve> path, double speed) {
         Shape shape1 = PacketContoller.packetMap.get(packet).getShape();
-        Pane pane =SceneManager.getCurrentPane();
 
         this.packetView = PacketContoller.packetMap.get(packet);
 
@@ -87,9 +86,8 @@ public class PacketManager extends AnimationTimer {
 
         this.speed = speed;
 
-        if(!pane.getChildren().contains(shape1)){
-            pane.getChildren().add(shape1);
-        }
+        SceneManager.addComponent(shape1);
+
 
         buildLookupTable();
 
@@ -136,7 +134,7 @@ public class PacketManager extends AnimationTimer {
 
         if(distanceTraveled >= totalPathLength){
             packet.wire.avaible = true;
-            (SceneManager.getCurrentPane()).getChildren().remove(PacketContoller.packetMap.get(packet).getShape());
+            SceneManager.removeComponent(PacketContoller.packetMap.get(packet).getShape());
             Computer computer = packet.wire.ePort.computer;
            if(computer instanceof Spy ){
                 Spy spy = SpyManager.getRandomSpy();

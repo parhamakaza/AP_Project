@@ -8,11 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Computer {
-    public static final int WIDTH = 100, HEIGHT = 150;
+    public static final double WIDTH = 100;
+    public static final double HEIGHT = 150;
     public double x;
     public double y;
     public  ComputerTypes computerType ;
-    public ArrayList<Port> ports = new ArrayList<>();
+    public List<Port> ports = new ArrayList<>();
     public List<Packet> packets = new ArrayList<>();
 
     public boolean ready = false;
@@ -30,9 +31,7 @@ public abstract class Computer {
         }
        return true;
     }
-    public Computer(){
 
-    }
     public double getCenterX(){
         return x + WIDTH/2;
     }

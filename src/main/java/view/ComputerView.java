@@ -75,10 +75,9 @@ public  class ComputerView implements Drawable  {
             module.setLayoutY(this.computer.y);
             container.setLayoutX(this.computer.x);
             container.setLayoutY(this.computer.y);
-            Pane root = SceneManager.getCurrentPane();
             this.shape = module;
             this.container = container;
-            root.getChildren().add(container);
+            SceneManager.addComponent(container);
 
 
 

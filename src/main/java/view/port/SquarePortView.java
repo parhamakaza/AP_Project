@@ -8,7 +8,7 @@ public class SquarePortView extends PortView {
     }
     @Override
     public void draw(){
-        this.shape = this.createRectangleAsPolygon();
+        this.shape = this.createRectangleShape();
         setPortCordination();
     }
 }

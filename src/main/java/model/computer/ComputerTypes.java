@@ -5,6 +5,6 @@ public enum ComputerTypes {
     TRANSFORMER,
     SPY,
     DDOS,
-    VPN,
-    ANTIVIRUS
+    ANTIVIRUS,
+    VPN
 }

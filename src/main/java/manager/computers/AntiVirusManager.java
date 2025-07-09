@@ -8,7 +8,6 @@ import manager.LevelManager;
 import model.computer.Computer;
 import model.packet.Packet;
 
-import static manager.computers.TransformerManager.transferPacket;
 import static model.packet.Packet.SIZE;
 
 public class AntiVirusManager extends ComputerManager{
@@ -21,7 +20,7 @@ public class AntiVirusManager extends ComputerManager{
 
     @Override
     public void transfer(){
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(10), event ->  transferPacket(this.getComputer()));
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(10), event ->  standardtransfer());
         timeline.getKeyFrames().add(keyFrame);
     }
 
