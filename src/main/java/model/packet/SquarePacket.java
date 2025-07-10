@@ -12,6 +12,4 @@ public class SquarePacket extends Packet {
         value = health;
         this.type = Type.SQUARE;
     }
-
-
 }

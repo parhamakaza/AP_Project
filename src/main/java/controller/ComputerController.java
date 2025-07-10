@@ -9,12 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ComputerController {
-    public static Map<Computer, ComputerView> computerMap = new HashMap<>();
+    public static Map<Computer, ComputerView> computerViewMap = new HashMap<>();
 
 
     public static ComputerView MakeComputer(Computer computer) {
        ComputerView computerView = new ComputerView(computer);
-       computerMap.put(computer,computerView);
+       computerViewMap.put(computer,computerView);
        LevelManager.lvl.comps.add(computer);
        ComputerManagerFactory.createManager(computer);
        return computerView;

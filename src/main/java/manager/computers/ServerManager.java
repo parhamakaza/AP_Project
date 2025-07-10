@@ -22,7 +22,7 @@ public  class ServerManager extends ComputerManager {
     @Override
     public  void takePacket(Packet packet){
         lvl.coins = lvl.coins + packet.value;
-        SceneManager.removeComponent(PacketContoller.packetMap.get(packet).getShape());
+        SceneManager.removeComponent(PacketContoller.packetViewMap.get(packet).getShape());
         lvl.packets.remove(packet);
     }
     @Override

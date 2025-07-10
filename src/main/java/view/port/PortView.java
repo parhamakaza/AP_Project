@@ -5,8 +5,7 @@ import javafx.scene.shape.Shape;
 import model.computer.Computer;
 import model.port.Port;
 import model.port.PortType;
-import model.port.SquarePort;
-import model.port.TrianglePort;
+
 import service.SceneManager;
 import view.Drawable;
 

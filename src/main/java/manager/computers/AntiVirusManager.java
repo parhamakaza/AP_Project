@@ -48,7 +48,7 @@ public class AntiVirusManager extends ComputerManager{
     }
     private void killTrozhan(Packet packet){
         packet.setTrozhan(false);
-        PacketContoller.packetMap.get(packet).getShape().setFill(Color.rgb(255, 255, 0, 0.2));;
+        PacketContoller.packetViewMap.get(packet).getShape().setFill(Color.rgb(255, 255, 0, 0.2));;
     }
 
     private  double distance(double x , double y){

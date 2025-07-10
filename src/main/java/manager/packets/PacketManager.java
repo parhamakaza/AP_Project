@@ -5,7 +5,6 @@ import controller.PacketContoller;
 import controller.WireController;
 import javafx.animation.AnimationTimer;
 
-import javafx.scene.layout.Pane;
 import javafx.scene.shape.QuadCurve;
 
 import javafx.scene.shape.Shape;
@@ -22,16 +21,19 @@ import view.packets.PacketView;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
  * This class manages the animation for a single packet on a path of curves.
  */
 
-public class PacketManager extends AnimationTimer {
+public abstract class PacketManager extends AnimationTimer {
+    public static Map<Packet , PacketManager>  packetManagerMap= new HashMap<>();
 
-    private static final double SPEED_PIXELS_PER_SECOND = 150.0;
+    //protected static  double speed = 80.0;
 
     public static void sendPacket(Port sPort , Packet packet){
         sPort.wire.avaible = false;
@@ -40,53 +42,59 @@ public class PacketManager extends AnimationTimer {
             packet.x = sPort.x;
             packet.y = sPort.y;
             packet.wire = sPort.wire;
-            PacketManager packetManager = new PacketManager(packet, WireController.wireMap.get(sPort.wire).getCurves(),100);
+            PacketManager packetManager = PacketManagerFactory.createManager(packet,WireController.wireViewMap.get(sPort.wire).getCurves());
             packetManager.start();
         }
     }
 
 
-    private record ArcLengthData(int curveIndex, double t, double cumulativeDistance) {}
+    protected record ArcLengthData(int curveIndex, double t, double cumulativeDistance) {}
 
 
-    private PacketView packetView;
+    protected PacketView packetView;
 
-    private Packet packet;
+    protected Packet packet;
 
-    private final Shape shape;
+    protected final Shape shape;
 
-    private final List<QuadCurve> path;
+    protected final List<QuadCurve> path;
 
-    private double speed;
+    protected double speed = 80;
 
-    private final List<ArcLengthData> lookupTable = new ArrayList<>();
+    protected final List<ArcLengthData> lookupTable = new ArrayList<>();
 
-    private double totalPathLength;
+    protected double totalPathLength;
 
-    private long lastUpdate = 0;
-
-    private double distanceTraveled = 0;
+    protected long lastUpdate = 0;
 
 
-    public PacketManager(Packet packet, List<QuadCurve> path, double speed) {
-        Shape shape1 = PacketContoller.packetMap.get(packet).getShape();
+    protected double distanceTraveled = 0;
 
-        this.packetView = PacketContoller.packetMap.get(packet);
+    protected PacketState currentState = PacketState.FORWARD;
 
-        packetView.getPacket().wire.avaible = false;
 
-        this.packet = packetView.getPacket();
 
-        this.shape = packetView.getShape();
+
+
+    public PacketManager(Packet packet, List<QuadCurve> path) {
+
+        this.packetView = PacketContoller.packetViewMap.get(packet);
+
+
+        packet.wire.avaible = false;
+
+        this.packet = packet;
+
+        this.shape = packetView.getShape() ;
 
         shape.setLayoutX(packet.x);
         shape.setLayoutY(packet.y -  Packet.SIZE / 2);
 
         this.path = path;
 
-        this.speed = speed;
 
-        SceneManager.addComponent(shape1);
+
+        SceneManager.addComponent(shape);
 
 
         buildLookupTable();
@@ -97,7 +105,7 @@ public class PacketManager extends AnimationTimer {
     @Override
 
     public void handle(long now) {
-
+        packet.wire.avaible = false;
         if (lastUpdate == 0) {
 
             lastUpdate = now;
@@ -109,8 +117,11 @@ public class PacketManager extends AnimationTimer {
 
         double elapsedSeconds = (now - lastUpdate) / 1_000_000_000.0;
 
+
+
         lastUpdate = now;
-        packet.wire.avaible = false;
+
+
 
 
 
@@ -127,28 +138,30 @@ public class PacketManager extends AnimationTimer {
 
 
         shape.setLayoutX(position.x);
-
         shape.setLayoutY(position.y - Packet.SIZE / 2);
 
         bindToModule(shape);
 
         if(distanceTraveled >= totalPathLength){
-            packet.wire.avaible = true;
-            SceneManager.removeComponent(PacketContoller.packetMap.get(packet).getShape());
-            Computer computer = packet.wire.ePort.computer;
-           if(computer instanceof Spy ){
-                Spy spy = SpyManager.getRandomSpy();
-                ComputerManager.computerManagerMap.get(spy).takePacket(packet);
-            }else {
-                ComputerManager.computerManagerMap.get(computer).takePacket(packet);
-            }
-            stop();
+           packetMovmentEnds(packet.wire.ePort.computer);
+           stop();
         }
 
     }
 
+    protected void packetMovmentEnds(Computer computer){
+        packet.wire.avaible = true;
+        SceneManager.removeComponent(PacketContoller.packetViewMap.get(packet).getShape());
+        if(computer instanceof Spy ){
+            Spy spy = SpyManager.getRandomSpy();
+            ComputerManager.computerManagerMap.get(spy).takePacket(packet);
+        }else {
+            ComputerManager.computerManagerMap.get(computer).takePacket(packet);
+        }
+    }
 
-    private void buildLookupTable() {
+
+    protected void buildLookupTable() {
 
         final int stepsPerCurve = 1000;
 
@@ -159,7 +172,6 @@ public class PacketManager extends AnimationTimer {
 
         for (int i = 0; i < path.size(); i++) {
 
-            QuadCurve currentCurve = path.get(i);
 
 
 // Add the starting point of the current curve segment
@@ -190,7 +202,7 @@ public class PacketManager extends AnimationTimer {
     }
 
 
-    private ArcLengthData getPathDataForDistance(double distance) {
+    protected ArcLengthData getPathDataForDistance(double distance) {
 
         if (distance <= 0) return lookupTable.get(0);
 
@@ -230,7 +242,7 @@ public class PacketManager extends AnimationTimer {
     }
 
 
-    private Point2D evaluateCurve(int curveIndex, double t) {
+    protected Point2D evaluateCurve(int curveIndex, double t) {
 
         QuadCurve c = path.get(curveIndex);
 
@@ -257,7 +269,7 @@ public class PacketManager extends AnimationTimer {
     }
 
 
-    private record Point2D(double x, double y) {
+    protected record Point2D(double x, double y) {
 
         public double distance(Point2D other) {
 
@@ -266,9 +278,14 @@ public class PacketManager extends AnimationTimer {
         }
 
     }
+    public void returnPacket() {
+        this.currentState = PacketState.RETURNING;
+
+    }
 
 
-    private void bindToModule(Shape shape) {
+
+    protected void bindToModule(Shape shape) {
 
         packet.x = shape.getLayoutX();
         packet.y = shape.getLayoutY();

@@ -23,9 +23,6 @@ public class WireManager {
         Shape shape = portView.getShape();
         Port port = portView.getPort();
 
-
-
-
         shape.setOnMousePressed((MouseEvent e) -> {
             if(port.wire == null) {
                 firstPort = port;
@@ -37,14 +34,13 @@ public class WireManager {
                 currentLine.setEndX(e.getSceneX());
                 currentLine.setEndY(e.getSceneY());
                 SceneManager.addComponent(currentLine);
-            } else {
+            }else {
                 Wire wire = port.wire;
-                WireView wireView = WireController.wireMap.get(wire);
-                for (QuadCurve qc : WireController.wireMap.get(wire).getCurves()) {
+                WireView wireView = WireController.wireViewMap.remove(wire);
+                for (QuadCurve qc : wireView.getCurves()) {
                     SceneManager.removeComponent(qc);
                 }
-
-                wireView.setCurves(null);
+                //wireView.setCurves(null);
                 wire.sPort.wire = null;
                 wire.ePort.wire = null;
                 LevelManager.lvl.wireLength = LevelManager.lvl.wireLength + wire.length;
@@ -75,7 +71,6 @@ public class WireManager {
                     WireController.makeWire(new Wire(firstPort, p));
 
 
-
                 } catch (Exception ex) {
 
                     try {
@@ -89,8 +84,7 @@ public class WireManager {
             }
 
 
-
-            ((Pane) shape.getParent()).getChildren().remove(currentLine);
+            SceneManager.removeComponent(currentLine);
             currentLine = null;
             firstPort = null;
 
@@ -101,7 +95,7 @@ public class WireManager {
     }
 
     private static Port checkIsIndise(double x , double y){
-            for (PortView p : PortController.portMap.values()){
+            for (PortView p : PortController.portViewMap.values()){
                 Bounds bounds = p.getShape().localToScene(p.getShape().getBoundsInLocal());
                 if(bounds.contains(x, y)){
 

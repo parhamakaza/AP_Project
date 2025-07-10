@@ -2,7 +2,6 @@ package manager;
 
 import controller.*;
 import model.*;
-import view.packets.PacketView;
 
 import static manager.GameLoopManager.gameLoopManager;
 
@@ -16,11 +15,11 @@ public class LevelManager {
 
 
     public static void reset(){
-        ComputerController.computerMap.clear();
-        LevelController.levelMap.clear();
-        PacketContoller.packetMap.clear();
-        PortController.portMap.clear();
-        WireController.wireMap.clear();
+        ComputerController.computerViewMap.clear();
+        LevelController.levelViewMap.clear();
+        PacketContoller.packetViewMap.clear();
+        PortController.portViewMap.clear();
+        WireController.wireViewMap.clear();
 
 
 

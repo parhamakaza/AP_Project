@@ -5,7 +5,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.QuadCurve;
 import model.wire.Wire;
-import model.Type;
 import service.AudioManager;
 import service.SceneManager;
 
@@ -16,7 +15,7 @@ import java.util.List;
 public class WireView {
     private Wire wire;
     private List<QuadCurve> curves;
-    private List<Point2D> initialCurvesControles = new ArrayList<>();
+    private final List<Point2D> initialCurvesControllers = new ArrayList<>();
 
     public void setCurves(List<QuadCurve> curves) {
         this.curves = curves;
@@ -35,7 +34,6 @@ public class WireView {
     }
 
     public WireView(Wire wire) {
-
         this.wire = wire;
 
         Point2D p0 = new Point2D(wire.startX, wire.startY);  // Start Point
@@ -50,19 +48,12 @@ public class WireView {
 
         curves = List.of(curve1, curve2, curve3);
 
-        initialCurvesControles.addAll(List.of(setControlToMidpoint(curve1), setControlToMidpoint(curve2), setControlToMidpoint(curve3)));
+        initialCurvesControllers.addAll(List.of(setControlToMidpoint(curve1), setControlToMidpoint(curve2), setControlToMidpoint(curve3)));
 
         // Style the curves
         curves.forEach(curve -> {
-            curve.setStrokeWidth(4);
-            curve.setFill(null);
-            if (wire.type.equals(Type.SQUARE)) {
-                curve.setStroke(Color.GREEN);
-            } else if (wire.type.equals(Type.TRIANGLE)) {
-                curve.setStroke(Color.YELLOW);
-            }else if(wire.type.equals(Type.MATIC)){
-                curve.setStroke(Color.GRAY);
-            }
+            paintCurve(curve);
+
             curve.setOnMouseDragged(event -> {
                 // 1. Get the specific curve that was the source of the drag event.
                 QuadCurve draggedCurve = (QuadCurve) event.getSource();
@@ -71,7 +62,7 @@ public class WireView {
                 // 2. Get the current mouse coordinates.
                 double controlX = event.getX();
                 double controlY = event.getY();
-                if (distance(new Point2D(controlX, controlY), initialCurvesControles.get(i)) <= 120) {
+                if (distance(new Point2D(controlX, controlY), initialCurvesControllers.get(i)) <= 120) {
 
 
                     draggedCurve.setControlX(controlX);
@@ -80,7 +71,6 @@ public class WireView {
                 }
 
             });
-            curve.setOnMouseClicked(e -> wire.curved++);
             SceneManager.addComponent(curve);
         });
 
@@ -90,8 +80,8 @@ public class WireView {
     }
 
     private Point2D setControlToMidpoint(QuadCurve curve) {
-        double controlX = (curve.getStartX() + curve.getEndX()) / 2;
-        double controlY = (curve.getStartY() + curve.getEndY()) / 2;
+        double controlX = average(curve.getStartX() , curve.getEndX());
+        double controlY = average(curve.getStartY() , curve.getEndY());
         curve.setControlX(controlX);
         curve.setControlY(controlY);
         return new Point2D(controlX, controlY);
@@ -146,6 +136,24 @@ public class WireView {
 
     private double distance(Point2D p1, Point2D p2) {
         return Math.sqrt(Math.pow(p1.getX() - p2.getX(), 2) + Math.pow(p1.getY() - p2.getY(), 2));
+    }
+    private void paintCurve(QuadCurve curve) {
+        curve.setStrokeWidth(4);
+        curve.setFill(null);
+        switch (wire.type) {
+            case SQUARE:
+                curve.setStroke(Color.GREEN);
+                break;
+            case TRIANGLE:
+                curve.setStroke(Color.YELLOW);
+                break;
+            case MATIC:
+                curve.setStroke(Color.GRAY);
+                break;
+            default:
+                curve.setStroke(Color.WHITE);
+                break;
+        }
     }
 
 }

@@ -1,7 +1,6 @@
 package view;
 
 import controller.ComputerController;
-import manager.GameLoopManager;
 import manager.LevelManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -14,7 +13,6 @@ import javafx.scene.control.Slider;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -143,13 +141,15 @@ public class LevelView {
 
         KeyFrame keyFrame = new KeyFrame(Duration.millis(100), event -> {
             boolean allComputersReady = true;
-            for (Computer i : lvl.comps) {
-                boolean isReady = i.compIsReady();
+            for (Computer computer : lvl.comps) {
+                boolean isReady = computer.compIsReady();
                 Color glowColor = isReady ? Color.web("#00ffff") : Color.web("#FF0066");
                 DropShadow glow = new DropShadow(10, glowColor);
                 glow.setSpread(0.2);
-                ComputerController.computerMap.get(i).getShape().setEffect(glow);
-                i.ready = isReady;
+                ComputerView computerView= ComputerController.computerViewMap.get(computer);
+                computerView.getShape().setEffect(glow);
+                computerView.label.setText(computer.computerType.toString() +"\n" + computer.packets.size());
+                computer.ready = isReady;
                 if (!isReady) {
                     allComputersReady = false;
                 }

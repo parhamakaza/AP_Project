@@ -19,6 +19,7 @@ public  class ComputerView implements Drawable  {
     private Computer computer;
     private Shape shape;
     private StackPane container;
+    public Label label;
 
     public Computer getComputer() {
         return computer;
@@ -55,13 +56,14 @@ public  class ComputerView implements Drawable  {
             module.setEffect(glow);
 
             // Create the Label to go on top
-            Label serverLabel = new Label(computer.computerType.toString()); // Or get text from this.computer.getName()
-            serverLabel.setTextFill(Color.GOLD);      // Make the text easy to see
-            serverLabel.setFont(new Font("Arial Bold", 10));
+            Label computerLabel = new Label(computer.computerType.toString() +"\n" + computer.packets.size()); // Or get text from this.computer.getName()
+            computerLabel.setTextFill(Color.GOLD);      // Make the text easy to see
+            computerLabel.setFont(new Font("Arial Bold", 10));
+            this.label = computerLabel;
 
             // Add both the rectangle and the label to the container.
             // StackPane will automatically center the label on top of the rectangle.
-            container.getChildren().addAll(module, serverLabel);
+            container.getChildren().addAll(module, computerLabel);
             container.setMinWidth(WIDTH);
             container.setMaxWidth(WIDTH);
             container.setPrefWidth(WIDTH);

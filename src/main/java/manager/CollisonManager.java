@@ -3,7 +3,6 @@ package manager;
 import controller.PacketContoller;
 import javafx.animation.KeyFrame;
 
-import javafx.animation.PauseTransition;
 import javafx.geometry.Bounds;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
@@ -48,7 +47,7 @@ public class CollisonManager {
 
                             boolean isColliding = false;
                             try {
-                                Shape intersect = Shape.intersect(PacketContoller.packetMap.get(p1).getShape(), PacketContoller.packetMap.get(p2).getShape());
+                                Shape intersect = Shape.intersect(PacketContoller.packetViewMap.get(p1).getShape(), PacketContoller.packetViewMap.get(p2).getShape());
                                 isColliding = !intersect.getBoundsInLocal().isEmpty();
                             } catch (Exception e) {
                                 e.printStackTrace(); // Always log exceptions in dev
@@ -58,7 +57,7 @@ public class CollisonManager {
                                 if (!currentCollisions.contains(key)) {
                                    currentCollisions.add(key);
 
-                                    Shape intersect = Shape.intersect(PacketContoller.packetMap.get(p1).getShape(), PacketContoller.packetMap.get(p2).getShape());
+                                    Shape intersect = Shape.intersect(PacketContoller.packetViewMap.get(p1).getShape(), PacketContoller.packetViewMap.get(p2).getShape());
                                     Bounds collisionBounds = intersect.getBoundsInLocal();
                                     double collisionX = collisionBounds.getMinX() + collisionBounds.getWidth() / 2;
                                     double collisionY = collisionBounds.getMinY() + collisionBounds.getHeight() / 2;
@@ -96,7 +95,6 @@ public class CollisonManager {
         if (packet2.health == 0) {
             PacketContoller.killPacket(packet2);
         }
-
     }
 
 

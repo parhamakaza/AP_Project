@@ -5,7 +5,6 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import manager.computers.ComputerManager;
-import view.packets.PacketView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +12,7 @@ import java.util.List;
 public class GameLoopManager {
     public static GameLoopManager gameLoopManager = new GameLoopManager();
     public boolean paused;
-    private Timeline mainTimeLine = new Timeline();
-    private List<Timeline> computersTimeLine = new ArrayList<>();
+    protected Timeline mainTimeLine = new Timeline();
     public static void addKeyFrame(KeyFrame keyFrame){
         gameLoopManager.mainTimeLine.getKeyFrames().add(keyFrame);
 
@@ -35,13 +33,13 @@ public class GameLoopManager {
         if ( p && mainTimeLine.getStatus() == Animation.Status.RUNNING) {
             mainTimeLine.pause();
 
-            LevelController.levelMap.get(LevelManager.lvl).timeline.pause();
+            LevelController.levelViewMap.get(LevelManager.lvl).timeline.pause();
 
         }
         if(!p && mainTimeLine.getStatus() == Animation.Status.PAUSED){
             mainTimeLine.play();
 
-            LevelController.levelMap.get(LevelManager.lvl).timeline.play();
+            LevelController.levelViewMap.get(LevelManager.lvl).timeline.play();
 
         }
     }

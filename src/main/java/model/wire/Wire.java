@@ -15,52 +15,39 @@ public class Wire {
     public double endY;
     public boolean avaible = true;
     public double length;
-    public int curved = 0;
 
-    public Wire(Port sPort , Port ePort)throws Exception{
-        this.sPort = sPort;
-        this.ePort = ePort;
-        if(checkPorts(sPort,ePort)){
-
+    public Wire(Port sPort, Port ePort) throws Exception {
+        if (checkPorts(sPort, ePort)) {
+            this.sPort = sPort;
+            this.ePort = ePort;
 
 
             this.startX = sPort.centerX();
             this.startY = sPort.centerY();
-
             this.endX = ePort.centerX();
             this.endY = ePort.centerY();
+
+
+            this.length = WireManager.lengthcounter(this);
+            if (this.length > LevelManager.lvl.wireLength) {
+                throw new Exception("not enougth length");
+            }
 
             sPort.wire = this;
             ePort.wire = this;
 
-            this.length = WireManager.lengthcounter(this);
-            if(this.length >  LevelManager.lvl.wireLength){
-                sPort.wire = null;
-                ePort.wire = null;
-                throw new Exception("not enougth length");
-            }
-
-            LevelManager.lvl.wireLength= (LevelManager.lvl.wireLength - this.length);
-        }else{
-            this.ePort=null;
-            this.sPort =null;
+            LevelManager.lvl.wireLength = (LevelManager.lvl.wireLength - this.length);
+        } else {
             throw new Exception("wires ports type mismatch");
 
         }
-        if(sPort instanceof TrianglePort){
-            this.type = Type.TRIANGLE;
-        }else if(sPort instanceof SquarePort) {
-            this.type = Type.SQUARE;
-        }else if(sPort instanceof MaticPort){
-            this.type = Type.MATIC;
-        }
+        this.type = sPort.getType();
     }
 
-    public static boolean checkPorts(Port p1, Port p2){
-
-        boolean a = p1.getClass() == p2 .getClass();
+    public static boolean checkPorts(Port p1, Port p2) {
+        boolean a = p1.getClass() == p2.getClass();
         boolean b = !p1.computer.equals(p2.computer);
-        boolean c =  p1.portType.equals(PortType.OUTPUT);
+        boolean c = p1.portType.equals(PortType.OUTPUT);
         boolean d = p2.portType.equals(PortType.INPUT);
 
         return a && b && c && d;
