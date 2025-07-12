@@ -6,7 +6,7 @@ import model.packet.Packet;
 import java.util.List;
 
 public class TrianglePacketManager extends PacketManager {
-    private static final double THE_ACCELERATION = 10;
+    private static final double THE_ACCELERATION = 20;
     private boolean acceleration = false;
 
     public TrianglePacketManager(Packet packet, List<QuadCurve> path) {

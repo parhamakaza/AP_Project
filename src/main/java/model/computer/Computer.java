@@ -15,6 +15,7 @@ public abstract class Computer {
     public  ComputerTypes computerType ;
     public List<Port> ports = new ArrayList<>();
     public List<Packet> packets = new ArrayList<>();
+    public boolean disable = false;
 
     public boolean ready = false;
 
@@ -35,7 +36,10 @@ public abstract class Computer {
     public double getCenterX(){
         return x + WIDTH/2;
     }
+
     public double getCenterY(){
         return y + HEIGHT/2;
     }
+
+
 }

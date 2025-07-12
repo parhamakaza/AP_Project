@@ -15,7 +15,7 @@ public class ComputerManagerFactory {
         managerRegistry.put(Server.class,      comp -> new ServerManager((Server) comp));
         managerRegistry.put(DDOS.class , comp -> new DDOSManager((DDOS)comp));
         managerRegistry.put(AntiVirus.class , comp -> new AntiVirusManager((AntiVirus)comp));
-
+        managerRegistry.put(VPN.class , comp -> new VPNManager((VPN)comp));
     }
 
     public static ComputerManager createManager(Computer computer) {

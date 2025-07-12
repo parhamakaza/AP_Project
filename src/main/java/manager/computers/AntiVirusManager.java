@@ -14,15 +14,10 @@ public class AntiVirusManager extends ComputerManager{
     private  static  final double RADIUS = 200;
     public AntiVirusManager(Computer computer) {
         super(computer);
-        transfer();
         detectTrozhan();
     }
 
-    @Override
-    public void transfer(){
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(10), event ->  standardtransfer());
-        timeline.getKeyFrames().add(keyFrame);
-    }
+
 
     private void detectTrozhan() {
         double centerX = computer.getCenterX();
@@ -48,7 +43,8 @@ public class AntiVirusManager extends ComputerManager{
     }
     private void killTrozhan(Packet packet){
         packet.setTrozhan(false);
-        PacketContoller.packetViewMap.get(packet).getShape().setFill(Color.rgb(255, 255, 0, 0.2));;
+        PacketContoller.packetViewMap.get(packet).getShape().setFill(Color.rgb(255, 255, 0, 0.2));
+        disableComputer(computer);
     }
 
     private  double distance(double x , double y){

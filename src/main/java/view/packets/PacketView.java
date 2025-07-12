@@ -14,6 +14,10 @@ public abstract class PacketView implements Drawable {
         return shape;
     }
 
+    public void setShape(Shape shape) {
+        this.shape = shape;
+    }
+
     public Packet getPacket() {
         return packet;
     }

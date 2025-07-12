@@ -55,8 +55,8 @@ public interface Drawable {
          return triangle;
      }
 
-     default   Polygon createMaticShape() {
-         Polygon  maticShape= new Polygon();
+     default  Polygon createMaticShape() {
+         Polygon maticShape= new Polygon();
          // The coordinates are calculated to meet the 20x20 size constraint,
          // with x=0 as the horizontal center and y=0 as the top.
          // The points are listed in order to draw the outline.
@@ -80,7 +80,29 @@ public interface Drawable {
          return maticShape;
      }
 
-     void draw();
+     static Polygon createVpnShape(){
+
+         Polygon shield = new Polygon();
+
+         // Add the coordinates for the 4 vertices of the 20x20 shield.
+         shield.getPoints().addAll(
+                 0.0, 0.0,   // Top center point
+                 10.0, 10.0,  // Right shoulder (width/2, height/2)
+                 0.0, 20.0,   // Bottom point (0, height)
+                 -10.0, 10.0   // Left shoulder (-width/2, height/2)
+         );
+
+         // --- Style the shield ---
+         shield.setStrokeWidth(4);
+         shield.setFill(Color.STEELBLUE);
+         shield.setStroke(Color.BLACK);
+
+         return  shield;
+
+
+     }
+
+      void draw();
 
 
 }

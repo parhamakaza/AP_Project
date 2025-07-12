@@ -6,6 +6,8 @@ import javafx.animation.KeyFrame;
 import javafx.geometry.Bounds;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
+import manager.packets.PacketManager;
+import model.Type;
 import model.packet.Packet;
 import service.AudioManager;
 
@@ -80,10 +82,14 @@ public class CollisonManager {
     }
 
     public static void collison(Packet packet1, Packet packet2) {
-        System.out.println(packet1.x + "   " +packet1.y );
-        System.out.println(packet2.x + "  " +packet2.y);
 
         AudioManager.playCollison();
+        if(packet1.getType() == Type.MATIC){
+            PacketManager.changeDirection(packet1);
+        }
+        if(packet2.getType() == Type.MATIC){
+            PacketManager.changeDirection(packet2);
+        }
 
         packet1.health = packet1.health - 1;
         packet2.health = packet2.health - 1;

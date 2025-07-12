@@ -15,21 +15,24 @@ import static manager.LevelManager.lvl;
 import static manager.packets.PacketManager.sendPacket;
 
 public  class ServerManager extends ComputerManager {
+
     public ServerManager(Computer computer){
         super(computer);
-        transfer();
+
     }
+
     @Override
     public  void takePacket(Packet packet){
         lvl.coins = lvl.coins + packet.value;
         SceneManager.removeComponent(PacketContoller.packetViewMap.get(packet).getShape());
         lvl.packets.remove(packet);
     }
+
     @Override
     public void transfer(){
         Computer computer = getComputer();
         KeyFrame packetCreationKeyFrame = new KeyFrame(Duration.seconds(1),
-                event -> {
+                e -> {
                     for (Port port : computer.ports) {
                         if (port.wire.avaible && port.portType == PortType.OUTPUT) {
                             Packet packet = null;
@@ -50,7 +53,6 @@ public  class ServerManager extends ComputerManager {
                 }
         );
         timeline.getKeyFrames().add(packetCreationKeyFrame);
-
     }
 
 

@@ -17,6 +17,22 @@ public abstract class Packet {
     public boolean insideSystem = false;
     protected boolean trozhan = false;
 
+
+
+    public boolean isVpn() {
+        return vpn;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public void setVpn(boolean vpn) {
+        this.vpn = vpn;
+    }
+
+    protected boolean vpn = false;
+
     public Type getType() {
         return type;
     }
@@ -35,7 +51,14 @@ public abstract class Packet {
         theID++;
         this.id = theID;
         LevelManager.lvl.packets.add(this);
+    }
 
+    public boolean isDamged(){
+        if (this.health == this.value){
+            return false;
+        }else {
+            return true;
+        }
     }
 
 

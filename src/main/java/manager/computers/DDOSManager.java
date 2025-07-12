@@ -12,20 +12,20 @@ public class DDOSManager extends ComputerManager{
 
     public DDOSManager(Computer computer){
         super(computer);
-        transfer();
+
     }
 
-    @Override
-    public void transfer(){
-        KeyFrame sabotageKeyFrame = new KeyFrame(Duration.millis(500), e-> standardtransfer());
-        timeline.getKeyFrames().add(sabotageKeyFrame);
-    }
+
 
     @Override
     public void takePacket(Packet packet) {
-        packet.insideSystem = true;
-        this.computer.packets.add(packet);
-        if (packet.value == packet.health) {
+        super.takePacket(packet);
+        if(packet.isVpn()){
+            packet.setVpn(false);
+            VPNManager.resetPacket(packet);
+            return;
+        }
+        if (!packet.isDamged()) {
             packet.health--;
         }
         if (probability()) {

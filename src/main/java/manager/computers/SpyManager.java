@@ -4,6 +4,7 @@ import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 import model.computer.Computer;
 import model.computer.Spy;
+import model.packet.Packet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,25 +12,32 @@ import java.util.Random;
 
 public class SpyManager extends ComputerManager {
     private static Random random = new Random();
-    public static List<Spy> spyList = new ArrayList<>();
+    public  List<Spy> spyList = new ArrayList<>();
     public SpyManager(Computer computer){
         super(computer);
         spyList.add((Spy) this.getComputer());
-        transfer();
+
     }
+
 
     @Override
-    public void transfer(){
-        KeyFrame keyFrame = new KeyFrame(
-                // This is the TIMING. Change this duration to what you need (e.g., Duration.millis(500)).
-                Duration.seconds(1), e -> standardtransfer() );
-        timeline.getKeyFrames().add(keyFrame);
+    public void takePacket(Packet packet) {
+        if (packet.isVpn()) {
+            packet.setVpn(false);
+            VPNManager.resetPacket(packet);
+            super.takePacket(packet);
+
+        } else {
+            Spy spy = getRandomSpy();
+            packet.insideSystem = true;
+            spy.packets.add(packet);
+        }
+
     }
 
 
 
-
-    public  static Spy getRandomSpy() {
+    public  Spy getRandomSpy() {
 
         // 1. Handle edge cases: If the list is null or empty, there's nothing to choose.
         if (spyList == null || spyList.isEmpty()) {

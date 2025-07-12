@@ -10,7 +10,6 @@ import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Shape;
 
 import manager.computers.ComputerManager;
-import manager.computers.SpyManager;
 import model.computer.*;
 import model.packet.Packet;
 
@@ -125,7 +124,6 @@ public abstract class PacketManager extends AnimationTimer {
 
 
 
-        distanceTraveled += speed * elapsedSeconds;
 
 
 
@@ -142,22 +140,44 @@ public abstract class PacketManager extends AnimationTimer {
 
         bindToModule(shape);
 
-        if(distanceTraveled >= totalPathLength){
-           packetMovmentEnds(packet.wire.ePort.computer);
-           stop();
+        switch (currentState) {
+            case FORWARD:
+                distanceTraveled += speed * elapsedSeconds;
+
+                    if(distanceTraveled >= totalPathLength){
+                        Computer computer =  packet.wire.ePort.computer;
+                        if(computer.disable){
+                            currentState = PacketState.RETURNING;
+                        }else {
+                            packetMovementEnds(computer);
+                            stop();
+                        }
+                    }
+
+                break;
+
+            case RETURNING:
+                distanceTraveled -= speed * elapsedSeconds;
+
+
+                if (distanceTraveled <= 0) {
+                    distanceTraveled = 0;
+
+                    currentState = PacketState.FORWARD;
+
+                }
+                break;
         }
+
+
 
     }
 
-    protected void packetMovmentEnds(Computer computer){
+    protected void packetMovementEnds(Computer computer){
         packet.wire.avaible = true;
         SceneManager.removeComponent(PacketContoller.packetViewMap.get(packet).getShape());
-        if(computer instanceof Spy ){
-            Spy spy = SpyManager.getRandomSpy();
-            ComputerManager.computerManagerMap.get(spy).takePacket(packet);
-        }else {
-            ComputerManager.computerManagerMap.get(computer).takePacket(packet);
-        }
+        ComputerManager.computerManagerMap.get(computer).takePacket(packet);
+
     }
 
 
@@ -278,8 +298,17 @@ public abstract class PacketManager extends AnimationTimer {
         }
 
     }
-    public void returnPacket() {
-        this.currentState = PacketState.RETURNING;
+    public static void returnPacket(Packet packet) {
+        packetManagerMap.get(packet).currentState = PacketState.RETURNING;
+    }
+    public static void changeDirection(Packet packet){
+        PacketState packetState = packetManagerMap.get(packet).currentState;
+        switch (packetState){
+            case RETURNING ->  packetManagerMap.get(packet).currentState = PacketState.FORWARD;
+
+
+            case FORWARD ->  packetManagerMap.get(packet).currentState = PacketState.RETURNING;
+        }
 
     }
 

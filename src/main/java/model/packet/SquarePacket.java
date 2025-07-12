@@ -2,7 +2,7 @@ package model.packet;
 
 
 import model.Type;
-import model.port.Port;
+
 
 public class SquarePacket extends Packet {
 
@@ -12,4 +12,5 @@ public class SquarePacket extends Packet {
         value = health;
         this.type = Type.SQUARE;
     }
+
 }
