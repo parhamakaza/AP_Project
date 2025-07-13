@@ -14,8 +14,7 @@ public class MaticPacketView extends PacketView {
     public void draw() {
         this.shape = this.createMaticShape();
         shape.fillProperty().setValue(Color.PINK);
-        shape.setLayoutX(packet.x);
-        shape.setLayoutY(packet.y);
-        SceneManager.addComponent(shape);
+   setShapInitialCordination();
     }
+
 }

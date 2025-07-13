@@ -6,7 +6,7 @@ import model.packet.Packet;
 import java.util.List;
 
 public class TrianglePacketManager extends PacketManager {
-    private static final double THE_ACCELERATION = 20;
+    private static final double TRIANGLE_ACCELERATION = 20;
     private boolean acceleration = false;
 
     public TrianglePacketManager(Packet packet, List<QuadCurve> path) {
@@ -19,7 +19,7 @@ public class TrianglePacketManager extends PacketManager {
     @Override
     public void handle(long now) {
         if (acceleration && lastUpdate != 0) {
-            speed += THE_ACCELERATION * ((now - lastUpdate) / 1_000_000_000.0);
+            speed += TRIANGLE_ACCELERATION * ((now - lastUpdate) / 1_000_000_000.0);
         }
         super.handle(now);
 

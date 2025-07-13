@@ -53,6 +53,7 @@ public abstract class Packet {
         LevelManager.lvl.packets.add(this);
     }
 
+
     public boolean isDamged(){
         if (this.health == this.value){
             return false;

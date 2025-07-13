@@ -4,17 +4,17 @@ import controller.PacketContoller;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 import model.computer.Computer;
-import model.packet.MaticPacket;
-import model.packet.Packet;
-import model.packet.SquarePacket;
-import model.packet.TrianglePacket;
+import model.packet.*;
 import model.port.*;
 import service.SceneManager;
+
+import java.util.Random;
 
 import static manager.LevelManager.lvl;
 import static manager.packets.PacketManager.sendPacket;
 
 public  class ServerManager extends ComputerManager {
+    private static final Random random = new Random();
 
     public ServerManager(Computer computer){
         super(computer);
@@ -35,15 +35,20 @@ public  class ServerManager extends ComputerManager {
                 e -> {
                     for (Port port : computer.ports) {
                         if (port.wire.avaible && port.portType == PortType.OUTPUT) {
+
                             Packet packet = null;
-                            if (port instanceof SquarePort) {
-                                packet = new SquarePacket();
-                            }
-                            if (port instanceof TrianglePort) {
-                                packet = new TrianglePacket();
-                            }
-                            if(port instanceof MaticPort){
-                                packet = new MaticPacket();
+                            if(probability()){
+                                packet =new ConfidentialPacket();
+                            }else {
+                                if (port instanceof SquarePort) {
+                                    packet = new SquarePacket();
+                                }
+                                if (port instanceof TrianglePort) {
+                                    packet = new TrianglePacket();
+                                }
+                                if (port instanceof MaticPort) {
+                                    packet = new MaticPacket();
+                                }
                             }
                             PacketContoller.makePacket(packet);
                             lvl.generatedPackets++;
@@ -53,6 +58,10 @@ public  class ServerManager extends ComputerManager {
                 }
         );
         timeline.getKeyFrames().add(packetCreationKeyFrame);
+    }
+    //10% chance
+    private boolean probability() {
+        return random.nextDouble() < 0.05;
     }
 
 

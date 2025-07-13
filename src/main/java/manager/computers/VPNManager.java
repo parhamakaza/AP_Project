@@ -46,7 +46,7 @@ public class VPNManager extends ComputerManager{
 
     }
 
-    public static void resetPacket(Packet packet){
+    public static  void resetPacket(Packet packet){
         InitialPacket initialPacket = vpnedMap.get(packet);
         packet.health = chooseHealth(packet.health , initialPacket.health());
         packet.value = initialPacket.value;
@@ -72,6 +72,14 @@ public class VPNManager extends ComputerManager{
 
 
         return choices[randomIndex];
+    }
+
+    @Override
+    protected void disableComputer(){
+        for(Packet packet : vpned){
+            resetPacket(packet);
+
+        }
     }
 
     private record InitialPacket(int health , int value , Shape shape , Type type){}

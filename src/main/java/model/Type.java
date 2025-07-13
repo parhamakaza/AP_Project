@@ -4,5 +4,5 @@ public enum Type {
     SQUARE,
     TRIANGLE,
     MATIC,
-    OTHER
+    Confidential,
 }

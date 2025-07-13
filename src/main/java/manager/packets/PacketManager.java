@@ -32,7 +32,7 @@ import java.util.Map;
 public abstract class PacketManager extends AnimationTimer {
     public static Map<Packet , PacketManager>  packetManagerMap= new HashMap<>();
 
-    //protected static  double speed = 80.0;
+    protected static final double STANDARDSPEED = 80.0;
 
     public static void sendPacket(Port sPort , Packet packet){
         sPort.wire.avaible = false;
@@ -58,7 +58,7 @@ public abstract class PacketManager extends AnimationTimer {
 
     protected final List<QuadCurve> path;
 
-    protected double speed = 80;
+    protected double speed = STANDARDSPEED;
 
     protected final List<ArcLengthData> lookupTable = new ArrayList<>();
 

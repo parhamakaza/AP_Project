@@ -11,7 +11,7 @@ import model.packet.Packet;
 import static model.packet.Packet.SIZE;
 
 public class AntiVirusManager extends ComputerManager{
-    private  static  final double RADIUS = 200;
+    private  static  final double RADIUS = 250;
     public AntiVirusManager(Computer computer) {
         super(computer);
         detectTrozhan();
@@ -41,10 +41,12 @@ public class AntiVirusManager extends ComputerManager{
         timeline.getKeyFrames().add(keyFrame);
 
     }
+
+
     private void killTrozhan(Packet packet){
         packet.setTrozhan(false);
         PacketContoller.packetViewMap.get(packet).getShape().setFill(Color.rgb(255, 255, 0, 0.2));
-        disableComputer(computer);
+        disableComputer();
     }
 
     private  double distance(double x , double y){

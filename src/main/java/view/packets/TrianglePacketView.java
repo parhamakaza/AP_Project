@@ -14,8 +14,6 @@ public class TrianglePacketView extends PacketView{
     public void draw(){
         this.shape = this.createTriangleShape();
         shape.fillProperty().setValue(Color.PINK);
-        shape.setLayoutX(packet.x);
-        shape.setLayoutY(packet.y);
-        SceneManager.addComponent(shape);
+    setShapInitialCordination();
     }
 }

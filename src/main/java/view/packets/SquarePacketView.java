@@ -14,8 +14,6 @@ public class SquarePacketView extends PacketView{
     public void draw(){
         this.shape = this.createRectangleShape();
         shape.fillProperty().setValue(Color.PINK);
-        shape.setLayoutX(packet.x);
-        shape.setLayoutY(packet.y);
-        SceneManager.addComponent(shape);
+        setShapInitialCordination();
     }
 }

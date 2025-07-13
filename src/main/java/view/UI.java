@@ -41,6 +41,27 @@ public class UI {
                 "-fx-border-radius: 8;");
     }
 
+    public static void styler2(Button button){
+        String style = "-fx-background-color: #3a2d4b; /* Dark purple background */" +
+                "    -fx-text-fill: #eadaff; /* Light lavender text */" +
+                "    -fx-font-family: Consolas, Andale Mono, monospace;" +
+                "    -fx-font-weight: bold;" +
+                "    -fx-font-size: 16px;" +
+                "    -fx-border-color: #b794de; /* Medium purple border */" +
+                "    -fx-border-width: 2px;" +
+                "    -fx-border-radius: 8px;" +
+                "    -fx-background-radius: 8px;" +
+                "    -fx-effect: dropshadow(gaussian, #a862ea, 10, 0.6, 0, 0);";
+        button.setStyle(style);
+        button.setOnMouseEntered(e -> {
+            button.setStyle("-fx-background-color: #00b4d810; ");
+        });
+        button.setOnMouseExited(e -> {
+            button.setStyle(style);
+        });
+
+    }
+
     public static Button makeButton (String s ,double w, double h, double lx, double ly){
         Button button = makeButton(s , lx , ly);
         button.setPrefWidth(w);
@@ -70,6 +91,16 @@ public class UI {
         button.setPrefHeight(40); // Smaller height for HUD
         button.setPrefWidth(120); // Smaller width
         styler1(button); // Reuse the same cool style
+        // You might want to adjust font size here if needed
+        // button.setStyle(button.getStyle() + "-fx-font-size: 14px;");
+        return button;
+    }
+
+    public static Button createHUDButton2(String text) {
+        Button button = new Button(text);
+        button.setPrefHeight(40); // Smaller height for HUD
+        button.setPrefWidth(120); // Smaller width
+        styler2(button); // Reuse the same cool style
         // You might want to adjust font size here if needed
         // button.setStyle(button.getStyle() + "-fx-font-size: 14px;");
         return button;

@@ -1,10 +1,7 @@
 package manager.packets;
 
 import javafx.scene.shape.QuadCurve;
-import model.packet.MaticPacket;
-import model.packet.Packet;
-import model.packet.SquarePacket;
-import model.packet.TrianglePacket;
+import model.packet.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +16,7 @@ public class PacketManagerFactory {
         managerRegistry.put(SquarePacket.class, (packet, path) -> new SquarePacketManager(packet , path));
         managerRegistry.put(TrianglePacket.class,  (packet, path) -> new TrianglePacketManager(packet ,path));
         managerRegistry.put(MaticPacket.class,  (packet, path) -> new MaticPacketManager(packet ,path));
-
+        managerRegistry.put(ConfidentialPacket.class , ((packet, path) -> new ConfidentialPacketManager(packet ,path ) ));
     }
     private static final List<Class<? extends Packet>> ELIGIBLE_TYPES = List.of(
             SquarePacket.class,

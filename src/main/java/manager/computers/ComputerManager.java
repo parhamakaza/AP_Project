@@ -92,56 +92,10 @@ public abstract class ComputerManager {
         return packet.getType() == port.getType();
     }
 
-   /* public void standardtransfer() {
-        Computer computer = this.computer;
-        if (computer.packets.isEmpty()) {
-            return;
-        }
-
-        Packet packet = computer.packets.getLast();
-
-        if (computer.packets.size() > 5) {
-            computer.packets.remove(packet);
-            PacketContoller.killPacket(packet);
-            return;
-        }
-
-
-        Port bestFitPort = null;
-        Port firstAvailablePort = null;
-
-        for (Port port : computer.ports) {
-
-            if (port.portType != PortType.OUTPUT || !port.wire.avaible) {
-                continue;
-            }
-
-
-            if (firstAvailablePort == null) {
-                firstAvailablePort = port;
-            }
-
-
-            boolean isPerfectMatch = this.isPerfect(packet, port);
-
-            if (isPerfectMatch) {
-                bestFitPort = port;
-                break;
-            }
-        }
-
-        Port portToSendFrom = Optional.ofNullable(bestFitPort).orElse(firstAvailablePort);
-        if (portToSendFrom != null) {
-            PacketManager.sendPacket(portToSendFrom, packet);
-            computer.packets.remove(packet);
-        }
-
-    }*/
-    public static void disableComputer(Computer computer){
+    protected void disableComputer(){
         computer.disable = true;
-        Shape shape =ComputerController.computerViewMap.get(computer).getShape();
+        Shape shape = ComputerController.computerViewMap.get(computer).getShape();
         shape.setOpacity(0.5);
-        Timeline timeline = ComputerManager.computerManagerMap.get(computer).timeline;
         timeline.pause();
         PauseTransition pause = new PauseTransition(Duration.seconds(4));
 

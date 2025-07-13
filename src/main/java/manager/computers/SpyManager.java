@@ -1,7 +1,6 @@
 package manager.computers;
 
-import javafx.animation.KeyFrame;
-import javafx.util.Duration;
+
 import model.computer.Computer;
 import model.computer.Spy;
 import model.packet.Packet;
@@ -12,7 +11,7 @@ import java.util.Random;
 
 public class SpyManager extends ComputerManager {
     private static Random random = new Random();
-    public  List<Spy> spyList = new ArrayList<>();
+    public List<Spy> spyList = new ArrayList<>();
     public SpyManager(Computer computer){
         super(computer);
         spyList.add((Spy) this.getComputer());

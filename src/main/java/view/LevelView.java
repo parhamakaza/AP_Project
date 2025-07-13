@@ -74,7 +74,7 @@ public class LevelView {
         startButton = UI.createHUDButton("Start");
         startButton.setOnAction(e -> gameLoopManager.start());
 
-        shopButton = UI.createHUDButton("Shop");
+        shopButton = UI.createHUDButton2("Shop");
         shopButton.setOnAction(e -> Shop.openShop(e));
 
         timelineSlider = new Slider(0, 20, 0);

@@ -2,6 +2,7 @@ package view.packets;
 
 import javafx.scene.shape.Shape;
 import model.packet.Packet;
+import service.SceneManager;
 import view.Drawable;
 
 public abstract class PacketView implements Drawable {
@@ -29,6 +30,11 @@ public abstract class PacketView implements Drawable {
     public PacketView(Packet packet){
         this.packet = packet;
         this.draw();
+    }
+    protected void setShapInitialCordination(){
+        shape.setLayoutX(packet.x);
+        shape.setLayoutY(packet.y);
+        SceneManager.addComponent(shape);
     }
 
 
