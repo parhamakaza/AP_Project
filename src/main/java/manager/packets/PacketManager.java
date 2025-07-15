@@ -24,6 +24,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static controller.PacketContoller.packetViewMap;
+import static controller.WireController.wireViewMap;
+import static manager.packets.PacketState.*;
+
+
 
 /**
  * This class manages the animation for a single packet on a path of curves.
@@ -38,10 +43,10 @@ public abstract class PacketManager extends AnimationTimer {
         sPort.wire.avaible = false;
         packet.insideSystem =false;
         if(sPort.portType.equals(PortType.OUTPUT)) {
-            packet.x = sPort.x;
-            packet.y = sPort.y;
+            packet.x = sPort.x + packet.deflectedX;
+            packet.y = sPort.y + packet.deflectedY;
             packet.wire = sPort.wire;
-            PacketManager packetManager = PacketManagerFactory.createManager(packet,WireController.wireViewMap.get(sPort.wire).getCurves());
+            PacketManager packetManager = PacketManagerFactory.createManager(packet,wireViewMap.get(sPort.wire).getCurves());
             packetManager.start();
         }
     }
@@ -69,7 +74,7 @@ public abstract class PacketManager extends AnimationTimer {
 
     protected double distanceTraveled = 0;
 
-    protected PacketState currentState = PacketState.FORWARD;
+    protected PacketState currentState = FORWARD;
 
 
 
@@ -77,7 +82,7 @@ public abstract class PacketManager extends AnimationTimer {
 
     public PacketManager(Packet packet, List<QuadCurve> path) {
 
-        this.packetView = PacketContoller.packetViewMap.get(packet);
+        this.packetView = packetViewMap.get(packet);
 
 
         packet.wire.avaible = false;
@@ -126,20 +131,6 @@ public abstract class PacketManager extends AnimationTimer {
 
 
 
-
-        ArcLengthData targetData = getPathDataForDistance(distanceTraveled);
-
-
-
-
-        Point2D position = evaluateCurve(targetData.curveIndex(), targetData.t());
-
-
-        shape.setLayoutX(position.x);
-        shape.setLayoutY(position.y );
-
-        bindToModule(shape);
-
         switch (currentState) {
             case FORWARD:
                 distanceTraveled += speed * elapsedSeconds;
@@ -147,7 +138,7 @@ public abstract class PacketManager extends AnimationTimer {
                     if(distanceTraveled >= totalPathLength){
                         Computer computer =  packet.wire.ePort.computer;
                         if(computer.disable){
-                            currentState = PacketState.RETURNING;
+                            currentState = RETURNING;
                         }else {
                             packetMovementEnds(computer);
                             stop();
@@ -163,11 +154,23 @@ public abstract class PacketManager extends AnimationTimer {
                 if (distanceTraveled <= 0) {
                     distanceTraveled = 0;
 
-                    currentState = PacketState.FORWARD;
+                    currentState = FORWARD;
 
                 }
                 break;
         }
+
+        ArcLengthData targetData = getPathDataForDistance(distanceTraveled);
+
+        Point2D position = evaluateCurve(targetData.curveIndex(), targetData.t());
+
+
+
+
+        packet.x = position.x + packet.deflectedX;
+        packet.y = position.y + packet.deflectedY;
+        shape.setLayoutX(packet.x);
+        shape.setLayoutY(packet.y);
 
 
 
@@ -175,7 +178,7 @@ public abstract class PacketManager extends AnimationTimer {
 
     protected void packetMovementEnds(Computer computer){
         packet.wire.avaible = true;
-        SceneManager.removeComponent(PacketContoller.packetViewMap.get(packet).getShape());
+        SceneManager.removeComponent(packetViewMap.get(packet).getShape());
         ComputerManager.computerManagerMap.get(computer).takePacket(packet);
 
     }
@@ -229,7 +232,7 @@ public abstract class PacketManager extends AnimationTimer {
         if (distance >= totalPathLength) return lookupTable.get(lookupTable.size() - 1);
 
 
-        ArcLengthData p1 = lookupTable.get(0);
+        ArcLengthData p1 = lookupTable.getFirst();
 
         ArcLengthData p2 = null;
 
@@ -299,26 +302,21 @@ public abstract class PacketManager extends AnimationTimer {
 
     }
     public static void returnPacket(Packet packet) {
-        packetManagerMap.get(packet).currentState = PacketState.RETURNING;
+        packetManagerMap.get(packet).currentState = RETURNING;
     }
     public static void changeDirection(Packet packet){
         PacketState packetState = packetManagerMap.get(packet).currentState;
         switch (packetState){
-            case RETURNING ->  packetManagerMap.get(packet).currentState = PacketState.FORWARD;
+            case RETURNING ->  packetManagerMap.get(packet).currentState = FORWARD;
 
 
-            case FORWARD ->  packetManagerMap.get(packet).currentState = PacketState.RETURNING;
+            case FORWARD ->  packetManagerMap.get(packet).currentState = RETURNING;
         }
 
     }
 
 
 
-    protected void bindToModule(Shape shape) {
 
-        packet.x = shape.getLayoutX();
-        packet.y = shape.getLayoutY();
-
-    }
 
 }

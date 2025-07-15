@@ -16,7 +16,8 @@ public abstract class Packet {
     public int value;
     public boolean insideSystem = false;
     protected boolean trozhan = false;
-
+    public double deflectedX = 0;
+    public double deflectedY = 0;
 
 
     public boolean isVpn() {

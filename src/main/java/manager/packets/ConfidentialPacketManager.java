@@ -77,7 +77,7 @@ public class ConfidentialPacketManager extends PacketManager {
 
         PauseTransition delay = new PauseTransition(Duration.millis(250));
 
-    
+
         delay.setOnFinished(event -> {
 
             this.currentState = PacketState.FORWARD;
