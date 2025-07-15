@@ -97,7 +97,7 @@ public abstract class ComputerManager {
         Shape shape = ComputerController.computerViewMap.get(computer).getShape();
         shape.setOpacity(0.5);
         timeline.pause();
-        PauseTransition pause = new PauseTransition(Duration.seconds(4));
+        PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
         pause.setOnFinished(event -> {
             computer.disable = false;

@@ -47,18 +47,20 @@ public class Level1 extends LevelView{
         PortController.makePort(new TrianglePort(PortType.OUTPUT, vpn, 2));
         PortController.makePort(new MaticPort(PortType.OUTPUT,vpn, 3));
 
+/*
         DDOS ddos = new DDOS(1150 , 500);
         ComputerController.MakeComputer(ddos);
         PortController.makePort(new TrianglePort(PortType.INPUT,ddos, 2));
-        PortController.makePort(new SquarePort(PortType.OUTPUT, ddos, 1));
+        PortController.makePort(new TrianglePort(PortType.OUTPUT, ddos, 1));
+*/
 
-        Spy spy1 = new Spy(1000 , 700);
+     /*   Spy spy1 = new Spy(1000 , 700);
         ComputerController.MakeComputer(spy1);
         PortController.makePort(new MaticPort(PortType.OUTPUT, spy1, 2));
         PortController.makePort(new MaticPort(PortType.INPUT,spy1, 2));
+*/
 
-
-        Spy spy = new Spy(1000 , 300);
+     /*   Spy spy = new Spy(1000 , 300);
         ComputerController.MakeComputer(spy);
         PortController.makePort(new SquarePort(PortType.INPUT,spy, 2));
        // PortController.makePort(new TrianglePort(PortType.INPUT,spy, 3));
@@ -66,7 +68,7 @@ public class Level1 extends LevelView{
         //PortController.makePort(new SquarePort(PortType.OUTPUT, spy, 1));
         //PortController.makePort(new MaticPort(PortType.OUTPUT, spy, 2));
         PortController.makePort(new TrianglePort(PortType.OUTPUT, spy, 2));
-
+*/
 
 
 

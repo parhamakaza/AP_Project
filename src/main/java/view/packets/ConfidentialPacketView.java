@@ -12,13 +12,11 @@ public class ConfidentialPacketView extends PacketView{
 
     @Override
     public void draw() {
-        double radius = 10.0;
-
 
         Circle circle = new Circle();
         circle.setCenterX(0.0);
-        circle.setCenterY(radius);
-        circle.setRadius(radius);
+        circle.setCenterY(0.0);
+        circle.setRadius(10);
         circle.setFill(Color.BLUE);
         this.shape = circle;
         //shape.fillProperty().setValue(Color.PINK);

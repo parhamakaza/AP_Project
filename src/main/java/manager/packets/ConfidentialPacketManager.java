@@ -1,37 +1,100 @@
 package manager.packets;
 
+import javafx.animation.PauseTransition;
 import javafx.scene.shape.QuadCurve;
+import javafx.util.Duration;
+import manager.LevelManager;
 import model.computer.Computer;
 import model.packet.Packet;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class ConfidentialPacketManager extends PacketManager{
+public class ConfidentialPacketManager extends PacketManager {
+    private Map<Packet, Double> distanceMap = new HashMap<>();
+
     public ConfidentialPacketManager(Packet packet, List<QuadCurve> path) {
         super(packet, path);
     }
+
     @Override
-    public void handle(long now){
+    public void handle(long now) {
         setSpeed();
-        super.handle(now);
-
-    }
-
-    private boolean destinationComputerIsEmpty(){
-        Computer computer = packet.wire.ePort.computer;
-
-        if(computer.packets.isEmpty()){
-            return true;
-        }else {
-            return false;
+        if (packet.isVpn()) {
+            setStatus();
         }
+        super.handle(now);
     }
-    private void setSpeed(){
-        if(destinationComputerIsEmpty()){
+
+    private boolean destinationComputerIsEmpty() {
+        Computer computer = packet.wire.ePort.computer;
+        return computer.packets.isEmpty();
+    }
+
+    private void setSpeed() {
+        if (destinationComputerIsEmpty()) {
             speed = STANDARDSPEED;
-        }else {
+        } else {
             speed = STANDARDSPEED / 2;
         }
+
+    }
+
+  /*  private void setStatus() {
+        for (Packet packet1 : LevelManager.lvl.packets) {
+            double distance = distance(packet1, packet);
+            boolean tooClose = distance < 45;
+            if (packet1 != packet && tooClose && !packet1.insideSystem) {
+                double prevDistance = distanceMap.getOrDefault(packet1, Double.MAX_VALUE);
+                if (distance < prevDistance) {
+                    currentState = PacketState.RETURNING;
+                }
+            distanceMap.put(packet1, distance);
+                return;
+            }
+            currentState = PacketState.FORWARD;
+        }
+    }*/
+
+  private void setStatus() {
+      for (Packet packet1 : LevelManager.lvl.packets) {
+          double distance = distance(packet1, packet);
+          boolean tooClose = distance < 45;
+          if (packet1 != packet && tooClose && !packet1.insideSystem) {
+              double prevDistance = distanceMap.getOrDefault(packet1, Double.MAX_VALUE);
+              if (distance < prevDistance) {
+                  currentState = PacketState.RETURNING;
+                  distanceMap.put(packet1, distance);
+                  scheduleReturnToForward();
+              }
+
+          }
+
+      }
+  }
+    private void scheduleReturnToForward() {
+
+        PauseTransition delay = new PauseTransition(Duration.millis(250));
+
+    
+        delay.setOnFinished(event -> {
+
+            this.currentState = PacketState.FORWARD;
+        });
+
+        // Start the countdown.
+        delay.play();
+    }
+
+
+    private double distance(Packet packet1, Packet packet2) {
+        double x1 = packet1.x;
+        double y1 = packet1.y;
+        double x2 = packet2.x;
+        double y2 = packet2.y;
+        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+
     }
 
 

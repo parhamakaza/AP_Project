@@ -8,26 +8,17 @@ import model.port.Port;
 public interface Drawable {
      default Shape createRectangleShape() {
          //this method is used for ports and packets rectangle and not computers
-         double width = Port.SIZE;
-         double height = Port.SIZE;
 
          Polygon rectangle = new Polygon();
 
-         double topLeftX = -width / 2;
-         double topLeftY = 0;
-         double topRightX = width / 2;
-         double topRightY = 0;
-         double bottomRightX = width / 2;
-         double bottomRightY = height;
-         double bottomLeftX = -width / 2;
-         double bottomLeftY = height;
+
 
 
          rectangle.getPoints().addAll(
-                 topLeftX, topLeftY,
-                 topRightX, topRightY,
-                 bottomRightX, bottomRightY,
-                 bottomLeftX, bottomLeftY
+                 -10.0, -10.0,
+                 10.0, -10.0,
+                 10.0,  10.0,
+                 -10.0,  10.0
          );
          rectangle.setFill(Color.rgb(255, 255, 0, 0.2));
 
@@ -43,9 +34,9 @@ public interface Drawable {
      default Shape createTriangleShape() {
          Polygon triangle = new Polygon();
          triangle.getPoints().addAll(
-                 0.0, 0.0,    // Peak at (0,0)
-                 10.0, 20.0,// Bottom right point (slanted)
-                 -10.0, 20.0       // Bottom left point
+                 0.0, -10.0,  // Peak
+                 10.0,  10.0,  // Bottom right
+                 -10.0,  10.0    // Bottom left point
          );
 
          triangle.setFill(Color.rgb(255, 255, 0, 0.2)); // semi-transparent yellow fill
@@ -62,15 +53,14 @@ public interface Drawable {
          // The points are listed in order to draw the outline.
          maticShape.getPoints().addAll(
 
-                 -2.5, 0.0,    // P1
-                 -10.0, 5.0,   // P2
-                 -7.5, 20.0,   // P3
-                 0.0, 15.0,   // P4
-                 7.5, 20.0,   // P5
-                 10.0, 5.0,   // P6
-                 2.5, 0.0,    // P7
-                 0.0, 5.0
-
+                 -2.5, -10.0,  // P1
+                 -10.0,  -5.0,  // P2
+                 -7.5,  10.0,  // P3
+                 0.0,   5.0,  // P4
+                 7.5,  10.0,  // P5
+                 10.0,  -5.0,  // P6
+                 2.5, -10.0,  // P7
+                 0.0,  -5.0
          );
 
 
@@ -86,10 +76,10 @@ public interface Drawable {
 
          // Add the coordinates for the 4 vertices of the 20x20 shield.
          shield.getPoints().addAll(
-                 0.0, 0.0,   // Top center point
-                 10.0, 10.0,  // Right shoulder (width/2, height/2)
-                 0.0, 20.0,   // Bottom point (0, height)
-                 -10.0, 10.0   // Left shoulder (-width/2, height/2)
+                 0.0, -10.0,  // Top point
+                 10.0,   0.0,  // Right shoulder
+                 0.0,  10.0,  // Bottom point
+                 -10.0,   0.0    // Left shoulder (-width/2, height/2)
          );
 
          // --- Style the shield ---

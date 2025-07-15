@@ -1,6 +1,7 @@
 package manager.computers;
 
 import controller.PacketContoller;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import model.Type;
 import model.computer.Computer;
@@ -28,12 +29,20 @@ public class VPNManager extends ComputerManager{
 
     private void makeVpn(Packet packet){
         packet.setVpn(true);
+
         PacketView packetView =  PacketContoller.packetViewMap.get(packet);
         initialSaving(packetView);
-        packetView.setShape(Drawable.createVpnShape());
         packet.health  *= 2;
-        packet.value = 5;
+
         //packet.setType(getRandomType());
+
+        switch (packet.getType()){
+
+            case Type.Confidential -> makeConfidentialPacketVpn(packet , packetView);
+            default -> makeMessengerPacketVpn(packet , packetView);
+
+        }
+
         vpned.add(packet);
 
     }
@@ -47,6 +56,7 @@ public class VPNManager extends ComputerManager{
     }
 
     public static  void resetPacket(Packet packet){
+        packet.setVpn(false);
         InitialPacket initialPacket = vpnedMap.get(packet);
         packet.health = chooseHealth(packet.health , initialPacket.health());
         packet.value = initialPacket.value;
@@ -55,13 +65,8 @@ public class VPNManager extends ComputerManager{
     }
 
     private static int chooseHealth(int health1 , int health2){
-        if(health2 >= health1){
-            return health1;
-        }else {
-            return health2;
-        }
 
-
+        return Math.min(health1,health2);
 
     }
 
@@ -76,12 +81,22 @@ public class VPNManager extends ComputerManager{
 
     @Override
     protected void disableComputer(){
+        super.disableComputer();
         for(Packet packet : vpned){
             resetPacket(packet);
-
         }
     }
+   private void makeConfidentialPacketVpn(Packet packet , PacketView packetView){
+        packet.value = 4;
+        packetView.getShape().setFill(Color.GRAY);
 
+
+    }
+    private void makeMessengerPacketVpn(Packet packet , PacketView packetView){
+        packet.value = 5;
+        packetView.setShape(Drawable.createVpnShape());
+
+    }
     private record InitialPacket(int health , int value , Shape shape , Type type){}
 
 

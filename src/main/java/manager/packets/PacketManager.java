@@ -136,7 +136,7 @@ public abstract class PacketManager extends AnimationTimer {
 
 
         shape.setLayoutX(position.x);
-        shape.setLayoutY(position.y - Packet.SIZE / 2);
+        shape.setLayoutY(position.y );
 
         bindToModule(shape);
 

@@ -1,6 +1,7 @@
 package manager.packets;
 
 import javafx.scene.shape.QuadCurve;
+import model.Type;
 import model.packet.*;
 
 import java.util.HashMap;
@@ -35,7 +36,7 @@ public class PacketManagerFactory {
 
     public static PacketManager createManager(Packet packet , List<QuadCurve> path ){
         BiFunction<Packet, List<QuadCurve>, PacketManager> managerCreator;
-        if(packet.isVpn()){
+        if(packet.isVpn() && packet.getType() != Type.Confidential){
            managerCreator = managerRegistry.get(selectRandomType());
         } else {
             managerCreator = managerRegistry.get(packet.getClass());

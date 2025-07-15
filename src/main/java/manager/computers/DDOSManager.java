@@ -41,8 +41,10 @@ public class DDOSManager extends ComputerManager{
     private boolean probability() {
         return Math.random() < 0.3;
     }
+
     private void makeTrojan(Packet packet){
         packet.setTrozhan(true);
         PacketContoller.packetViewMap.get(packet).getShape().setFill(Color.RED);
     }
+
 }

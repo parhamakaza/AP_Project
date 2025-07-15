@@ -93,22 +93,12 @@ public class WireView {
 
     private void smoother(int n, QuadCurve draggedCurve) {
         switch (n) {
-            case 0:
-                smoothAfter(n, draggedCurve);
-                break;
-
-            case 1:
+            case 0 -> smoothAfter(n, draggedCurve);
+            case 1 -> {
                 smoothBefore(n, draggedCurve);
                 smoothAfter(n, draggedCurve);
-
-                break;
-
-            case 2:
-                smoothBefore(n, draggedCurve);
-                break;
-            default:
-
-                break;
+            }
+            case 2 -> smoothBefore(n, draggedCurve);
         }
 
     }
@@ -137,23 +127,19 @@ public class WireView {
     private double distance(Point2D p1, Point2D p2) {
         return Math.sqrt(Math.pow(p1.getX() - p2.getX(), 2) + Math.pow(p1.getY() - p2.getY(), 2));
     }
+
     private void paintCurve(QuadCurve curve) {
+
         curve.setStrokeWidth(4);
         curve.setFill(null);
+
         switch (wire.type) {
-            case SQUARE:
-                curve.setStroke(Color.GREEN);
-                break;
-            case TRIANGLE:
-                curve.setStroke(Color.YELLOW);
-                break;
-            case MATIC:
-                curve.setStroke(Color.GRAY);
-                break;
-            default:
-                curve.setStroke(Color.WHITE);
-                break;
+            case SQUARE   -> curve.setStroke(Color.GREEN);
+            case TRIANGLE -> curve.setStroke(Color.YELLOW);
+            case MATIC    -> curve.setStroke(Color.GRAY);
+            default       -> curve.setStroke(Color.WHITE);
         }
+
     }
 
 }

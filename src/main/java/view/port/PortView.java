@@ -35,21 +35,11 @@ public abstract class PortView implements Drawable {
         }
 
         switch (port.portNum) {
-
-            case 1:
-                port.y = 15 + port.computer.y;
-                break;
-
-            case 2:
-                port.y = 65 + port.computer.y;
-                break;
-
-            case 3:
-                port.y = 115 + port.computer.y;
-                break;
-
+            case 1 -> port.y = 15 + port.computer.y;
+            case 2 -> port.y = 65 + port.computer.y;
+            case 3 -> port.y = 115 + port.computer.y;
         }
-        shape.setLayoutY(port.y);
+        shape.setLayoutY(port.y + 10);
         shape.setOnMouseEntered(event -> shape.setOpacity(0.5));
         shape.setOnMouseExited(event -> shape.setOpacity(1));
 

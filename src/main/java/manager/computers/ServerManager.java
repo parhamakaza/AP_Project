@@ -59,7 +59,7 @@ public  class ServerManager extends ComputerManager {
         );
         timeline.getKeyFrames().add(packetCreationKeyFrame);
     }
-    //10% chance
+    //5% chance
     private boolean probability() {
         return random.nextDouble() < 0.05;
     }
