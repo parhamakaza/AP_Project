@@ -2,6 +2,7 @@ package manager.packets;
 
 import javafx.scene.shape.QuadCurve;
 import model.packet.Packet;
+import model.wire.Wire;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ public class TrianglePacketManager extends PacketManager {
     private static final double TRIANGLE_ACCELERATION = 20;
     private boolean acceleration = false;
 
-    public TrianglePacketManager(Packet packet, List<QuadCurve> path) {
+    public TrianglePacketManager(Packet packet, Wire path) {
         super(packet, path);
         if (packet.getType() != packet.wire.type) {
             acceleration = true;

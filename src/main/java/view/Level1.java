@@ -2,7 +2,7 @@ package view;
 
 
 import controller.*;
-import manager.LevelManager;
+import manager.GameManager;
 import model.*;
 import model.computer.*;
 import model.port.MaticPort;
@@ -23,52 +23,39 @@ public class Level1 extends LevelView{
 
         LevelView lvl = LevelController.makeLevel(new Level(10000));
 
-        LevelManager.lvl = lvl.getLevel();
+        GameManager.lvl = lvl.getLevel();
         SceneManager.goToLevel(lvl.getScene());
-        Server server = new Server(500 , 500);
-        ComputerController.MakeComputer(server);
-        PortController.makePort(new SquarePort(PortType.OUTPUT,server, 1));
-        PortController.makePort(new TrianglePort(PortType.OUTPUT,server, 2));
-        PortController.makePort(new MaticPort(PortType.OUTPUT,server, 3));
+        Server sServer = new Server(500 , 500);
+        ComputerController.MakeComputer(sServer);
+        PortController.makePort(new TrianglePort(PortType.OUTPUT, sServer, 1));
+        PortController.makePort(new SquarePort(PortType.OUTPUT, sServer, 2));
+        PortController.makePort(new MaticPort(PortType.OUTPUT, sServer, 3));
 
-        Server server2 = new Server(1400 , 500);
-        ComputerController.MakeComputer(server2);
-        PortController.makePort(new SquarePort(PortType.INPUT, server2, 2));
-        PortController.makePort(new MaticPort(PortType.INPUT, server2, 3));
-       PortController.makePort(new TrianglePort(PortType.INPUT, server2, 1));
+        Server endServer = new Server(1400 , 500);
+        ComputerController.MakeComputer(endServer);
+       PortController.makePort(new TrianglePort(PortType.INPUT, endServer, 1));
+        PortController.makePort(new SquarePort(PortType.INPUT, endServer, 2));
+        PortController.makePort(new MaticPort(PortType.INPUT, endServer, 3));
 
 
-        VPN vpn = new VPN(900 , 500);
-        ComputerController.MakeComputer(vpn);
-        PortController.makePort(new SquarePort(PortType.INPUT,vpn, 1));
-        PortController.makePort(new TrianglePort(PortType.INPUT,vpn, 2));
-        PortController.makePort(new MaticPort(PortType.INPUT,vpn, 3));
-        PortController.makePort(new SquarePort(PortType.OUTPUT, vpn, 1));
-        PortController.makePort(new TrianglePort(PortType.OUTPUT, vpn, 2));
-        PortController.makePort(new MaticPort(PortType.OUTPUT,vpn, 3));
+        Merger merger = new Merger(1100 , 500);
+        ComputerController.MakeComputer(merger);
+        PortController.makePort(new TrianglePort(PortType.INPUT, merger, 1));
+        PortController.makePort(new SquarePort(PortType.INPUT, merger, 2));
+        PortController.makePort(new MaticPort(PortType.INPUT, merger, 3));
+        PortController.makePort(new TrianglePort(PortType.OUTPUT, merger, 1));
+        PortController.makePort(new SquarePort(PortType.OUTPUT, merger, 2));
+        PortController.makePort(new MaticPort(PortType.OUTPUT, merger, 3));
 
-/*
-        DDOS ddos = new DDOS(1150 , 500);
-        ComputerController.MakeComputer(ddos);
-        PortController.makePort(new TrianglePort(PortType.INPUT,ddos, 2));
-        PortController.makePort(new TrianglePort(PortType.OUTPUT, ddos, 1));
-*/
+        Distributor distributor = new Distributor(800 , 500);
+        ComputerController.MakeComputer(distributor);
 
-     /*   Spy spy1 = new Spy(1000 , 700);
-        ComputerController.MakeComputer(spy1);
-        PortController.makePort(new MaticPort(PortType.OUTPUT, spy1, 2));
-        PortController.makePort(new MaticPort(PortType.INPUT,spy1, 2));
-*/
-
-     /*   Spy spy = new Spy(1000 , 300);
-        ComputerController.MakeComputer(spy);
-        PortController.makePort(new SquarePort(PortType.INPUT,spy, 2));
-       // PortController.makePort(new TrianglePort(PortType.INPUT,spy, 3));
-       // PortController.makePort(new MaticPort(PortType.INPUT,spy, 2));
-        //PortController.makePort(new SquarePort(PortType.OUTPUT, spy, 1));
-        //PortController.makePort(new MaticPort(PortType.OUTPUT, spy, 2));
-        PortController.makePort(new TrianglePort(PortType.OUTPUT, spy, 2));
-*/
+        PortController.makePort(new TrianglePort(PortType.INPUT, distributor, 1));
+        PortController.makePort(new SquarePort(PortType.INPUT, distributor, 2));
+        PortController.makePort(new MaticPort(PortType.INPUT, distributor, 3));
+        PortController.makePort(new TrianglePort(PortType.OUTPUT, distributor, 1));
+        PortController.makePort(new SquarePort(PortType.OUTPUT, distributor, 2));
+        PortController.makePort(new MaticPort(PortType.OUTPUT, distributor, 3));
 
 
 

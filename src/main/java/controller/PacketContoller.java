@@ -1,7 +1,7 @@
 package controller;
 
 
-import manager.LevelManager;
+import manager.GameManager;
 import model.packet.Packet;
 import service.SceneManager;
 import view.packets.PacketView;
@@ -24,8 +24,8 @@ public class PacketContoller {
     public static void killPacket(Packet packet){
         System.out.println("packet dead :" + packet);
         packet.wire.avaible = true;
-        LevelManager.lvl.lostPackets++;
-        LevelManager.lvl.packets.remove(packet);
+        GameManager.lvl.lostPackets++;
+        GameManager.lvl.packets.remove(packet);
         PacketView packetView = packetViewMap.get(packet);
         SceneManager.removeComponent(packetView.getShape());
     }

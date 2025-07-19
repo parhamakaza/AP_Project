@@ -16,19 +16,20 @@ import service.AudioManager;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static controller.PacketContoller.killPacket;
 import static manager.GameLoopManager.gameLoopManager;
-import static manager.LevelManager.*;
+import static manager.ShopManager.*;
 
 public class CollisonManager {
-    static Set<String> currentCollisions = new HashSet<>();
-    private static double explosionRadius = 100;
-    private static double explosionForce = 10;
+    private static final double EXPLOSION_RADIUS = 100;
+    private static final double EXPLOSION_FORCE = 10;
+    Set<String> currentCollisions = new HashSet<>();
 
-    public static void checkForCollison() {
-        ArrayList<Packet> packets = lvl.packets;
+    public  CollisonManager() {
+        List<Packet> packets = GameManager.lvl.packets;
         KeyFrame keyFrame = new KeyFrame((Duration.millis(16)), event -> {
 
             if (!airyaman && !gameLoopManager.paused) {
@@ -55,6 +56,7 @@ public class CollisonManager {
 
                             boolean isColliding = false;
                             try {
+
                                 Shape intersect = Shape.intersect(PacketContoller.packetViewMap.get(p1).getShape(), PacketContoller.packetViewMap.get(p2).getShape());
                                 isColliding = !intersect.getBoundsInLocal().isEmpty();
                             } catch (Exception e) {
@@ -70,8 +72,8 @@ public class CollisonManager {
                                     double collisionX = collisionBounds.getMinX() + collisionBounds.getWidth() / 2;
                                     double collisionY = collisionBounds.getMinY() + collisionBounds.getHeight() / 2;
                                     collision(p1, p2);
-                                    if (!LevelManager.atar) {
-                                        explosion(collisionX, collisionY);
+                                    if (!ShopManager.atar) {
+                                        //explosion(collisionX, collisionY);
                                     }
                                 }
                             } else {
@@ -87,7 +89,7 @@ public class CollisonManager {
         gameLoopManager.addKeyFrame(keyFrame);
     }
 
-    private static void collision(Packet packet1, Packet packet2) {
+    private  void collision(Packet packet1, Packet packet2) {
 
         AudioManager.playCollison();
         if(packet1.getType() == Type.MATIC){
@@ -108,14 +110,14 @@ public class CollisonManager {
             killPacket(packet2);
         }
     }
-    private static void explosion(double explosionX , double explosionY){
+    private void explosion(double explosionX , double explosionY){
 
-            for(Packet packet : lvl.packets){
+            for(Packet packet : GameManager.lvl.packets){
 
                 double deltaX = packet.x - explosionX;
                 double deltaY = packet.y - explosionY;
                 double distanceSq = (deltaX * deltaX) + (deltaY * deltaY);
-                double radiusSq = explosionRadius * explosionRadius;
+                double radiusSq = EXPLOSION_RADIUS * EXPLOSION_RADIUS;
                 if (distanceSq <= radiusSq) {
                     double distance = Math.sqrt(distanceSq);
                     if (distance > 0) {
@@ -125,18 +127,18 @@ public class CollisonManager {
 
                         // Calculate force falloff: 1.0 at center, 0.0 at the edge.
                         // This makes the explosion weaker the farther the packet is from the center.
-                        double forceFalloff = 1.0 - (distance / explosionRadius);
+                        double forceFalloff = 1.0 - (distance / EXPLOSION_RADIUS);
 
                         // Calculate the final deflection vector
-                        double finalDeflectionX =  normalizedX * explosionForce * forceFalloff;
-                        double finalDeflectionY =  normalizedY * explosionForce * forceFalloff;
+                        double finalDeflectionX =  normalizedX * EXPLOSION_FORCE * forceFalloff;
+                        double finalDeflectionY =  normalizedY * EXPLOSION_FORCE * forceFalloff;
                         smoothDeflecting(finalDeflectionX,finalDeflectionY,packet);
 
 
                     } else {
 
                         packet.deflectedX = 0;
-                        packet.deflectedY = 1 * explosionForce;
+                        packet.deflectedY = 1 * EXPLOSION_FORCE;
                     }
 
 
@@ -195,16 +197,13 @@ public class CollisonManager {
     }*/
     private static void smoothDeflecting(double toDeflectX, double toDeflectY , Packet packet){
 
-        //int timeToPlayX = 100 * Math.abs((int)toDeflectX);
-        //int timeToPlayY =100 * Math.abs((int)toDeflectY);
 
-        double whatToAddX = toDeflectX / 100.0; // Use 100.0 to ensure floating-point division
+        double whatToAddX = toDeflectX / 100.0;
         double whatToAddY = toDeflectY / 100.0;
 
-        // Use a single timeline for both X and Y
+
         Timeline timeline = new Timeline();
 
-        // The KeyFrame will update both X and Y at the same time
         KeyFrame keyFrame = new KeyFrame(Duration.millis(1), e -> {
             packet.deflectedX += whatToAddX;
             packet.deflectedY += whatToAddY;

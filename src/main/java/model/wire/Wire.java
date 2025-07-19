@@ -1,6 +1,6 @@
 package model.wire;
 
-import manager.LevelManager;
+import manager.GameManager;
 import manager.WireManager;
 import model.Type;
 import model.port.*;
@@ -29,14 +29,14 @@ public class Wire {
 
 
             this.length = WireManager.lengthcounter(this);
-            if (this.length > LevelManager.lvl.wireLength) {
+            if (this.length > GameManager.lvl.wireLength) {
                 throw new Exception("not enougth length");
             }
 
             sPort.wire = this;
             ePort.wire = this;
 
-            LevelManager.lvl.wireLength = (LevelManager.lvl.wireLength - this.length);
+            GameManager.lvl.wireLength = (GameManager.lvl.wireLength - this.length);
         } else {
             throw new Exception("wires ports type mismatch");
 

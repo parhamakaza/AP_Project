@@ -8,20 +8,32 @@ import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
+import manager.ComponentsManager;
 import manager.packets.PacketManager;
+import manager.packets.PacketManagerFactory;
 import model.computer.Computer;
 import model.packet.Packet;
 import model.port.Port;
 import model.port.PortType;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 public abstract class ComputerManager {
-    public static Map<Computer, ComputerManager> computerManagerMap = new HashMap<>();
     public Computer computer;
     public Timeline timeline = new Timeline();
+
+    public void sendPacket(Port sPort , Packet packet){
+        sPort.wire.avaible = false;
+        packet.insideSystem =false;
+        if(sPort.portType.equals(PortType.OUTPUT)) {
+            packet.x = sPort.x + packet.deflectedX;
+            packet.y = sPort.y + packet.deflectedY;
+            packet.wire = sPort.wire;
+            PacketManager packetManager = PacketManagerFactory.createManager(packet,sPort.wire);
+            packetManager.start();
+        }
+        computer.packets.remove(packet);
+    }
 
     public Computer getComputer() {
         return computer;
@@ -29,9 +41,9 @@ public abstract class ComputerManager {
 
     public ComputerManager(Computer computer){
         this.computer = computer;
-        computerManagerMap.put(computer, this);
+        ComponentsManager.computerManagerMap.put(computer, this);
         timeline.setCycleCount(Animation.INDEFINITE);
-        transfer();
+        startTransfer();
     }
 
     public void takePacket(Packet packet) {
@@ -39,51 +51,63 @@ public abstract class ComputerManager {
         this.computer.packets.add(packet);
     }
 
-    public void transfer(){
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(10) , event -> {Computer computer = this.computer;
-            if (computer.packets.isEmpty()) {
-                return;
+    protected Packet choosePacketToSend(){
+        if (computer.packets.isEmpty()) {
+            return null;
+        }
+
+        if (computer.packets.size() > 5) {
+            Packet packet = computer.packets.removeLast();
+            PacketContoller.killPacket(packet);
+            return null;
+        }
+        return computer.packets.getFirst();
+    }
+
+    protected void transfer(){
+
+
+       Packet packet = choosePacketToSend();
+        if(packet == null){
+            return;
+        }
+
+        Port bestFitPort = null;
+        Port firstAvailablePort = null;
+
+
+
+        for (Port port : computer.ports) {
+
+            if (port.portType != PortType.OUTPUT || !port.wire.avaible) {
+                continue;
             }
 
-            Packet packet = computer.packets.getLast();
 
-            if (computer.packets.size() > 5) {
-                computer.packets.remove(packet);
-                PacketContoller.killPacket(packet);
-                return;
+            if (firstAvailablePort == null) {
+                firstAvailablePort = port;
             }
 
 
-            Port bestFitPort = null;
-            Port firstAvailablePort = null;
+            boolean isPerfectMatch = this.isPerfect(packet, port);
 
-            for (Port port : computer.ports) {
-
-                if (port.portType != PortType.OUTPUT || !port.wire.avaible) {
-                    continue;
-                }
-
-
-                if (firstAvailablePort == null) {
-                    firstAvailablePort = port;
-                }
-
-
-                boolean isPerfectMatch = this.isPerfect(packet, port);
-
-                if (isPerfectMatch) {
-                    bestFitPort = port;
-                    break;
-                }
+            if (isPerfectMatch) {
+                bestFitPort = port;
+                break;
             }
+        }
 
-            Port portToSendFrom = Optional.ofNullable(bestFitPort).orElse(firstAvailablePort);
-            if (portToSendFrom != null) {
-                PacketManager.sendPacket(portToSendFrom, packet);
-                computer.packets.remove(packet);
-            }});
+        Port portToSendFrom = Optional.ofNullable(bestFitPort).orElse(firstAvailablePort);
+        if (portToSendFrom != null) {
+            sendPacket(portToSendFrom, packet);
+        }
+    }
+
+
+
+    public void startTransfer(){
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(10) , event -> transfer());
         timeline.getKeyFrames().add(keyFrame);
-
 
 
     }

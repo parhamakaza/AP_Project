@@ -1,7 +1,7 @@
 package controller;
 
+import manager.GameManager;
 import manager.computers.ComputerManagerFactory;
-import manager.LevelManager;
 import model.computer.Computer;
 import view.ComputerView;
 
@@ -15,7 +15,7 @@ public class ComputerController {
     public static ComputerView MakeComputer(Computer computer) {
        ComputerView computerView = new ComputerView(computer);
        computerViewMap.put(computer,computerView);
-       LevelManager.lvl.comps.add(computer);
+       GameManager.lvl.comps.add(computer);
        ComputerManagerFactory.createManager(computer);
        return computerView;
 

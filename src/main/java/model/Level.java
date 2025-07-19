@@ -5,6 +5,7 @@ package model;
 import model.computer.Computer;
 import model.packet.Packet;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Level {
@@ -13,8 +14,8 @@ public class Level {
     public int lostPackets = 0;
     public int coins = 10;
     public double wireLength ;
-    public ArrayList<Computer> comps = new ArrayList<>();
-    public ArrayList<Packet> packets = new ArrayList<>();
+    public List<Computer> comps = new ArrayList<>();
+    public List<Packet> packets = new ArrayList<>();
     public Level(){
 
     }

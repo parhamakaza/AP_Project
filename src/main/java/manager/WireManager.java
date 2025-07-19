@@ -4,7 +4,6 @@ import controller.PortController;
 import controller.WireController;
 import javafx.geometry.Bounds;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.QuadCurve;
@@ -43,7 +42,7 @@ public class WireManager {
                 //wireView.setCurves(null);
                 wire.sPort.wire = null;
                 wire.ePort.wire = null;
-                LevelManager.lvl.wireLength = LevelManager.lvl.wireLength + wire.length;
+                GameManager.lvl.wireLength = GameManager.lvl.wireLength + wire.length;
             }
         });
 
@@ -54,7 +53,7 @@ public class WireManager {
                 double dx = currentLine.getEndX() - currentLine.getStartX();
                 double dy = currentLine.getEndY() - currentLine.getStartY();
                 double length = Math.sqrt(dx * dx + dy * dy);
-                if(length > LevelManager.lvl.wireLength){
+                if(length > GameManager.lvl.wireLength){
                     currentLine.setStroke(Color.RED);
                 }else {
                     currentLine.setStroke(Color.WHITE);

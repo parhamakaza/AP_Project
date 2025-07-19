@@ -2,6 +2,7 @@ package manager.packets;
 
 import javafx.scene.shape.QuadCurve;
 import model.packet.Packet;
+import model.wire.Wire;
 
 import java.util.List;
 
@@ -9,12 +10,13 @@ public class MaticPacketManager extends PacketManager{
     private static final double THE_ACCELERATION = 10;
     private static final double MIN_SPEED = 50;
     private boolean slowing = false;
-    public MaticPacketManager(Packet packet, List<QuadCurve> path) {
+    public MaticPacketManager(Packet packet, Wire path) {
         super(packet, path);
         if (packet.getType() != packet.wire.type) {
             slowing = true;
         }
     }
+
     @Override
     public void handle(long now) {
         if (!slowing  &&lastUpdate != 0) {

@@ -1,7 +1,7 @@
 package view;
 
 import controller.ComputerController;
-import manager.LevelManager;
+import manager.ShopManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
@@ -68,7 +68,7 @@ public class LevelView {
             showMenuView();
             gameLoopManager.pauseAndResume(true);
             timeline.stop();
-            LevelManager.reset();
+
         });
 
         startButton = UI.createHUDButton("Start");

@@ -6,5 +6,7 @@ public enum ComputerTypes {
     SPY,
     DDOS,
     ANTIVIRUS,
-    VPN
+    VPN,
+    DISTRIBUTOR,
+    MERGER
 }

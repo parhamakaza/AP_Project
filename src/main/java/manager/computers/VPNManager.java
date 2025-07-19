@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import model.Type;
 import model.computer.Computer;
+import model.packet.MassivePacket;
 import model.packet.Packet;
 import view.Drawable;
 import view.packets.PacketView;
@@ -13,8 +14,8 @@ import java.util.*;
 
 public class VPNManager extends ComputerManager{
     private static final Random RANDOM_GENERATOR = new Random();
-    private static  Map<Packet , InitialPacket> vpnedMap= new HashMap<>();
-    private List<Packet> vpned = new LinkedList<>();
+    private static  Map<Packet , InitialPacket> vpnedMap = new HashMap<>();
+    private final List<Packet> vpned = new LinkedList<>();
     public VPNManager(Computer computer) {
         super(computer);
     }
@@ -28,17 +29,19 @@ public class VPNManager extends ComputerManager{
     }
 
     private void makeVpn(Packet packet){
+        if(packet.isVpn()){
+            return;
+        }
         packet.setVpn(true);
-
         PacketView packetView =  PacketContoller.packetViewMap.get(packet);
         initialSaving(packetView);
-        packet.health  *= 2;
 
         //packet.setType(getRandomType());
 
-        switch (packet.getType()){
+        switch (packet.getType() ){
 
-            case Type.Confidential -> makeConfidentialPacketVpn(packet , packetView);
+            case Type.CONFIDENTIAL -> makeConfidentialPacketVpn(packet , packetView);
+            case Type.MASSIVE -> makeMassivePacketVpn( (MassivePacket) packet,packetView);
             default -> makeMessengerPacketVpn(packet , packetView);
 
         }
@@ -60,7 +63,17 @@ public class VPNManager extends ComputerManager{
         InitialPacket initialPacket = vpnedMap.get(packet);
         packet.health = chooseHealth(packet.health , initialPacket.health());
         packet.value = initialPacket.value;
-        PacketContoller.packetViewMap.get(packet).setShape(initialPacket.shape);
+        resetPacketShape(packet);
+
+    }
+
+    private static void resetPacketShape(Packet packet){
+        PacketView packetView = PacketContoller.packetViewMap.get(packet);
+        switch (packet.getType() ){
+            case Type.CONFIDENTIAL -> packetView.getShape().setFill(Color.DARKBLUE);
+            case Type.MASSIVE -> packetView.getShape().setFill(Color.DARKBLUE);
+            default -> packetView.setShape(vpnedMap.get(packet).shape);
+        }
 
     }
 
@@ -82,21 +95,36 @@ public class VPNManager extends ComputerManager{
     @Override
     protected void disableComputer(){
         super.disableComputer();
-        for(Packet packet : vpned){
+        vpned.removeIf(packet -> {
             resetPacket(packet);
-        }
+            return true;
+        });
+
+    }
+    private void makeMassivePacketVpn(MassivePacket packet , PacketView packetView){
+
+        packet.health  = 10;
+        packet.value = 10;
+        packet.setSize(10);
+        packetView.getShape().setFill(Color.LIGHTBLUE);
+
+
+
     }
    private void makeConfidentialPacketVpn(Packet packet , PacketView packetView){
+        packet.health  = 6;
         packet.value = 4;
         packetView.getShape().setFill(Color.GRAY);
 
-
     }
+
     private void makeMessengerPacketVpn(Packet packet , PacketView packetView){
+        packet.health  *= 2;
         packet.value = 5;
         packetView.setShape(Drawable.createVpnShape());
 
     }
+
     private record InitialPacket(int health , int value , Shape shape , Type type){}
 
 

@@ -1,20 +1,19 @@
 package manager.packets;
 
 import javafx.animation.PauseTransition;
-import javafx.scene.shape.QuadCurve;
 import javafx.util.Duration;
-import manager.LevelManager;
+import manager.GameManager;
 import model.computer.Computer;
 import model.packet.Packet;
+import model.wire.Wire;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ConfidentialPacketManager extends PacketManager {
     private Map<Packet, Double> distanceMap = new HashMap<>();
 
-    public ConfidentialPacketManager(Packet packet, List<QuadCurve> path) {
+    public ConfidentialPacketManager(Packet packet, Wire path) {
         super(packet, path);
     }
 
@@ -28,7 +27,7 @@ public class ConfidentialPacketManager extends PacketManager {
     }
 
     private boolean destinationComputerIsEmpty() {
-        Computer computer = packet.wire.ePort.computer;
+        Computer computer = wire.ePort.computer;
         return computer.packets.isEmpty();
     }
 
@@ -58,7 +57,7 @@ public class ConfidentialPacketManager extends PacketManager {
     }*/
 
   private void setStatus() {
-      for (Packet packet1 : LevelManager.lvl.packets) {
+      for (Packet packet1 : GameManager.lvl.packets) {
           double distance = distance(packet1, packet);
           boolean tooClose = distance < 45;
           if (packet1 != packet && tooClose && !packet1.insideSystem) {
@@ -73,13 +72,12 @@ public class ConfidentialPacketManager extends PacketManager {
 
       }
   }
+
     private void scheduleReturnToForward() {
 
         PauseTransition delay = new PauseTransition(Duration.millis(250));
 
-
         delay.setOnFinished(event -> {
-
             this.currentState = PacketState.FORWARD;
         });
 

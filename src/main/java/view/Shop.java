@@ -1,7 +1,7 @@
 package view;
 
-import manager.GameLoopManager;
-import manager.LevelManager;
+import manager.GameManager;
+import manager.ShopManager;
 import javafx.animation.PauseTransition;
 import javafx.event.Event;
 import javafx.scene.Scene;
@@ -39,7 +39,7 @@ public class Shop {
             shop.closeShop();
         });
         shop.atar.setOnAction(e2 -> {
-            if(LevelManager.lvl.coins >= 3) {
+            if(GameManager.lvl.coins >= 3) {
                 atar();
                 shopStage.close();
                 shop.closeShop();
@@ -48,7 +48,7 @@ public class Shop {
 
         });
         shop.airyaman.setOnAction(e3 -> {
-            if(LevelManager.lvl.coins >= 4) {
+            if(GameManager.lvl.coins >= 4) {
                 airyaman();
                 shopStage.close();
                 shop.closeShop();
@@ -58,7 +58,7 @@ public class Shop {
 
         });
         shop.anahita.setOnAction(e3 -> {
-            if(LevelManager.lvl.coins >= 5) {
+            if(GameManager.lvl.coins >= 5) {
                 anahita();
                 shopStage.close();
                 shop.closeShop();
@@ -82,12 +82,12 @@ public class Shop {
 
     }
     public static void atar(){
-        LevelManager.lvl.coins = LevelManager.lvl.coins - 3;
+        GameManager.lvl.coins = GameManager.lvl.coins - 3;
 
-        LevelManager.atar=true;
+        ShopManager.atar=true;
         PauseTransition delay = new PauseTransition(Duration.seconds(10));
         delay.setOnFinished(event -> {
-            LevelManager.atar=false;
+            ShopManager.atar=false;
 
 
         });
@@ -98,12 +98,12 @@ public class Shop {
 
     }
     public static void airyaman(){
-        LevelManager.lvl.coins -= 4;
+        GameManager.lvl.coins -= 4;
 
-            LevelManager.airyaman=true;
+            ShopManager.airyaman=true;
             PauseTransition delay = new PauseTransition(Duration.seconds(5));
             delay.setOnFinished(event -> {
-                LevelManager.airyaman=false;
+                ShopManager.airyaman=false;
 
 
             });
@@ -114,9 +114,9 @@ public class Shop {
 
     }
     public static void anahita(){
-        LevelManager.lvl.coins -= 5;
+        GameManager.lvl.coins -= 5;
 
-        for(Packet i : LevelManager.lvl.packets ){
+        for(Packet i : GameManager.lvl.packets ){
             if(i instanceof TrianglePacket){
                 i.health = 3;
             }

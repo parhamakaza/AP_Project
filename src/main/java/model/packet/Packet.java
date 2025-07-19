@@ -1,6 +1,6 @@
 package model.packet;
 
-import manager.LevelManager;
+import manager.GameManager;
 import model.Type;
 import model.wire.Wire;
 
@@ -51,7 +51,7 @@ public abstract class Packet {
     public Packet() {
         theID++;
         this.id = theID;
-        LevelManager.lvl.packets.add(this);
+        GameManager.lvl.packets.add(this);
     }
 
 

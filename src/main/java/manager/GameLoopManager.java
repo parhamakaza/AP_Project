@@ -6,9 +6,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import manager.computers.ComputerManager;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class GameLoopManager {
     public static GameLoopManager gameLoopManager = new GameLoopManager();
     public boolean paused;
@@ -33,13 +30,13 @@ public class GameLoopManager {
         if ( p && mainTimeLine.getStatus() == Animation.Status.RUNNING) {
             mainTimeLine.pause();
 
-            LevelController.levelViewMap.get(LevelManager.lvl).timeline.pause();
+            LevelController.levelViewMap.get(GameManager.lvl).timeline.pause();
 
         }
         if(!p && mainTimeLine.getStatus() == Animation.Status.PAUSED){
             mainTimeLine.play();
 
-            LevelController.levelViewMap.get(LevelManager.lvl).timeline.play();
+            LevelController.levelViewMap.get(GameManager.lvl).timeline.play();
 
         }
     }
@@ -47,10 +44,10 @@ public class GameLoopManager {
 
 
     public void start() {
-        for (ComputerManager computer : ComputerManager.computerManagerMap.values()) {
+        for (ComputerManager computer : ComponentsManager.computerManagerMap.values()) {
             computer.timeline.play();
         }
-        CollisonManager.checkForCollison();
+        new CollisonManager();
         mainTimeLine.setCycleCount(Animation.INDEFINITE);
         mainTimeLine.play();
 

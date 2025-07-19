@@ -1,8 +1,6 @@
 package view.packets;
 
-import manager.computers.*;
-import manager.packets.PacketManager;
-import model.computer.*;
+import model.packet.BitPacket;
 import model.packet.*;
 
 import java.util.HashMap;
@@ -16,6 +14,10 @@ public class PacketViewFactory {
         managerRegistry.put(TrianglePacket.class, packet -> new TrianglePacketView(packet));
         managerRegistry.put(MaticPacket.class, packet -> new MaticPacketView(packet));
         managerRegistry.put(ConfidentialPacket.class, packet -> new ConfidentialPacketView(packet));
+        managerRegistry.put(MassivePacket.class , packet -> new MassivePacketView(packet));
+        managerRegistry.put(BitPacket.class , packet -> new BitPacketView(packet));
+
+
     }
     public static PacketView creatView(Packet packet) {
 
