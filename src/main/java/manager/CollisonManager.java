@@ -55,6 +55,7 @@ public class CollisonManager {
 
                             boolean isColliding = false;
                             try {
+
                                 Shape intersect = Shape.intersect(PacketContoller.packetViewMap.get(p1).getShape(), PacketContoller.packetViewMap.get(p2).getShape());
                                 isColliding = !intersect.getBoundsInLocal().isEmpty();
                             } catch (Exception e) {
@@ -71,7 +72,7 @@ public class CollisonManager {
                                     double collisionY = collisionBounds.getMinY() + collisionBounds.getHeight() / 2;
                                     collision(p1, p2);
                                     if (!LevelManager.atar) {
-                                        explosion(collisionX, collisionY);
+                                        //explosion(collisionX, collisionY);
                                     }
                                 }
                             } else {
@@ -195,16 +196,13 @@ public class CollisonManager {
     }*/
     private static void smoothDeflecting(double toDeflectX, double toDeflectY , Packet packet){
 
-        //int timeToPlayX = 100 * Math.abs((int)toDeflectX);
-        //int timeToPlayY =100 * Math.abs((int)toDeflectY);
 
-        double whatToAddX = toDeflectX / 100.0; // Use 100.0 to ensure floating-point division
+        double whatToAddX = toDeflectX / 100.0;
         double whatToAddY = toDeflectY / 100.0;
 
-        // Use a single timeline for both X and Y
+
         Timeline timeline = new Timeline();
 
-        // The KeyFrame will update both X and Y at the same time
         KeyFrame keyFrame = new KeyFrame(Duration.millis(1), e -> {
             packet.deflectedX += whatToAddX;
             packet.deflectedY += whatToAddY;

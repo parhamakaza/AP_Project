@@ -3,7 +3,6 @@ package view.packets;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import model.packet.Packet;
-import service.SceneManager;
 
 public class ConfidentialPacketView extends PacketView{
     public ConfidentialPacketView(Packet packet) {
@@ -20,7 +19,7 @@ public class ConfidentialPacketView extends PacketView{
         circle.setFill(Color.BLUE);
         this.shape = circle;
         //shape.fillProperty().setValue(Color.PINK);
-        setShapInitialCordination();
+        setInitialisesCoordination();
 
     }
 }

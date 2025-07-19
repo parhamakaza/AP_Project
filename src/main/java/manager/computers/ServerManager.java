@@ -11,10 +11,11 @@ import service.SceneManager;
 import java.util.Random;
 
 import static manager.LevelManager.lvl;
-import static manager.packets.PacketManager.sendPacket;
 
 public  class ServerManager extends ComputerManager {
     private static final Random random = new Random();
+
+    private static boolean ss = true;
 
     public ServerManager(Computer computer){
         super(computer);
@@ -29,7 +30,7 @@ public  class ServerManager extends ComputerManager {
     }
 
     @Override
-    public void transfer(){
+    public void startTransfer(){
         Computer computer = getComputer();
         KeyFrame packetCreationKeyFrame = new KeyFrame(Duration.seconds(1),
                 e -> {
@@ -37,8 +38,9 @@ public  class ServerManager extends ComputerManager {
                         if (port.wire.avaible && port.portType == PortType.OUTPUT) {
 
                             Packet packet = null;
-                            if(probability()){
-                                packet =new ConfidentialPacket();
+                            if(probability() && ss){
+                                packet =new MassivePacket();
+                                ss = false;
                             }else {
                                 if (port instanceof SquarePort) {
                                     packet = new SquarePacket();
@@ -61,7 +63,7 @@ public  class ServerManager extends ComputerManager {
     }
     //5% chance
     private boolean probability() {
-        return random.nextDouble() < 0.05;
+        return random.nextDouble() < 0.20;
     }
 
 

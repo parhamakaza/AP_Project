@@ -1,20 +1,22 @@
 package manager.packets;
 
+import controller.WireController;
 import javafx.animation.PauseTransition;
 import javafx.scene.shape.QuadCurve;
 import javafx.util.Duration;
 import manager.LevelManager;
 import model.computer.Computer;
 import model.packet.Packet;
+import model.wire.Wire;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ConfidentialPacketManager extends PacketManager {
+public class ConfidentialPacketManager extends PacketManager implements PacketsStuff{
     private Map<Packet, Double> distanceMap = new HashMap<>();
 
-    public ConfidentialPacketManager(Packet packet, List<QuadCurve> path) {
+    public ConfidentialPacketManager(Packet packet, Wire path) {
         super(packet, path);
     }
 
@@ -73,13 +75,12 @@ public class ConfidentialPacketManager extends PacketManager {
 
       }
   }
+
     private void scheduleReturnToForward() {
 
         PauseTransition delay = new PauseTransition(Duration.millis(250));
 
-
         delay.setOnFinished(event -> {
-
             this.currentState = PacketState.FORWARD;
         });
 

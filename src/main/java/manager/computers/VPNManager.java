@@ -38,7 +38,8 @@ public class VPNManager extends ComputerManager{
 
         switch (packet.getType()){
 
-            case Type.Confidential -> makeConfidentialPacketVpn(packet , packetView);
+            case Type.CONFIDENTIAL -> makeConfidentialPacketVpn(packet , packetView);
+            case Type.MASSIVE -> makeMassivePacketVpn(  packet,packetView);
             default -> makeMessengerPacketVpn(packet , packetView);
 
         }
@@ -47,6 +48,11 @@ public class VPNManager extends ComputerManager{
 
     }
 
+    private void makeMassivePacketVpn(Packet packet , PacketView packetView){
+        packet.setVpn(true);
+
+
+    }
     private void initialSaving(PacketView packetView ){
         Packet packet = packetView.getPacket();
         InitialPacket initialPacket  = new InitialPacket(packet.health, packet.value , packetView.getShape() , packet.getType() );
