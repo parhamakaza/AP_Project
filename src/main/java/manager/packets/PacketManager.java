@@ -1,7 +1,6 @@
 package manager.packets;
 
 
-import controller.PacketContoller;
 import controller.WireController;
 import javafx.animation.AnimationTimer;
 
@@ -13,8 +12,7 @@ import manager.computers.ComputerManager;
 import model.computer.*;
 import model.packet.Packet;
 
-import model.port.Port;
-import model.port.PortType;
+import model.wire.Wire;
 import service.SceneManager;
 import view.packets.PacketView;
 
@@ -38,18 +36,6 @@ public abstract class PacketManager extends AnimationTimer {
     public static Map<Packet , PacketManager>  packetManagerMap= new HashMap<>();
 
     protected static final double STANDARDSPEED = 80.0;
-
-    public static void sendPacket(Port sPort , Packet packet){
-        sPort.wire.avaible = false;
-        packet.insideSystem =false;
-        if(sPort.portType.equals(PortType.OUTPUT)) {
-            packet.x = sPort.x + packet.deflectedX;
-            packet.y = sPort.y + packet.deflectedY;
-            packet.wire = sPort.wire;
-            PacketManager packetManager = PacketManagerFactory.createManager(packet,wireViewMap.get(sPort.wire).getCurves());
-            packetManager.start();
-        }
-    }
 
 
     protected record ArcLengthData(int curveIndex, double t, double cumulativeDistance) {}
@@ -80,7 +66,7 @@ public abstract class PacketManager extends AnimationTimer {
 
 
 
-    public PacketManager(Packet packet, List<QuadCurve> path) {
+    public PacketManager(Packet packet, Wire wire) {
 
         this.packetView = packetViewMap.get(packet);
 
@@ -94,8 +80,7 @@ public abstract class PacketManager extends AnimationTimer {
         shape.setLayoutX(packet.x);
         shape.setLayoutY(packet.y -  Packet.SIZE / 2);
 
-        this.path = path;
-
+        this.path = wireViewMap.get(wire).getCurves();
 
 
         SceneManager.addComponent(shape);
@@ -304,6 +289,7 @@ public abstract class PacketManager extends AnimationTimer {
     public static void returnPacket(Packet packet) {
         packetManagerMap.get(packet).currentState = RETURNING;
     }
+
     public static void changeDirection(Packet packet){
         PacketState packetState = packetManagerMap.get(packet).currentState;
         switch (packetState){

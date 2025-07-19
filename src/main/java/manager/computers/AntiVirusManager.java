@@ -32,8 +32,6 @@ public class AntiVirusManager extends ComputerManager{
                         killTrozhan(packet);
 
 
-
-
                 }
 
             }
