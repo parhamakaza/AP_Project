@@ -1,6 +1,6 @@
 package manager.computers;
 
-import controller.PacketContoller;
+import controller.ComponentsController;
 import javafx.animation.KeyFrame;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -8,6 +8,7 @@ import manager.GameManager;
 import model.computer.Computer;
 import model.packet.Packet;
 
+import static controller.ComponentsController.TheComponentsController;
 import static model.packet.Packet.SIZE;
 
 public class AntiVirusManager extends ComputerManager {
@@ -43,7 +44,7 @@ public class AntiVirusManager extends ComputerManager {
 
     private void killTrozhan(Packet packet) {
         packet.setTrozhan(false);
-        PacketContoller.packetViewMap.get(packet).getShape().setFill(Color.rgb(255, 255, 0, 0.2));
+        TheComponentsController.packetViewMap.get(packet).getShape().setFill(Color.rgb(255, 255, 0, 0.2));
         disableComputer();
     }
 

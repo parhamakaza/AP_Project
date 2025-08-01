@@ -1,6 +1,6 @@
 package manager;
 
-import controller.PortController;
+import controller.ComponentsController;
 import controller.WireController;
 import javafx.geometry.Bounds;
 import javafx.scene.input.MouseEvent;
@@ -13,6 +13,8 @@ import model.wire.Wire;
 import service.SceneManager;
 import view.port.PortView;
 import view.WireView;
+
+import static controller.ComponentsController.TheComponentsController;
 
 public class WireManager {
     private static Line currentLine = new Line();
@@ -34,15 +36,9 @@ public class WireManager {
                 currentLine.setEndY(e.getSceneY());
                 SceneManager.addComponent(currentLine);
             }else {
-                Wire wire = port.wire;
-                WireView wireView = WireController.wireViewMap.remove(wire);
-                for (QuadCurve qc : wireView.getCurves()) {
-                    SceneManager.removeComponent(qc);
-                }
-                //wireView.setCurves(null);
-                wire.sPort.wire = null;
-                wire.ePort.wire = null;
-                GameManager.lvl.wireLength = GameManager.lvl.wireLength + wire.length;
+                disConnectWire(port.wire);
+
+
             }
         });
 
@@ -94,10 +90,9 @@ public class WireManager {
     }
 
     private static Port checkIsIndise(double x , double y){
-            for (PortView p : PortController.portViewMap.values()){
+            for (PortView p : TheComponentsController.portViewMap.values()){
                 Bounds bounds = p.getShape().localToScene(p.getShape().getBoundsInLocal());
                 if(bounds.contains(x, y)){
-
                     return  p.getPort();
                 }
             }
@@ -108,6 +103,16 @@ public class WireManager {
 
 
 
+    }
+    public static void disConnectWire(Wire wire){
+        WireView wireView = TheComponentsController.wireViewMap.remove(wire);
+        for (QuadCurve qc : wireView.getCurves()) {
+            SceneManager.removeComponent(qc);
+        }
+        //wireView.setCurves(null);
+        wire.sPort.wire = null;
+        wire.ePort.wire = null;
+        TheComponentsController.wireViewMap.remove(wire);
     }
 
 

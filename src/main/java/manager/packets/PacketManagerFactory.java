@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.function.BiFunction;
 
+import static manager.ComponentsManager.TheComponentsManager;
+
 public class PacketManagerFactory {
     private static final Random RANDOM = new Random();
     protected static final Map<Class<? extends Packet>, BiFunction<Packet, Wire ,PacketManager>> managerRegistry = new HashMap<>();
@@ -46,7 +48,7 @@ public class PacketManagerFactory {
         }
         PacketManager packetManager = managerCreator.apply(packet , wire);
 
-        ComponentsManager.packetManagerMap.put(packet , packetManager);
+        TheComponentsManager.packetManagerMap.put(packet , packetManager);
         return packetManager;
 
 

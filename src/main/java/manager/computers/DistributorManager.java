@@ -1,20 +1,15 @@
 package manager.computers;
 
 import controller.PacketContoller;
-import manager.packets.PacketManager;
-import manager.packets.PacketManagerFactory;
 import model.Type;
 import model.computer.Computer;
 import model.packet.BitPacket;
 import model.packet.MassivePacket;
 import model.packet.Packet;
 import model.port.Port;
-import model.port.PortType;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static controller.WireController.wireViewMap;
 
 public class DistributorManager extends ComputerManager {
     private final List<Packet> bitPackets = new ArrayList<>();

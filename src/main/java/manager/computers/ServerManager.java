@@ -1,5 +1,6 @@
 package manager.computers;
 
+import controller.ComponentsController;
 import controller.PacketContoller;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
@@ -8,8 +9,10 @@ import model.packet.*;
 import model.port.*;
 import service.SceneManager;
 
+import javax.swing.plaf.TableHeaderUI;
 import java.util.Random;
 
+import static controller.ComponentsController.TheComponentsController;
 import static manager.GameManager.lvl;
 
 public  class ServerManager extends ComputerManager {
@@ -25,7 +28,8 @@ public  class ServerManager extends ComputerManager {
     @Override
     public  void takePacket(Packet packet){
         lvl.coins = lvl.coins + packet.value;
-        SceneManager.removeComponent(PacketContoller.packetViewMap.get(packet).getShape());
+        PacketContoller.removePacketView(packet);
+        PacketContoller.removePacketManager(packet);
         lvl.packets.remove(packet);
     }
 
@@ -35,12 +39,16 @@ public  class ServerManager extends ComputerManager {
         KeyFrame packetCreationKeyFrame = new KeyFrame(Duration.seconds(1),
                 e -> {
                     for (Port port : computer.ports) {
+                        if(port .wire == null){
+                            continue;
+                        }
+
                         if (port.wire.avaible && port.portType == PortType.OUTPUT ) {
 
                             Packet packet = null;
-                            if(probability() && ss){
+                            if(probability() ){
                                 packet =new MassivePacket();
-                                ss = false;
+
                             }else {
                                 if (port instanceof SquarePort) {
                                     packet = new SquarePacket();
@@ -63,7 +71,7 @@ public  class ServerManager extends ComputerManager {
     }
     //5% chance
     private boolean probability() {
-        return random.nextDouble() < 0.20;
+        return random.nextDouble() < 0.10;
     }
 
 

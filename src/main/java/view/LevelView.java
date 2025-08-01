@@ -1,7 +1,6 @@
 package view;
 
-import controller.ComputerController;
-import manager.ShopManager;
+import controller.ComponentsController;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
@@ -16,10 +15,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import manager.LevelManager;
 import model.computer.Computer;
 import model.Level;
 
-import static manager.GameLoopManager.gameLoopManager;
+import static controller.ComponentsController.TheComponentsController;
+import static manager.LevelManager.theLevelManager;
 import static service.SceneManager.showMenuView;
 
 public class LevelView {
@@ -57,22 +58,22 @@ public class LevelView {
 
         scene.setOnKeyPressed((KeyEvent event) -> {
             if (event.getCode() == KeyCode.P) {
-                gameLoopManager.paused = !gameLoopManager.paused;
-                gameLoopManager.pauseAndResume(gameLoopManager.paused);
+                theLevelManager.paused = !theLevelManager.paused;
+                theLevelManager.pauseAndResume(theLevelManager.paused);
             }
         });
 
         // --- Create all UI components ---
         menuButton = UI.createHUDButton("Menu");
         menuButton.setOnAction(e -> {
-            showMenuView();
-            gameLoopManager.pauseAndResume(true);
             timeline.stop();
+            theLevelManager.stop();
+            showMenuView();
 
         });
 
         startButton = UI.createHUDButton("Start");
-        startButton.setOnAction(e -> gameLoopManager.start());
+        startButton.setOnAction(e -> theLevelManager.start());
 
         shopButton = UI.createHUDButton2("Shop");
         shopButton.setOnAction(e -> Shop.openShop(e));
@@ -84,7 +85,7 @@ public class LevelView {
         currentTimeLabel = UI.createHUDLabel("Time: 0.0s");
         packetLossLabel = UI.createHUDLabel("Packet Loss: 0.0%");
         wireLabel = UI.createHUDLabel("Wire Left: 0.0");
-         coinsLabel = UI.createHUDLabel("Coins: 10");
+        coinsLabel = UI.createHUDLabel("Coins: 10");
 
         //coinsLabel = new Label("Coins: 10");
         //coinsLabel.setStyle("-fx-text-fill: yellow; -fx-font-size: 16px; -fx-font-weight: bold;");
@@ -136,8 +137,7 @@ public class LevelView {
     }
 
     private void bind(Level lvl) {
-        Timeline timeline = new Timeline();
-        this.timeline = timeline;
+        this.timeline = new Timeline();
 
         KeyFrame keyFrame = new KeyFrame(Duration.millis(100), event -> {
             boolean allComputersReady = true;
@@ -146,7 +146,7 @@ public class LevelView {
                 Color glowColor = isReady ? Color.web("#00ffff") : Color.web("#FF0066");
                 DropShadow glow = new DropShadow(10, glowColor);
                 glow.setSpread(0.2);
-                ComputerView computerView= ComputerController.computerViewMap.get(computer);
+                ComputerView computerView= TheComponentsController.computerViewMap.get(computer);
                 computerView.getShape().setEffect(glow);
                 computerView.label.setText(computer.computerType.toString() +"\n" + computer.packets.size());
                 computer.ready = isReady;

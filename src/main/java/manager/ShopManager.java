@@ -9,14 +9,5 @@ public class ShopManager {
     public static  boolean anahita = false;
 
 
-    public static void reset(){
-        ComputerController.computerViewMap.clear();
-        LevelController.levelViewMap.clear();
-        PacketContoller.packetViewMap.clear();
-        PortController.portViewMap.clear();
-        WireController.wireViewMap.clear();
-
-
-    }
 
 }

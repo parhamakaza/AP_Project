@@ -1,12 +1,12 @@
 package manager.computers;
 
-import controller.PacketContoller;
-import javafx.animation.KeyFrame;
+import controller.ComponentsController;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
 import model.computer.Computer;
 import model.packet.Packet;
 import model.port.Port;
+
+import static controller.ComponentsController.TheComponentsController;
 
 public class DDOSManager extends ComputerManager{
 
@@ -44,7 +44,7 @@ public class DDOSManager extends ComputerManager{
 
     private void makeTrojan(Packet packet){
         packet.setTrozhan(true);
-        PacketContoller.packetViewMap.get(packet).getShape().setFill(Color.RED);
+        TheComponentsController.packetViewMap.get(packet).getShape().setFill(Color.RED);
     }
 
 }

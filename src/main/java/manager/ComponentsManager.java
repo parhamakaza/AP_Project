@@ -9,6 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ComponentsManager {
-    public static Map<Computer, ComputerManager> computerManagerMap = new HashMap<>();
-    public static Map<Packet, PacketManager>  packetManagerMap= new HashMap<>();
+    public static ComponentsManager TheComponentsManager;
+    public  Map<Computer, ComputerManager> computerManagerMap = new HashMap<>();
+    public  Map<Packet, PacketManager>  packetManagerMap= new HashMap<>();
+    public ComponentsManager(){
+        TheComponentsManager = this;
+    }
+
 }

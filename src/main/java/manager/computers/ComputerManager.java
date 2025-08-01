@@ -1,6 +1,6 @@
 package manager.computers;
 
-import controller.ComputerController;
+import controller.ComponentsController;
 import controller.PacketContoller;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -17,6 +17,9 @@ import model.port.Port;
 import model.port.PortType;
 
 import java.util.Optional;
+
+import static controller.ComponentsController.TheComponentsController;
+import static manager.ComponentsManager.TheComponentsManager;
 
 public abstract class ComputerManager {
     public Computer computer;
@@ -41,7 +44,7 @@ public abstract class ComputerManager {
 
     public ComputerManager(Computer computer){
         this.computer = computer;
-        ComponentsManager.computerManagerMap.put(computer, this);
+        TheComponentsManager.computerManagerMap.put(computer, this);
         timeline.setCycleCount(Animation.INDEFINITE);
         startTransfer();
     }
@@ -79,7 +82,11 @@ public abstract class ComputerManager {
 
         for (Port port : computer.ports) {
 
-            if (port.portType != PortType.OUTPUT || !port.wire.avaible) {
+            if(port.wire == null){
+                continue;
+            }
+
+            if (port.portType != PortType.OUTPUT || !port.wire.avaible ) {
                 continue;
             }
 
@@ -118,7 +125,7 @@ public abstract class ComputerManager {
 
     protected void disableComputer(){
         computer.disable = true;
-        Shape shape = ComputerController.computerViewMap.get(computer).getShape();
+        Shape shape = TheComponentsController.computerViewMap.get(computer).getShape();
         shape.setOpacity(0.5);
         timeline.pause();
         PauseTransition pause = new PauseTransition(Duration.seconds(2));

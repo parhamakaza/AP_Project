@@ -1,6 +1,6 @@
 package manager.computers;
 
-import controller.PacketContoller;
+import controller.ComponentsController;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import model.Type;
@@ -12,10 +12,14 @@ import view.packets.PacketView;
 
 import java.util.*;
 
+import static controller.ComponentsController.TheComponentsController;
+
 public class VPNManager extends ComputerManager{
+
     private static final Random RANDOM_GENERATOR = new Random();
     private static  Map<Packet , InitialPacket> vpnedMap = new HashMap<>();
     private final List<Packet> vpned = new LinkedList<>();
+
     public VPNManager(Computer computer) {
         super(computer);
     }
@@ -33,7 +37,7 @@ public class VPNManager extends ComputerManager{
             return;
         }
         packet.setVpn(true);
-        PacketView packetView =  PacketContoller.packetViewMap.get(packet);
+        PacketView packetView =  TheComponentsController.packetViewMap.get(packet);
         initialSaving(packetView);
 
         //packet.setType(getRandomType());
@@ -68,7 +72,7 @@ public class VPNManager extends ComputerManager{
     }
 
     private static void resetPacketShape(Packet packet){
-        PacketView packetView = PacketContoller.packetViewMap.get(packet);
+        PacketView packetView = TheComponentsController.packetViewMap.get(packet);
         switch (packet.getType() ){
             case Type.CONFIDENTIAL -> packetView.getShape().setFill(Color.DARKBLUE);
             case Type.MASSIVE -> packetView.getShape().setFill(Color.DARKBLUE);
@@ -101,6 +105,7 @@ public class VPNManager extends ComputerManager{
         });
 
     }
+
     private void makeMassivePacketVpn(MassivePacket packet , PacketView packetView){
 
         packet.health  = 10;

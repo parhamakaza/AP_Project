@@ -14,7 +14,6 @@ import model.packet.Packet;
 import model.packet.SquarePacket;
 import model.packet.TrianglePacket;
 
-import static manager.GameLoopManager.gameLoopManager;
 
 public class Shop {
 
@@ -133,6 +132,6 @@ public class Shop {
     }
 
         private void closeShop() {
-            gameLoopManager.pauseAndResume(false);
+            //gameLoopManager.pauseAndResume(false);
         }
 }

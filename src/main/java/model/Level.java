@@ -2,6 +2,7 @@ package model;
 
 
 
+import manager.GameManager;
 import model.computer.Computer;
 import model.packet.Packet;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class Level {
     }
     public Level(double x){
             wireLength = x;
+        GameManager.lvl = this;
     }
 
 

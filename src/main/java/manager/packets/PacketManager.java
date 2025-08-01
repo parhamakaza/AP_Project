@@ -8,6 +8,7 @@ import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Shape;
 
 import manager.ComponentsManager;
+import manager.LevelManager;
 import model.computer.*;
 import model.packet.Packet;
 
@@ -19,9 +20,10 @@ import view.packets.PacketView;
 import java.util.ArrayList;
 import java.util.List;
 
-import static controller.PacketContoller.packetViewMap;
-import static controller.WireController.wireViewMap;
-import static manager.ComponentsManager.computerManagerMap;
+import static controller.ComponentsController.*;
+import static manager.ComponentsManager.TheComponentsManager;
+
+import static manager.LevelManager.theLevelManager;
 import static manager.packets.PacketState.*;
 
 
@@ -65,7 +67,7 @@ public abstract class PacketManager extends AnimationTimer  {
 
     public PacketManager(Packet packet, Wire wire) {
 
-        this.packetView = packetViewMap.get(packet);
+        this.packetView = TheComponentsController.packetViewMap.get(packet);
 
         this.wire = wire;
         wire.avaible = false;
@@ -77,7 +79,7 @@ public abstract class PacketManager extends AnimationTimer  {
         shape.setLayoutX(packet.x);
         shape.setLayoutY(packet.y);
 
-        this.path = wireViewMap.get(wire).getCurves();
+        this.path = TheComponentsController.wireViewMap.get(wire).getCurves();
 
         SceneManager.addComponent(shape);
 
@@ -87,10 +89,9 @@ public abstract class PacketManager extends AnimationTimer  {
 
 
     @Override
-
     public void handle(long now) {
         packet.wire.avaible = false;
-        if (lastUpdate == 0) {
+        if (lastUpdate == 0 || theLevelManager.paused) {
 
             lastUpdate = now;
 
@@ -115,8 +116,8 @@ public abstract class PacketManager extends AnimationTimer  {
                         if(computer.disable){
                             currentState = RETURNING;
                         }else {
-                            packetMovementEnds(computer);
                             stop();
+                            packetMovementEnds(computer);
                         }
                     }
 
@@ -154,11 +155,11 @@ public abstract class PacketManager extends AnimationTimer  {
     protected void packetMovementEnds(Computer computer){
         packet.wire.avaible = true;
         SceneManager.removeComponent(shape);
-        computerManagerMap.get(computer).takePacket(packet);
+        TheComponentsManager.computerManagerMap.get(computer).takePacket(packet);
     }
 
 
-    protected void buildLookupTable() {
+    protected double buildLookupTable() {
 
         final int stepsPerCurve = 1000;
 
@@ -195,6 +196,7 @@ public abstract class PacketManager extends AnimationTimer  {
         }
 
         totalPathLength = cumulativeDistance;
+        return totalPathLength;
 
     }
 
@@ -275,17 +277,18 @@ public abstract class PacketManager extends AnimationTimer  {
         }
 
     }
+
     public static void returnPacket(Packet packet) {
-        ComponentsManager.packetManagerMap.get(packet).currentState = RETURNING;
+        TheComponentsManager.packetManagerMap.get(packet).currentState = RETURNING;
     }
 
     public static void changeDirection(Packet packet){
-        PacketState packetState = ComponentsManager.packetManagerMap.get(packet).currentState;
+        PacketState packetState = TheComponentsManager.packetManagerMap.get(packet).currentState;
         switch (packetState){
-            case RETURNING ->  ComponentsManager.packetManagerMap.get(packet).currentState = FORWARD;
+            case RETURNING ->  TheComponentsManager.packetManagerMap.get(packet).currentState = FORWARD;
 
 
-            case FORWARD ->  ComponentsManager.packetManagerMap.get(packet).currentState = RETURNING;
+            case FORWARD ->  TheComponentsManager.packetManagerMap.get(packet).currentState = RETURNING;
         }
 
     }

@@ -15,6 +15,16 @@ public class Wire {
     public double endY;
     public boolean avaible = true;
     public double length;
+    private boolean curved = false;
+    private int massivePassed = 0;
+
+    public int getMassivePassed() {
+        return massivePassed;
+    }
+
+    public void increaseMassivePassed(){
+        massivePassed++;
+    }
 
     public Wire(Port sPort, Port ePort) throws Exception {
         if (checkPorts(sPort, ePort)) {
@@ -44,6 +54,10 @@ public class Wire {
         this.type = sPort.getType();
     }
 
+    public boolean isCurved() {
+        return curved;
+    }
+
     public static boolean checkPorts(Port p1, Port p2) {
         boolean a = p1.getClass() == p2.getClass();
         boolean b = !p1.computer.equals(p2.computer);
@@ -52,5 +66,9 @@ public class Wire {
 
         return a && b && c && d;
 
+    }
+
+    public void setCurved(){
+        curved = true;
     }
 }

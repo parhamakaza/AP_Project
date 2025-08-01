@@ -11,6 +11,8 @@ import service.SceneManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import static manager.GameManager.lvl;
+
 
 public class WireView {
     private Wire wire;
@@ -53,6 +55,13 @@ public class WireView {
         // Style the curves
         curves.forEach(curve -> {
             paintCurve(curve);
+            curve.setOnMousePressed(mouseEvent -> {
+                if(!wire.isCurved()){
+                    lvl.coins--;
+                    wire.setCurved();
+                }
+                System.out.println("s");
+            });
 
             curve.setOnMouseDragged(event -> {
                 // 1. Get the specific curve that was the source of the drag event.

@@ -1,6 +1,7 @@
 package manager;
 
-import controller.PacketContoller;
+import controller.ComponentsController;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 
 import javafx.animation.Timeline;
@@ -10,6 +11,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 import manager.packets.PacketManager;
+import model.Level;
 import model.Type;
 import model.packet.Packet;
 import service.AudioManager;
@@ -19,26 +21,29 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static controller.ComponentsController.TheComponentsController;
 import static controller.PacketContoller.killPacket;
-import static manager.GameLoopManager.gameLoopManager;
+import static manager.LevelManager.theLevelManager;
 import static manager.ShopManager.*;
 
 public class CollisonManager {
     private static final double EXPLOSION_RADIUS = 100;
     private static final double EXPLOSION_FORCE = 10;
     Set<String> currentCollisions = new HashSet<>();
+    private Timeline timeline = new Timeline();
 
-    public  CollisonManager() {
-        List<Packet> packets = GameManager.lvl.packets;
+    public  CollisonManager(Level level) {
+
+        timeline.setCycleCount(Animation.INDEFINITE);
+        List<Packet> packets = level.packets;
         KeyFrame keyFrame = new KeyFrame((Duration.millis(16)), event -> {
 
-            if (!airyaman && !gameLoopManager.paused) {
+            if (!airyaman && !theLevelManager.paused) {
 
                 // 1. Create a copy of the list to iterate over
                 ArrayList<Packet> packetsThisFrame = new ArrayList<>(packets);
                 int n = packetsThisFrame.size();
 
-                if (n > 1) {
                     for (int i = 0; i < n; i++) {
                         for (int j = i + 1; j < n; j++) {
 
@@ -46,6 +51,9 @@ public class CollisonManager {
                             Packet p1 = packetsThisFrame.get(i);
                             Packet p2 = packetsThisFrame.get(j);
                             if(p1.insideSystem || p2.insideSystem){
+                                continue;
+                            }
+                            if(!(packets.contains(p1) && packets.contains(p2))){
                                 continue;
                             }
 
@@ -57,17 +65,19 @@ public class CollisonManager {
                             boolean isColliding = false;
                             try {
 
-                                Shape intersect = Shape.intersect(PacketContoller.packetViewMap.get(p1).getShape(), PacketContoller.packetViewMap.get(p2).getShape());
+
+                                Shape intersect = Shape.intersect(TheComponentsController.packetViewMap.get(p1).getShape(), TheComponentsController.packetViewMap.get(p2).getShape());
                                 isColliding = !intersect.getBoundsInLocal().isEmpty();
+
                             } catch (Exception e) {
-                                e.printStackTrace(); // Always log exceptions in dev
+                                e.printStackTrace();
                             }
 
                             if (isColliding ) {
                                 if (!currentCollisions.contains(key)) {
                                    currentCollisions.add(key);
 
-                                    Shape intersect = Shape.intersect(PacketContoller.packetViewMap.get(p1).getShape(), PacketContoller.packetViewMap.get(p2).getShape());
+                                    Shape intersect = Shape.intersect(TheComponentsController.packetViewMap.get(p1).getShape(), TheComponentsController.packetViewMap.get(p2).getShape());
                                     Bounds collisionBounds = intersect.getBoundsInLocal();
                                     double collisionX = collisionBounds.getMinX() + collisionBounds.getWidth() / 2;
                                     double collisionY = collisionBounds.getMinY() + collisionBounds.getHeight() / 2;
@@ -83,13 +93,13 @@ public class CollisonManager {
                     }
                 }
 
-            }
+
 
         });
-        gameLoopManager.addKeyFrame(keyFrame);
+        timeline.getKeyFrames().add(keyFrame);
     }
 
-    private  void collision(Packet packet1, Packet packet2) {
+    private void collision(Packet packet1, Packet packet2) {
 
         AudioManager.playCollison();
         if(packet1.getType() == Type.MATIC){
@@ -226,6 +236,15 @@ public class CollisonManager {
 
 
 
+    }
+    public void play(){
+        timeline.play();
+    }
+    public void pause(){
+        timeline.pause();
+    }
+    public void stop(){
+        timeline.stop();
     }
     private static EventHandler<ActionEvent> checkToKill(Packet packet){
 
