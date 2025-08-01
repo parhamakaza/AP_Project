@@ -14,14 +14,14 @@ public class Level {
     public int generatedPackets = 0;
     public int lostPackets = 0;
     public int coins = 10;
+    public final double initialWireLength;
     public double wireLength ;
     public List<Computer> comps = new ArrayList<>();
     public List<Packet> packets = new ArrayList<>();
-    public Level(){
 
-    }
     public Level(double x){
-            wireLength = x;
+        initialWireLength = x;
+        wireLength = x;
         GameManager.lvl = this;
     }
 

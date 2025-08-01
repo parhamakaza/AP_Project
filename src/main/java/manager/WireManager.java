@@ -8,11 +8,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Shape;
+import manager.packets.PacketManager;
 import model.port.Port;
 import model.wire.Wire;
 import service.SceneManager;
 import view.port.PortView;
 import view.WireView;
+
+import java.util.List;
 
 import static controller.ComponentsController.TheComponentsController;
 
@@ -63,8 +66,9 @@ public class WireManager {
                 Port p = checkIsIndise(currentLine.getEndX(), currentLine.getEndY());
                 try {
 
-                    WireController.makeWire(new Wire(firstPort, p));
-
+                    WireView wireView = WireController.makeWire(new Wire(firstPort, p));
+                    List<QuadCurve> curves = wireView.getCurves();
+                    wireView.getWire().length = PacketManager.calculateWireLength(curves);
 
                 } catch (Exception ex) {
 
@@ -116,16 +120,5 @@ public class WireManager {
     }
 
 
-    public static double lengthcounter(Wire wire){
-        double x1 = wire.startX;
-        double y1 = wire.startY;
-        double x2 = wire.endX;
-        double y2 = wire.endY;
-        double l = Math.abs(x1 - x2);
-        double h = Math.abs(y2 - y1);
 
-        return Math.sqrt((l * l) + (h * h));
-
-
-    }
 }

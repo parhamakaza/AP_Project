@@ -5,6 +5,8 @@ import javafx.animation.Animation;
 import manager.computers.ComputerManager;
 import manager.packets.PacketManager;
 import model.Level;
+import model.wire.Wire;
+import view.WireView;
 
 import static manager.ComponentsManager.TheComponentsManager;
 
@@ -63,6 +65,15 @@ public class LevelManager {
         for (PacketManager packetManager : componentsManager.packetManagerMap.values()) {
             packetManager.stop();
         }
+    }
+    public double updateWireLength(){
+
+        double totalLength = 0;
+        for(Wire wire : componentsController.wireViewMap.keySet()) {
+            totalLength += wire.length;
+        }
+        level.wireLength =  level.initialWireLength - totalLength;
+        return level.wireLength;
     }
 
 }

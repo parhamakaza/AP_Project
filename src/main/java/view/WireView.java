@@ -4,6 +4,7 @@ package view;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.QuadCurve;
+import manager.packets.PacketManager;
 import model.wire.Wire;
 import service.AudioManager;
 import service.SceneManager;
@@ -67,6 +68,8 @@ public class WireView {
                 // 1. Get the specific curve that was the source of the drag event.
                 QuadCurve draggedCurve = (QuadCurve) event.getSource();
                 int i = curves.indexOf(draggedCurve);
+
+                wire.length = PacketManager.calculateWireLength(curves);
 
                 // 2. Get the current mouse coordinates.
                 double controlX = event.getX();

@@ -38,7 +38,6 @@ public class Wire {
             this.endY = ePort.centerY();
 
 
-            this.length = WireManager.lengthcounter(this);
             if (this.length > GameManager.lvl.wireLength) {
                 throw new Exception("not enougth length");
             }

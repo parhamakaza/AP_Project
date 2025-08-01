@@ -159,7 +159,7 @@ public class LevelView {
             if (!isDragging[0]) {
                 currentTimeLabel.setText("Time: " + String.format("%.1f", lvl.currentTime));
             }
-            wireLabel.setText("Wire: " + String.format("%.1f", lvl.wireLength));
+            wireLabel.setText("Wire: " + String.format("%.1f", theLevelManager.updateWireLength()));
 
             try {
                 double lossPercentage = (lvl.lostPackets / (double) lvl.generatedPackets) * 100;
