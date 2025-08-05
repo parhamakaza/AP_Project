@@ -17,7 +17,7 @@ public class PacketContoller {
 
     public static PacketView makePacket(Packet packet) {
         PacketView packetView = PacketViewFactory.creatView(packet);
-        TheComponentsController.packetViewMap.put(packet, packetView);
+        TheComponentsController.putView(packet, packetView);
         return packetView;
 
     }

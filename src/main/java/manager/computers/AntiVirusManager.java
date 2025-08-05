@@ -44,7 +44,7 @@ public class AntiVirusManager extends ComputerManager {
 
     private void killTrozhan(Packet packet) {
         packet.setTrozhan(false);
-        TheComponentsController.packetViewMap.get(packet).getShape().setFill(Color.rgb(255, 255, 0, 0.2));
+        TheComponentsController.getView(packet).getShape().setFill(Color.rgb(255, 255, 0, 0.2));
         disableComputer();
     }
 

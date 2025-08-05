@@ -10,7 +10,7 @@ public class WireController {
 
     public static WireView makeWire(Wire wire){
         WireView wireView = new WireView(wire);
-        TheComponentsController.wireViewMap.put(wire,wireView);
+        TheComponentsController.putView(wire,wireView);
         return wireView;
     }
 

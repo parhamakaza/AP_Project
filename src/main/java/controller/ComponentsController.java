@@ -25,4 +25,49 @@ public class ComponentsController {
     public ComponentsController(){
         TheComponentsController = this;
     }
+
+    public ComputerView getView(Computer computer) {
+        return computerViewMap.get(computer);
+    }
+
+
+    public PacketView getView(Packet packet) {
+        return packetViewMap.get(packet);
+    }
+
+
+    public LevelView getView(Level level) {
+        return levelViewMap.get(level);
+    }
+
+
+    public PortView getView(Port port) {
+        return portViewMap.get(port);
+    }
+
+
+    public WireView getView(Wire wire) {
+        return wireViewMap.get(wire);
+    }
+
+    public void putView(Computer computer, ComputerView computerView) {
+        computerViewMap.put(computer, computerView);
+    }
+
+    public void putView(Packet packet, PacketView packetView) {
+        packetViewMap.put(packet, packetView);
+    }
+
+    public void putView(Level level, LevelView levelView) {
+        levelViewMap.put(level, levelView);
+    }
+
+
+    public void putView(Port port, PortView portView) {
+        portViewMap.put(port, portView);
+    }
+
+    public void putView(Wire wire, WireView wireView) {
+        wireViewMap.put(wire, wireView);
+    }
 }

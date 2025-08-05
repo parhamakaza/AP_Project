@@ -16,4 +16,23 @@ public class ComponentsManager {
         TheComponentsManager = this;
     }
 
+    public ComputerManager getManager(Computer computer) {
+        return computerManagerMap.get(computer);
+    }
+
+
+    public PacketManager getManager(Packet packet) {
+        return packetManagerMap.get(packet);
+    }
+
+
+    public void putManager(Computer computer, ComputerManager computerManager) {
+        computerManagerMap.put(computer, computerManager);
+    }
+
+
+    public void putManager(Packet packet, PacketManager packetManager) {
+        packetManagerMap.put(packet, packetManager);
+    }
+
 }

@@ -115,15 +115,7 @@ public class Shop {
     public static void anahita(){
         GameManager.lvl.coins -= 5;
 
-        for(Packet i : GameManager.lvl.packets ){
-            if(i instanceof TrianglePacket){
-                i.health = 3;
-            }
-            if(i instanceof SquarePacket){
-                i.health = 2;
-            }
 
-        }
 
 
 

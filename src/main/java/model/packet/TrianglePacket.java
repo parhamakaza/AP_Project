@@ -9,9 +9,9 @@ public class TrianglePacket extends Packet {
 
     public TrianglePacket (){
         super();
-        this.health = 3;
-        value = health;
-        this.type = Type.TRIANGLE;
+        size = 3;
+        value = 3;
+        type = Type.TRIANGLE;
 
     }
 

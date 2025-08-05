@@ -26,7 +26,7 @@ public class DDOSManager extends ComputerManager{
             return;
         }
         if (!packet.isDamged()) {
-            packet.health--;
+            packet.increaseNoize();
         }
         if (probability()) {
             makeTrojan(packet);
@@ -44,7 +44,7 @@ public class DDOSManager extends ComputerManager{
 
     private void makeTrojan(Packet packet){
         packet.setTrozhan(true);
-        TheComponentsController.packetViewMap.get(packet).getShape().setFill(Color.RED);
+        TheComponentsController.getView(packet).getShape().setFill(Color.RED);
     }
 
 }

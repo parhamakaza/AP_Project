@@ -1,5 +1,6 @@
 package model.packet;
 
+import controller.PacketContoller;
 import manager.GameManager;
 import model.Type;
 import model.wire.Wire;
@@ -12,13 +13,39 @@ public abstract class Packet {
     public Wire wire;
     public double x;
     public double y;
-    public int health;
     public int value;
     public boolean insideSystem = false;
     protected boolean trozhan = false;
     public double deflectedX = 0;
     public double deflectedY = 0;
+    protected int size;
+    protected int noise = 0;
 
+    public void increaseNoize(){
+        noise += 1;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public void setNoise(int noise) {
+        this.noise = noise;
+    }
+
+    public void  checkToKill(){
+        if(noise >= size){
+            PacketContoller.killPacket(this);
+        }
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public int getNoise() {
+        return noise;
+    }
 
     public boolean isVpn() {
         return vpn;
@@ -56,11 +83,12 @@ public abstract class Packet {
 
 
     public boolean isDamged(){
-        if (this.health == this.value){
+        if (noise == 0){
+
             return false;
-        }else {
-            return true;
         }
+        return true;
+
     }
 
 

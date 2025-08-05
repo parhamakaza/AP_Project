@@ -62,18 +62,16 @@ public class WireManager {
         });
 
         shape.setOnMouseReleased((MouseEvent e3) -> {
-            if (currentLine != null){
+            if (currentLine != null && currentLine.getStroke() != Color.RED){
                 Port p = checkIsIndise(currentLine.getEndX(), currentLine.getEndY());
                 try {
+                makeWire(firstPort , p);
 
-                    WireView wireView = WireController.makeWire(new Wire(firstPort, p));
-                    List<QuadCurve> curves = wireView.getCurves();
-                    wireView.getWire().length = PacketManager.calculateWireLength(curves);
 
                 } catch (Exception ex) {
 
                     try {
-                        WireController.makeWire(new Wire(p , firstPort));
+                        makeWire( p , firstPort );
 
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
@@ -108,6 +106,13 @@ public class WireManager {
 
 
     }
+    private static void makeWire(Port firstPort , Port secondPort) throws Exception {
+
+        WireView wireView = WireController.makeWire(new Wire(firstPort, secondPort));
+        List<QuadCurve> curves = wireView.getCurves();
+        wireView.getWire().length = PacketManager.calculateWireLength(curves);
+    }
+
     public static void disConnectWire(Wire wire){
         WireView wireView = TheComponentsController.wireViewMap.remove(wire);
         for (QuadCurve qc : wireView.getCurves()) {

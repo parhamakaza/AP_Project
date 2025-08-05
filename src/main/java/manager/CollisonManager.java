@@ -66,7 +66,7 @@ public class CollisonManager {
                             try {
 
 
-                                Shape intersect = Shape.intersect(TheComponentsController.packetViewMap.get(p1).getShape(), TheComponentsController.packetViewMap.get(p2).getShape());
+                                Shape intersect = Shape.intersect(TheComponentsController.getView(p1).getShape(), TheComponentsController.getView(p2).getShape());
                                 isColliding = !intersect.getBoundsInLocal().isEmpty();
 
                             } catch (Exception e) {
@@ -77,7 +77,7 @@ public class CollisonManager {
                                 if (!currentCollisions.contains(key)) {
                                    currentCollisions.add(key);
 
-                                    Shape intersect = Shape.intersect(TheComponentsController.packetViewMap.get(p1).getShape(), TheComponentsController.packetViewMap.get(p2).getShape());
+                                    Shape intersect = Shape.intersect(TheComponentsController.getView(p1).getShape(), TheComponentsController.getView(p2).getShape());
                                     Bounds collisionBounds = intersect.getBoundsInLocal();
                                     double collisionX = collisionBounds.getMinX() + collisionBounds.getWidth() / 2;
                                     double collisionY = collisionBounds.getMinY() + collisionBounds.getHeight() / 2;
@@ -109,16 +109,12 @@ public class CollisonManager {
             PacketManager.changeDirection(packet2);
         }
 
-        packet1.health = packet1.health - 1;
-        packet2.health = packet2.health - 1;
+        packet1.increaseNoize();
+        packet2.increaseNoize();
 
-        if (packet1.health == 0) {
-           killPacket(packet1);
-        }
+        packet1.checkToKill();
+        packet2.checkToKill();
 
-        if (packet2.health == 0) {
-            killPacket(packet2);
-        }
     }
     private void explosion(double explosionX , double explosionY){
 

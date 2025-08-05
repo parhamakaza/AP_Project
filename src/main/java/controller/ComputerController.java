@@ -12,7 +12,7 @@ public class ComputerController {
 
     public static ComputerView MakeComputer(Computer computer) {
        ComputerView computerView = new ComputerView(computer);
-       TheComponentsController.computerViewMap.put(computer,computerView);
+       TheComponentsController.putView(computer,computerView);
        GameManager.lvl.comps.add(computer);
        ComputerManagerFactory.createManager(computer);
        return computerView;

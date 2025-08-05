@@ -8,8 +8,8 @@ public class SquarePacket extends Packet {
 
     public SquarePacket (){
         super();
-        this.health = 2;
-        value = health;
+        size = 2;
+        value = 2;
         this.type = Type.SQUARE;
     }
 

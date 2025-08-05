@@ -12,7 +12,7 @@ public class PortController {
     public static PortView makePort(Port port){
         PortView portView = PortViewFactory.creatPortView(port);
         WireManager.professionalWiring(portView);
-        TheComponentsController.portViewMap.put(port,portView);
+        TheComponentsController.putView(port,portView);
         return portView;
 
     }

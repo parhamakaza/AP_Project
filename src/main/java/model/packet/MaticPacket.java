@@ -6,9 +6,9 @@ public class MaticPacket extends Packet {
 
     public MaticPacket (){
         super();
-        this.health = 2;
-        value = health;
-        this.type = Type.MATIC;
+        size = 2;
+        value = 2;
+        type = Type.MATIC;
 
     }
 

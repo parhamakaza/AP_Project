@@ -21,7 +21,7 @@ public class Level1 extends LevelView{
 
     public static void startLevel1(){
 
-        LevelView lvl = LevelController.makeLevel(new Level(10000));
+        LevelView lvl = LevelController.makeLevel(new Level(1900));
 
         GameManager.lvl = lvl.getLevel();
         SceneManager.goToLevel(lvl.getScene());

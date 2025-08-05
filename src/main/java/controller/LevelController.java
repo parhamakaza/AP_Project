@@ -12,7 +12,7 @@ public class LevelController {
     public static LevelView makeLevel(Level level) {
         LevelView levelView = new LevelView(level);
         LevelManager.theLevelManager =  new LevelManager(level);
-        TheComponentsController.levelViewMap.put(level, levelView);
+        TheComponentsController.putView(level, levelView);
         return levelView;
     }
 

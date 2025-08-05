@@ -73,6 +73,9 @@ public class LevelManager {
             totalLength += wire.length;
         }
         level.wireLength =  level.initialWireLength - totalLength;
+        if(level.wireLength <= 0){
+            level.wireLength = 0;
+        }
         return level.wireLength;
     }
 

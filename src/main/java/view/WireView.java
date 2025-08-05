@@ -65,22 +65,44 @@ public class WireView {
             });
 
             curve.setOnMouseDragged(event -> {
-                // 1. Get the specific curve that was the source of the drag event.
                 QuadCurve draggedCurve = (QuadCurve) event.getSource();
                 int i = curves.indexOf(draggedCurve);
 
-                wire.length = PacketManager.calculateWireLength(curves);
+                // 1. Calculate the length of this specific curve *before* any changes
+                double originalLength = PacketManager.calculateWireLength(List.of(draggedCurve));
 
-                // 2. Get the current mouse coordinates.
+                // Get the potential new mouse coordinates
                 double controlX = event.getX();
                 double controlY = event.getY();
-                if (distance(new Point2D(controlX, controlY), initialCurvesControllers.get(i)) <= 120) {
 
+                // 2. Calculate the potential new length of the curve at the mouse's position
+                QuadCurve potentialCurve = new QuadCurve(
+                        draggedCurve.getStartX(), draggedCurve.getStartY(),
+                        controlX, controlY, // Use the new potential control point
+                        draggedCurve.getEndX(), draggedCurve.getEndY()
+                );
+                double newLength = PacketManager.calculateWireLength(List.of(potentialCurve));
 
+                // 3. Determine the change in length (will be negative if the curve gets shorter)
+                double lengthChange = newLength - originalLength;
+
+                // 4. Check if the remaining wire length can cover the change AND the control point is within its allowed radius
+                if (lvl.wireLength >= lengthChange && distance(new Point2D(controlX, controlY), initialCurvesControllers.get(i)) <= 120) {
+                    // --- The move is valid, so we commit the changes ---
+
+                    // a. Update the level's remaining wire length.
+                    //    (Subtracting a negative correctly adds length back)
+                    lvl.wireLength -= lengthChange;
+
+                    // b. Apply the new position to the actual curve
                     draggedCurve.setControlX(controlX);
                     draggedCurve.setControlY(controlY);
+                    wire.length = PacketManager.calculateWireLength(curves);
+
+                    // c. Call your smoothing function
                     smoother(i, draggedCurve);
                 }
+
 
             });
             SceneManager.addComponent(curve);

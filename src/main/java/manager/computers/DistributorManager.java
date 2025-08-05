@@ -38,11 +38,12 @@ public class DistributorManager extends ComputerManager {
 
     @Override
     protected Packet choosePacketToSend() {
-        if (bitPackets.isEmpty()) {
-            return super.choosePacketToSend();
-        } else {
-            return bitPackets.getFirst();
+        Packet packet = super.choosePacketToSend();
+        if ( !bitPackets.isEmpty()) {
+            packet = bitPackets.getFirst();
         }
+        return packet;
+
     }
 
     @Override

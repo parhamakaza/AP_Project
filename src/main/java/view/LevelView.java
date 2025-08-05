@@ -146,7 +146,7 @@ public class LevelView {
                 Color glowColor = isReady ? Color.web("#00ffff") : Color.web("#FF0066");
                 DropShadow glow = new DropShadow(10, glowColor);
                 glow.setSpread(0.2);
-                ComputerView computerView= TheComponentsController.computerViewMap.get(computer);
+                ComputerView computerView= TheComponentsController.getView(computer);
                 computerView.getShape().setEffect(glow);
                 computerView.label.setText(computer.computerType.toString() +"\n" + computer.packets.size());
                 computer.ready = isReady;

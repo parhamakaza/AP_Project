@@ -86,7 +86,7 @@ public abstract class ComputerManager {
                 continue;
             }
 
-            if (port.portType != PortType.OUTPUT || !port.wire.avaible ) {
+            if (port.portType != PortType.OUTPUT || !port.wire.avaible || port.wire.ePort.computer.disable) {
                 continue;
             }
 
@@ -123,9 +123,9 @@ public abstract class ComputerManager {
         return packet.getType() == port.getType();
     }
 
-    protected void disableComputer(){
+    public void disableComputer(){
         computer.disable = true;
-        Shape shape = TheComponentsController.computerViewMap.get(computer).getShape();
+        Shape shape = TheComponentsController.getView(computer).getShape();
         shape.setOpacity(0.5);
         timeline.pause();
         PauseTransition pause = new PauseTransition(Duration.seconds(2));

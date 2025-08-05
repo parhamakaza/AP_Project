@@ -5,6 +5,7 @@ import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Shape;
 import manager.ComponentsManager;
 import manager.LevelManager;
+import manager.computers.ComputerManager;
 import model.computer.Computer;
 import model.packet.Packet;
 import model.wire.Wire;
@@ -50,14 +51,14 @@ public abstract class PacketManager extends AnimationTimer {
     }
 
     public PacketManager(Packet packet, Wire wire) {
-        this.packetView = TheComponentsController.packetViewMap.get(packet);
+        this.packetView = TheComponentsController.getView(packet);
         this.wire = wire;
         wire.avaible = false;
         this.packet = packet;
         this.shape = packetView.getShape();
         shape.setLayoutX(packet.x);
         shape.setLayoutY(packet.y);
-        this.path = TheComponentsController.wireViewMap.get(wire).getCurves();
+        this.path = TheComponentsController.getView(wire).getCurves();
         SceneManager.addComponent(shape);
 
         // Build the lookup table for animation and get the total path length
@@ -110,6 +111,10 @@ public abstract class PacketManager extends AnimationTimer {
                     } else {
                         stop();
                         packetMovementEnds(computer);
+                        if(speed > 150){
+                            TheComponentsManager.getManager(computer).disableComputer();
+
+                        }
                     }
                 }
                 break;
