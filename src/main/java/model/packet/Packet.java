@@ -5,8 +5,10 @@ import manager.GameManager;
 import model.Type;
 import model.wire.Wire;
 
+import java.io.Serializable;
 
-public abstract class Packet {
+
+public abstract class Packet implements Serializable {
     public static final double SIZE = 20;
     public static int theID = 0;
     public int id;

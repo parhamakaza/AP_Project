@@ -18,6 +18,7 @@ import javafx.util.Duration;
 import manager.LevelManager;
 import model.computer.Computer;
 import model.Level;
+import saveAndLoad.Save;
 
 import static controller.ComponentsController.TheComponentsController;
 import static manager.LevelManager.theLevelManager;
@@ -68,6 +69,7 @@ public class LevelView {
         menuButton.setOnAction(e -> {
             timeline.stop();
             theLevelManager.stop();
+            Save.stop();
             showMenuView();
 
         });

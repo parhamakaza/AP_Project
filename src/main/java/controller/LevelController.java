@@ -1,5 +1,6 @@
 package controller;
 
+import manager.GameManager;
 import manager.LevelManager;
 import manager.LevelManager.*;
 import model.Level;
@@ -13,6 +14,7 @@ public class LevelController {
         LevelView levelView = new LevelView(level);
         LevelManager.theLevelManager =  new LevelManager(level);
         TheComponentsController.putView(level, levelView);
+        GameManager.lvl = level;
         return levelView;
     }
 

@@ -20,9 +20,7 @@ public class PortViewFactory {
     }
 
     public static PortView creatPortView(Port port) {
-
         Function<Port, PortView> managerCreator = managerRegistry.get(port.getClass());
         return managerCreator.apply(port);
-
     }
 }

@@ -6,6 +6,7 @@ import manager.computers.ComputerManager;
 import manager.packets.PacketManager;
 import model.Level;
 import model.wire.Wire;
+import saveAndLoad.Save;
 import view.WireView;
 
 import static manager.ComponentsManager.TheComponentsManager;
@@ -44,6 +45,7 @@ public class LevelManager {
         for (ComputerManager computer : componentsManager.computerManagerMap.values()) {
             computer.timeline.play();
         }
+        Save.save();
 
         collisonManager.play();
     }

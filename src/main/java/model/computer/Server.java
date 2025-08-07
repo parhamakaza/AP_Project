@@ -5,8 +5,8 @@ public class Server extends Computer {
 
 
 
-    public Server(double x , double y){
-       super(x,y);
+    public Server(double x , double y, String id){
+       super(x,y,id);
        this.computerType = ComputerTypes.SERVER;
     }
 

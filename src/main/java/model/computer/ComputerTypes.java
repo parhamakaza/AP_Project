@@ -1,6 +1,8 @@
 package model.computer;
 
-public enum ComputerTypes {
+import java.io.Serializable;
+
+public enum ComputerTypes implements Serializable {
     SERVER,
     TRANSFORMER,
     SPY,

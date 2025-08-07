@@ -1,6 +1,8 @@
 package model;
 
-public enum Type {
+import java.io.Serializable;
+
+public enum Type implements Serializable {
     SQUARE,
     TRIANGLE,
     MATIC,

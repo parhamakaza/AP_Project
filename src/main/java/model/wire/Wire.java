@@ -5,10 +5,14 @@ import manager.WireManager;
 import model.Type;
 import model.port.*;
 
-public class Wire {
+import java.io.Serializable;
+
+public class Wire implements Serializable {
     public Type type;
-    public Port sPort;
-    public Port ePort;
+    public transient Port sPort;
+    public transient Port ePort;
+    public String sPortId;
+    public String ePortId;
     public double startX;
     public double startY;
     public double endX;
@@ -30,6 +34,8 @@ public class Wire {
         if (checkPorts(sPort, ePort)) {
             this.sPort = sPort;
             this.ePort = ePort;
+            this.sPortId = sPort.portID;
+            this.ePortId = ePort.portID;
 
 
             this.startX = sPort.centerX();

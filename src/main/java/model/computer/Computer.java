@@ -4,22 +4,30 @@ package model.computer;
 import model.packet.Packet;
 import model.port.Port;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Computer {
+public abstract class Computer implements Serializable {
     public static final double WIDTH = 100;
     public static final double HEIGHT = 150;
     public double x;
     public double y;
-    public  ComputerTypes computerType ;
-    public List<Port> ports = new ArrayList<>();
-    public List<Packet> packets = new ArrayList<>();
+    public ComputerTypes computerType ;
+    protected final String id;
     public boolean disable = false;
-
     public boolean ready = false;
 
-    public Computer(double x , double y){
+    public String getId() {
+        return id;
+    }
+
+    public  List<Port> ports = new ArrayList<>();
+    public List<Packet> packets = new ArrayList<>();
+
+
+    public Computer(double x , double y , String id){
+        this.id = id;
         this.x = x;
         this.y = y;
     }

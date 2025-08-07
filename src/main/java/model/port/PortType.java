@@ -1,6 +1,8 @@
 package model.port;
 
-public enum PortType {
+import java.io.Serializable;
+
+public enum PortType implements Serializable {
     OUTPUT,
     INPUT
 }

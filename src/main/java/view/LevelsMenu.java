@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import saveAndLoad.Load;
 import service.SceneManager;
 
 public class LevelsMenu {
@@ -32,7 +33,7 @@ public class LevelsMenu {
         lvl1.setOnAction(e ->Level1.startLevel1());
         Button lvl2 = UI.makeButton("Level2", Main.STAGE_WIDTH /2,475);
         UI.styler1(lvl2);
-        //lvl2.setOnAction(e ->Level2.startLevel2());
+        lvl2.setOnAction(e -> Load.loadGameData());
 
         root.getChildren().add(lvl1);
         root.getChildren().add(lvl2);
