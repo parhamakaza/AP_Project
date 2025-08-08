@@ -3,6 +3,7 @@ package controller;
 
 import manager.GameManager;
 import manager.packets.PacketManager;
+import manager.packets.PacketManagerFactory;
 import model.packet.Packet;
 import service.SceneManager;
 import view.packets.PacketView;
@@ -18,6 +19,11 @@ public class PacketContoller {
     public static PacketView makePacket(Packet packet) {
         PacketView packetView = PacketViewFactory.creatView(packet);
         TheComponentsController.putView(packet, packetView);
+
+        if(!packet.insideSystem){
+            PacketManagerFactory.createManager(packet, packet.wire);
+        }
+
         return packetView;
 
     }

@@ -45,6 +45,7 @@ public class LevelManager {
         for (ComputerManager computer : componentsManager.computerManagerMap.values()) {
             computer.timeline.play();
         }
+
         Save.save();
 
         collisonManager.play();

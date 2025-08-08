@@ -35,7 +35,9 @@ public abstract class PacketView implements Drawable {
     protected void setInitialisesCoordination(){
         shape.setLayoutX(packet.x);
         shape.setLayoutY(packet.y);
-        SceneManager.addComponent(shape);
+        if(!packet.insideSystem){
+            SceneManager.addComponent(shape);
+        }
     }
 
 

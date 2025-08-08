@@ -2,13 +2,13 @@ package view;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 
+import saveAndLoad.Load;
 import service.SceneManager;
+
+import java.util.Optional;
 
 
 public class Menu {
@@ -30,7 +30,7 @@ public class Menu {
             Button startButton = UI.makeButton("start", Main.STAGE_WIDTH /2,320);
             UI.styler1(startButton);
             startButton.setOnAction(e -> {
-                Level1.startLevel1();
+                showConfirmationDialog();
             });
             Button levelButton = UI.makeButton("Levels", Main.STAGE_WIDTH /2,475);
             UI.styler1(levelButton);
@@ -77,7 +77,38 @@ public class Menu {
     }
 
 
+    public void showConfirmationDialog() {
+        Alert alert = new Alert(Alert.AlertType.NONE);
+        alert.setTitle("Load Game");
 
+        // ... (rest of the styling and button creation code is the same)
+        ButtonType buttonTypeYes = new ButtonType("Yes", ButtonBar.ButtonData.OK_DONE);
+        ButtonType buttonTypeNo = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.setStyle("-fx-background-color: #001a21;");
+        Label headerLabel = new Label("Continue previous game?");
+        UI.styler1(headerLabel); // Using your UI class
+        dialogPane.setHeader(headerLabel);
+
+        Button yesButton = (Button) dialogPane.lookupButton(buttonTypeYes);
+        Button noButton = (Button) dialogPane.lookupButton(buttonTypeNo);
+        UI.styler1(yesButton);
+        UI.styler1(noButton);
+        // --- End of styling ---
+
+
+        // Show the dialog and get the result
+        Optional<ButtonType> result = alert.showAndWait();
+
+        // ✅ This is the key change: execute the provided actions
+        if (result.isPresent() && result.get() == buttonTypeYes) {
+            Load.loadGameData();
+        } else {
+            Level1.startLevel1() ;
+        }
+    }
 
 
 

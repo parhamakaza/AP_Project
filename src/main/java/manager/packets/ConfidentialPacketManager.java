@@ -33,9 +33,9 @@ public class ConfidentialPacketManager extends PacketManager {
 
     private void setSpeed() {
         if (destinationComputerIsEmpty()) {
-            speed = STANDARDSPEED;
+            speed = Packet.STANDARDSPEED;
         } else {
-            speed = STANDARDSPEED / 2;
+            speed = Packet.STANDARDSPEED / 2;
         }
 
     }

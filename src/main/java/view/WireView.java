@@ -45,13 +45,26 @@ public class WireView {
         Point2D p2 = new Point2D(p0.getX() + 2 * (p3.getX() - p0.getX()) / 3, p0.getY() + 2 * (p3.getY() - p0.getY()) / 3);
 
 
+
+
         QuadCurve curve1 = new QuadCurve(p0.getX(), p0.getY(), 0, 0, p1.getX(), p1.getY());
         QuadCurve curve2 = new QuadCurve(p1.getX(), p1.getY(), 0, 0, p2.getX(), p2.getY());
         QuadCurve curve3 = new QuadCurve(p2.getX(), p2.getY(), 0, 0, p3.getX(), p3.getY());
-
         curves = List.of(curve1, curve2, curve3);
-
         initialCurvesControllers.addAll(List.of(setControlToMidpoint(curve1), setControlToMidpoint(curve2), setControlToMidpoint(curve3)));
+
+        if(wire.isCurved()){
+            curve1.setControlX(wire.firstControlX);
+            curve1.setControlY(wire.firstControlY);
+            curve2.setControlX(wire.secondControlX);
+            curve2.setControlY(wire.secondControlY);
+            curve3.setControlX(wire.thirdControlX);
+            curve3.setControlY(wire.thirdControlY);
+        }
+
+            smoother(0, curve1);
+            smoother(1, curve2);
+            smoother(2, curve3);
 
         // Style the curves
         curves.forEach(curve -> {
@@ -61,7 +74,6 @@ public class WireView {
                     lvl.coins--;
                     wire.setCurved();
                 }
-                System.out.println("s");
             });
 
             curve.setOnMouseDragged(event -> {
@@ -97,10 +109,12 @@ public class WireView {
                     // b. Apply the new position to the actual curve
                     draggedCurve.setControlX(controlX);
                     draggedCurve.setControlY(controlY);
+
                     wire.length = PacketManager.calculateWireLength(curves);
 
                     // c. Call your smoothing function
                     smoother(i, draggedCurve);
+                    linkToModel(i,draggedCurve);
                 }
 
 
@@ -116,8 +130,12 @@ public class WireView {
     private Point2D setControlToMidpoint(QuadCurve curve) {
         double controlX = average(curve.getStartX() , curve.getEndX());
         double controlY = average(curve.getStartY() , curve.getEndY());
-        curve.setControlX(controlX);
-        curve.setControlY(controlY);
+        if(!wire.isCurved()){
+            curve.setControlX(controlX);
+            curve.setControlY(controlY);
+            int i = curves.indexOf(curve);
+            linkToModel(i , curve);
+        }
         return new Point2D(controlX, controlY);
     }
 
@@ -133,6 +151,25 @@ public class WireView {
                 smoothAfter(n, draggedCurve);
             }
             case 2 -> smoothBefore(n, draggedCurve);
+        }
+
+    }
+    private void linkToModel(int i , QuadCurve curve){
+        switch (i) {
+            case 0 -> {
+                wire.firstControlX = curve.getControlX();
+                wire.firstControlY = curve.getControlY();
+
+            }
+            case 1 -> {
+                wire.secondControlX = curve.getControlX();
+                wire.secondControlY = curve.getControlY();
+            }
+            case 2 -> {
+              wire.thirdControlX = curve.getControlX();
+              wire.thirdControlY = curve.getControlY();
+
+            }
         }
 
     }

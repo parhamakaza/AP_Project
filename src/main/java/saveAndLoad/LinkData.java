@@ -3,11 +3,13 @@ package saveAndLoad;
 import controller.*;
 import model.Level;
 import model.computer.Computer;
+import model.packet.Packet;
 import model.port.Port;
 import model.wire.Wire;
 import service.SceneManager;
 import view.LevelView;
 
+import static manager.LevelManager.theLevelManager;
 import static saveAndLoad.Load.theLoadedData;
 
 public class LinkData {
@@ -18,6 +20,8 @@ public class LinkData {
         linkComputers();
         linkPorts();
         linkWires();
+        linkPackets();
+        theLevelManager.pauseAndResume(false);
     }
 
     private static LevelView linkLevel(){
@@ -65,6 +69,14 @@ public class LinkData {
             wire.ePort = findPortById(wire.ePortId);
             WireController.makeWire(wire);
         }
+
+    }
+
+    private static void linkPackets(){
+        for (Packet packet : theLoadedData.getPackets()){
+            PacketContoller.makePacket(packet);
+        }
+
 
     }
 

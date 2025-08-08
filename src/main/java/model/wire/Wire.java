@@ -17,6 +17,13 @@ public class Wire implements Serializable {
     public double startY;
     public double endX;
     public double endY;
+    public double firstControlX;
+    public double firstControlY;
+    public double secondControlX;
+    public double secondControlY;
+    public double thirdControlX;
+    public double thirdControlY;
+
     public boolean avaible = true;
     public double length;
     private boolean curved = false;

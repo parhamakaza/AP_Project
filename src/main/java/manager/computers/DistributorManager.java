@@ -28,6 +28,8 @@ public class DistributorManager extends ComputerManager {
     }
 
     private void takeMassivePacket(MassivePacket packet) {
+        packet.distanceTravled = 0;
+        packet.resetSpeed();
         packet.insideSystem = true;
         for (int i = 0; i < packet.getSize(); i++) {
             Packet packet1 = new BitPacket(packet);

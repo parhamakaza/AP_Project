@@ -3,9 +3,6 @@ package manager.packets;
 import javafx.animation.AnimationTimer;
 import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Shape;
-import manager.ComponentsManager;
-import manager.LevelManager;
-import manager.computers.ComputerManager;
 import model.computer.Computer;
 import model.packet.Packet;
 import model.wire.Wire;
@@ -27,20 +24,18 @@ import static manager.packets.PacketState.RETURNING;
  */
 public abstract class PacketManager extends AnimationTimer {
 
-    protected static final double STANDARDSPEED = 80.0;
-
     // --- Member Variables ---
     protected PacketView packetView;
     protected Packet packet;
     protected final Shape shape;
     protected final List<QuadCurve> path;
-    protected double speed = STANDARDSPEED;
+    protected double speed ;
     protected final List<ArcLengthData> lookupTable = new ArrayList<>();
     protected double totalPathLength;
     protected long lastUpdate = 0;
     protected Wire wire;
-    protected double distanceTraveled = 0;
-    protected PacketState currentState = FORWARD;
+    protected double distanceTraveled;
+    protected PacketState currentState ;
 
     // --- Records for Data Structures ---
     protected record ArcLengthData(int curveIndex, double t, double cumulativeDistance) {}
@@ -54,23 +49,25 @@ public abstract class PacketManager extends AnimationTimer {
         this.packetView = TheComponentsController.getView(packet);
         this.wire = wire;
         wire.avaible = false;
+        speed = packet.getSpeed();
         this.packet = packet;
+        distanceTraveled = packet.distanceTravled;
+        currentState = packet.getState();
         this.shape = packetView.getShape();
         shape.setLayoutX(packet.x);
         shape.setLayoutY(packet.y);
         this.path = TheComponentsController.getView(wire).getCurves();
+
         SceneManager.addComponent(shape);
 
-        // Build the lookup table for animation and get the total path length
+
+
+
         buildLookupTable();
+        start();
     }
 
-    /**
-     * NEW STATIC METHOD: Calculates the total length of a wire path.
-     * You can call this from anywhere: Wire.calculateWireLength(wireView.getCurves());
-     * @param path The list of QuadCurve segments representing the wire.
-     * @return The total geometric length of the wire path.
-     */
+
     public static double calculateWireLength(List<QuadCurve> path) {
         final int stepsPerCurve = 1000;
         double cumulativeDistance = 0;
@@ -92,6 +89,7 @@ public abstract class PacketManager extends AnimationTimer {
 
     @Override
     public void handle(long now) {
+
         packet.wire.avaible = false;
         if (lastUpdate == 0 || theLevelManager.paused) {
             lastUpdate = now;
@@ -104,6 +102,7 @@ public abstract class PacketManager extends AnimationTimer {
         switch (currentState) {
             case FORWARD:
                 distanceTraveled += speed * elapsedSeconds;
+                packet.distanceTravled = distanceTraveled;
                 if (distanceTraveled >= totalPathLength) {
                     Computer computer = packet.wire.ePort.computer;
                     if (computer.disable) {
@@ -111,7 +110,7 @@ public abstract class PacketManager extends AnimationTimer {
                     } else {
                         stop();
                         packetMovementEnds(computer);
-                        if(speed > 150){
+                        if(speed > 200){
                             TheComponentsManager.getManager(computer).disableComputer();
 
                         }
@@ -121,15 +120,16 @@ public abstract class PacketManager extends AnimationTimer {
 
             case RETURNING:
                 distanceTraveled -= speed * elapsedSeconds;
+                packet.distanceTravled = distanceTraveled;
                 if (distanceTraveled <= 0) {
                     distanceTraveled = 0;
                     currentState = FORWARD;
                 }
                 break;
         }
+        packet.setSpeed(speed);
 
         ArcLengthData targetData = getPathDataForDistance(distanceTraveled);
-        // Use the non-static evaluateCurve for animation, as it uses the instance's path
         Point2D position = evaluateCurve(targetData.curveIndex(), targetData.t());
 
         packet.x = position.x + packet.deflectedX;
@@ -200,14 +200,7 @@ public abstract class PacketManager extends AnimationTimer {
         return evaluateCurve(this.path, curveIndex, t);
     }
 
-    /**
-     * STATIC method to evaluate a point on a curve.
-     * Made static so it can be used by the static calculateWireLength method.
-     * @param path The list of curves to evaluate against.
-     * @param curveIndex The index of the curve in the list.
-     * @param t The parameter along the curve (0.0 to 1.0).
-     * @return The calculated Point2D coordinates.
-     */
+
     protected static Point2D evaluateCurve(List<QuadCurve> path, int curveIndex, double t) {
         QuadCurve c = path.get(curveIndex);
         double p0x = c.getStartX(), p0y = c.getStartY();
@@ -224,16 +217,12 @@ public abstract class PacketManager extends AnimationTimer {
         return new Point2D(x, y);
     }
 
-
-    public static void returnPacket(Packet packet) {
-        TheComponentsManager.packetManagerMap.get(packet).currentState = RETURNING;
-    }
-
     public static void changeDirection(Packet packet) {
         PacketState packetState = TheComponentsManager.packetManagerMap.get(packet).currentState;
         switch (packetState) {
             case RETURNING -> TheComponentsManager.packetManagerMap.get(packet).currentState = FORWARD;
             case FORWARD -> TheComponentsManager.packetManagerMap.get(packet).currentState = RETURNING;
         }
+        packet.setState(packetState);
     }
 }

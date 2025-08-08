@@ -25,6 +25,7 @@ public abstract class ComputerManager {
     public Computer computer;
     public Timeline timeline = new Timeline();
 
+
     public void sendPacket(Port sPort , Packet packet){
         sPort.wire.avaible = false;
         packet.insideSystem =false;
@@ -32,8 +33,9 @@ public abstract class ComputerManager {
             packet.x = sPort.x + packet.deflectedX;
             packet.y = sPort.y + packet.deflectedY;
             packet.wire = sPort.wire;
-            PacketManager packetManager = PacketManagerFactory.createManager(packet,sPort.wire);
-            packetManager.start();
+            packet.insideSystem = false;
+            PacketManager packetManager = PacketManagerFactory.createManager(packet , sPort.wire);
+           // packetManager.start();
         }
         computer.packets.remove(packet);
     }
@@ -51,6 +53,8 @@ public abstract class ComputerManager {
 
     public void takePacket(Packet packet) {
         packet.insideSystem = true;
+        packet.distanceTravled = 0;
+        packet.resetSpeed();
         this.computer.packets.add(packet);
     }
 

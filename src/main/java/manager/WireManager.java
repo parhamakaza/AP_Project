@@ -120,8 +120,7 @@ public class WireManager {
             SceneManager.removeComponent(qc);
         }
         //wireView.setCurves(null);
-        System.out.println(wire.sPort);
-        System.out.println(wire.ePort);
+
         wire.sPort.wire = null;
         wire.ePort.wire = null;
         TheComponentsController.wireViewMap.remove(wire);
