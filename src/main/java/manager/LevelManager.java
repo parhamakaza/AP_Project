@@ -2,6 +2,9 @@ package manager;
 
 import controller.ComponentsController;
 import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 import manager.computers.ComputerManager;
 import manager.packets.PacketManager;
 import model.Level;
@@ -13,12 +16,13 @@ import static manager.ComponentsManager.TheComponentsManager;
 
 public class LevelManager {
     public static LevelManager theLevelManager;
+    public static Level lvl;
 
     private Level level;
     private ComponentsController componentsController;
     private ComponentsManager componentsManager;
     private CollisonManager collisonManager;
-
+    private Timeline timeline = new Timeline();
 
     public boolean paused;
 
@@ -28,6 +32,11 @@ public class LevelManager {
         this.componentsController = new ComponentsController();
         this.componentsManager = new ComponentsManager();
         this.collisonManager = new CollisonManager(level);
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(100), event -> {
+            level.increaseTime();
+        });
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.setCycleCount(Animation.INDEFINITE);
     }
 
     public void pauseAndResume(boolean b){
@@ -45,6 +54,7 @@ public class LevelManager {
         for (ComputerManager computer : componentsManager.computerManagerMap.values()) {
             computer.timeline.play();
         }
+        timeline.play();
 
         Save.save();
 

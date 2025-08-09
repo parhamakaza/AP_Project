@@ -1,10 +1,9 @@
 package manager.computers;
 
-import controller.ComponentsController;
 import javafx.animation.KeyFrame;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import manager.GameManager;
+import manager.LevelManager;
 import model.computer.Computer;
 import model.packet.Packet;
 
@@ -24,7 +23,7 @@ public class AntiVirusManager extends ComputerManager {
         double centerX = computer.getCenterX();
         double centerY = computer.getCenterY();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(10), event -> {
-            for (Packet packet : GameManager.lvl.packets) {
+            for (Packet packet : LevelManager.lvl.packets) {
                 double packetCenterX = packet.x;
                 double packetCenterY = packet.y + SIZE / 2;
                 double distance = distance(centerX - packetCenterX, centerY - packetCenterY);

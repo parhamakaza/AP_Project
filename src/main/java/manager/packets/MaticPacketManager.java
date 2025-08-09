@@ -15,6 +15,7 @@ public class MaticPacketManager extends PacketManager{
         if (packet.getType() != packet.wire.type) {
             slowing = true;
         }
+        //System.out.println(packet.getSpeed());
     }
 
     @Override

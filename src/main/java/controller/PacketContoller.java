@@ -1,7 +1,7 @@
 package controller;
 
 
-import manager.GameManager;
+import manager.LevelManager;
 import manager.packets.PacketManager;
 import manager.packets.PacketManagerFactory;
 import model.packet.Packet;
@@ -31,8 +31,8 @@ public class PacketContoller {
     public static void killPacket(Packet packet){
         System.out.println("packet dead :" + packet);
         packet.wire.avaible = true;
-        GameManager.lvl.lostPackets++;
-        GameManager.lvl.packets.remove(packet);
+        LevelManager.lvl.lostPackets++;
+        LevelManager.lvl.packets.remove(packet);
         removePacketView(packet);
         removePacketManager(packet);
     }

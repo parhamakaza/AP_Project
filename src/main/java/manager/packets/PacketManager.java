@@ -1,5 +1,6 @@
 package manager.packets;
 
+import controller.PacketContoller;
 import javafx.animation.AnimationTimer;
 import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Shape;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import static controller.ComponentsController.TheComponentsController;
 import static manager.ComponentsManager.TheComponentsManager;
+import static manager.LevelManager.lvl;
 import static manager.LevelManager.theLevelManager;
 import static manager.packets.PacketState.FORWARD;
 import static manager.packets.PacketState.RETURNING;
@@ -36,6 +38,7 @@ public abstract class PacketManager extends AnimationTimer {
     protected Wire wire;
     protected double distanceTraveled;
     protected PacketState currentState ;
+    private double startTime;
 
     // --- Records for Data Structures ---
     protected record ArcLengthData(int curveIndex, double t, double cumulativeDistance) {}
@@ -46,17 +49,24 @@ public abstract class PacketManager extends AnimationTimer {
     }
 
     public PacketManager(Packet packet, Wire wire) {
+        this.packet = packet;
         this.packetView = TheComponentsController.getView(packet);
         this.wire = wire;
         wire.avaible = false;
         speed = packet.getSpeed();
-        this.packet = packet;
         distanceTraveled = packet.distanceTravled;
         currentState = packet.getState();
         this.shape = packetView.getShape();
         shape.setLayoutX(packet.x);
         shape.setLayoutY(packet.y);
         this.path = TheComponentsController.getView(wire).getCurves();
+
+        if(packet.distanceTravled == 0){
+            startTime = lvl.getTime();
+            packet.setPacketStartTime(startTime);
+        }else{
+            startTime = packet.getPacketStartTime();
+        }
 
         SceneManager.addComponent(shape);
 
@@ -114,6 +124,7 @@ public abstract class PacketManager extends AnimationTimer {
                             TheComponentsManager.getManager(computer).disableComputer();
 
                         }
+                        return;
                     }
                 }
                 break;
@@ -127,6 +138,12 @@ public abstract class PacketManager extends AnimationTimer {
                 }
                 break;
         }
+
+        if(  lvl.getTime()  - startTime >= 5){
+            PacketContoller.killPacket(packet);
+            stop();
+        }
+
         packet.setSpeed(speed);
 
         ArcLengthData targetData = getPathDataForDistance(distanceTraveled);
@@ -136,10 +153,13 @@ public abstract class PacketManager extends AnimationTimer {
         packet.y = position.y + packet.deflectedY;
         shape.setLayoutX(packet.x);
         shape.setLayoutY(packet.y);
+
+
     }
 
     protected void packetMovementEnds(Computer computer) {
         packet.wire.avaible = true;
+        packet.resetSpeed();
         SceneManager.removeComponent(shape);
         TheComponentsManager.computerManagerMap.get(computer).takePacket(packet);
     }

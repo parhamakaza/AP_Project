@@ -1,6 +1,5 @@
 package manager;
 
-import controller.ComponentsController;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 
@@ -118,7 +117,7 @@ public class CollisonManager {
     }
     private void explosion(double explosionX , double explosionY){
 
-            for(Packet packet : GameManager.lvl.packets){
+            for(Packet packet : LevelManager.lvl.packets){
 
                 double deltaX = packet.x - explosionX;
                 double deltaY = packet.y - explosionY;

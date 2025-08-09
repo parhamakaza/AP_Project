@@ -1,7 +1,7 @@
 package model.packet;
 
 import controller.PacketContoller;
-import manager.GameManager;
+import manager.LevelManager;
 import manager.packets.PacketState;
 import model.Type;
 import model.wire.Wire;
@@ -26,6 +26,7 @@ public abstract class Packet implements Serializable {
     protected int size;
     protected int noise = 0;
     protected double speed = STANDARDSPEED;
+    protected double packetStartTime;
 
     public void setSpeed(double speed) {
         this.speed = speed;
@@ -55,6 +56,14 @@ public abstract class Packet implements Serializable {
 
     public void setNoise(int noise) {
         this.noise = noise;
+    }
+
+    public void setPacketStartTime(double packetStartTime) {
+        this.packetStartTime = packetStartTime;
+    }
+
+    public double getPacketStartTime() {
+        return packetStartTime;
     }
 
     public void  checkToKill(){
@@ -102,7 +111,7 @@ public abstract class Packet implements Serializable {
     public Packet() {
         theID++;
         this.id = theID;
-        GameManager.lvl.packets.add(this);
+        LevelManager.lvl.packets.add(this);
     }
 
 
@@ -114,8 +123,9 @@ public abstract class Packet implements Serializable {
         return true;
     }
 
-    public  void resetSpeed(){
+    public void resetSpeed(){
         speed = STANDARDSPEED;
+
     }
 
 

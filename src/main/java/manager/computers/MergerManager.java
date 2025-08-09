@@ -20,6 +20,7 @@ public class MergerManager extends  ComputerManager{
     public MergerManager(Computer computer) {
         super(computer);
     }
+
     @Override
     public void takePacket(Packet packet){
         if(packet.getType() != Type.BIT){

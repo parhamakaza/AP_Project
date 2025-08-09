@@ -64,7 +64,7 @@ public class LevelView {
             }
         });
 
-        // --- Create all UI components ---
+
         menuButton = UI.createHUDButton("Menu");
         menuButton.setOnAction(e -> {
             timeline.stop();
@@ -80,7 +80,7 @@ public class LevelView {
         shopButton = UI.createHUDButton2("Shop");
         shopButton.setOnAction(e -> Shop.openShop(e));
 
-        timelineSlider = new Slider(0, 20, 0);
+        timelineSlider = new Slider(0, 60, levelModel.getTime()); // <-- MODIFIED
         UI.styleSlider(timelineSlider);
         timelineSlider.setPrefWidth(400);
 
@@ -89,16 +89,16 @@ public class LevelView {
         wireLabel = UI.createHUDLabel("Wire Left: 0.0");
         coinsLabel = UI.createHUDLabel("Coins: 10");
 
-        //coinsLabel = new Label("Coins: 10");
-        //coinsLabel.setStyle("-fx-text-fill: yellow; -fx-font-size: 16px; -fx-font-weight: bold;");
 
-        // --- Event Handlers for Slider ---
+
+
         timelineSlider.setOnMousePressed(event -> isDragging[0] = true);
         timelineSlider.setOnMouseReleased(event -> {
             isDragging[0] = false;
-            int value = (int) timelineSlider.getValue();
-            //LevelsController.travelInTime(value);
+
+
         });
+
         timelineSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (isDragging[0]) {
                 currentTimeLabel.setText("Time: " + String.format("%.1f", newVal));
@@ -143,6 +143,7 @@ public class LevelView {
 
         KeyFrame keyFrame = new KeyFrame(Duration.millis(100), event -> {
             boolean allComputersReady = true;
+
             for (Computer computer : lvl.comps) {
                 boolean isReady = computer.compIsReady();
                 Color glowColor = isReady ? Color.web("#00ffff") : Color.web("#FF0066");
@@ -157,10 +158,16 @@ public class LevelView {
                 }
             }
 
+                if (!isDragging[0]) {
+                    currentTimeLabel.setText("Time: " + String.format("%.1f", lvl.getTime()) + "s"); // <-- MODIFIED
+                    timelineSlider.setValue(lvl.getTime()); // <-- MODIFIED
+                }
+
+
+
+
+
             startButton.setDisable(!allComputersReady);
-            if (!isDragging[0]) {
-                currentTimeLabel.setText("Time: " + String.format("%.1f", lvl.currentTime));
-            }
             wireLabel.setText("Wire: " + String.format("%.1f", theLevelManager.updateWireLength()));
 
             try {

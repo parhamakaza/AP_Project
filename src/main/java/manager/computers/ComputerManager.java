@@ -54,7 +54,6 @@ public abstract class ComputerManager {
     public void takePacket(Packet packet) {
         packet.insideSystem = true;
         packet.distanceTravled = 0;
-        packet.resetSpeed();
         this.computer.packets.add(packet);
     }
 

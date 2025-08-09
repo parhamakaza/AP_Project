@@ -1,7 +1,6 @@
 package model.wire;
 
-import manager.GameManager;
-import manager.WireManager;
+import manager.LevelManager;
 import model.Type;
 import model.port.*;
 
@@ -51,14 +50,14 @@ public class Wire implements Serializable {
             this.endY = ePort.centerY();
 
 
-            if (this.length > GameManager.lvl.wireLength) {
+            if (this.length > LevelManager.lvl.wireLength) {
                 throw new Exception("not enougth length");
             }
 
             sPort.wire = this;
             ePort.wire = this;
 
-            GameManager.lvl.wireLength = (GameManager.lvl.wireLength - this.length);
+            LevelManager.lvl.wireLength = (LevelManager.lvl.wireLength - this.length);
         } else {
             throw new Exception("wires ports type mismatch");
 
@@ -71,12 +70,15 @@ public class Wire implements Serializable {
     }
 
     public static boolean checkPorts(Port p1, Port p2) {
+        if(!(p1.wire == null && p2.wire == null)){
+            return false;
+        }
         boolean a = p1.getClass() == p2.getClass();
         boolean b = !p1.computer.equals(p2.computer);
         boolean c = p1.portType.equals(PortType.OUTPUT);
         boolean d = p2.portType.equals(PortType.INPUT);
 
-        return a && b && c && d;
+        return  b && c && d;
 
     }
 

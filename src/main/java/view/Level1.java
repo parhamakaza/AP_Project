@@ -2,7 +2,7 @@ package view;
 
 
 import controller.*;
-import manager.GameManager;
+import manager.LevelManager;
 import model.*;
 import model.computer.*;
 import model.port.MaticPort;
@@ -21,9 +21,9 @@ public class Level1 extends LevelView{
 
     public static void startLevel1(){
 
-        LevelView lvl = LevelController.makeLevel(new Level(1900));
+        LevelView lvl = LevelController.makeLevel(new Level(19000));
 
-        GameManager.lvl = lvl.getLevel();
+        LevelManager.lvl = lvl.getLevel();
         SceneManager.goToLevel(lvl.getScene());
         Server sServer = new Server(500 , 500 , "a");
         ComputerController.MakeComputer(sServer);

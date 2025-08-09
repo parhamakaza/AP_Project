@@ -1,6 +1,5 @@
 package manager;
 
-import controller.ComponentsController;
 import controller.WireController;
 import javafx.geometry.Bounds;
 import javafx.scene.input.MouseEvent;
@@ -53,7 +52,7 @@ public class WireManager {
                 double dx = currentLine.getEndX() - currentLine.getStartX();
                 double dy = currentLine.getEndY() - currentLine.getStartY();
                 double length = Math.sqrt(dx * dx + dy * dy);
-                if(length > GameManager.lvl.wireLength){
+                if(length > LevelManager.lvl.wireLength){
                     currentLine.setStroke(Color.RED);
                 }else {
                     currentLine.setStroke(Color.WHITE);

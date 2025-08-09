@@ -12,6 +12,7 @@ public class SquarePacketManager extends PacketManager{
         if(packet.getType() != packet.wire.type){
             speed = speed * 2;
         }
+
     }
 
 

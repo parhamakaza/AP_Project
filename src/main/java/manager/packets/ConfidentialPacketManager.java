@@ -2,7 +2,7 @@ package manager.packets;
 
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
-import manager.GameManager;
+import manager.LevelManager;
 import model.computer.Computer;
 import model.packet.Packet;
 import model.wire.Wire;
@@ -57,7 +57,7 @@ public class ConfidentialPacketManager extends PacketManager {
     }*/
 
   private void setStatus() {
-      for (Packet packet1 : GameManager.lvl.packets) {
+      for (Packet packet1 : LevelManager.lvl.packets) {
           double distance = distance(packet1, packet);
           boolean tooClose = distance < 45;
           if (packet1 != packet && tooClose && !packet1.insideSystem) {

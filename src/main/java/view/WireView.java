@@ -12,7 +12,7 @@ import service.SceneManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import static manager.GameManager.lvl;
+import static manager.LevelManager.lvl;
 
 
 public class WireView {

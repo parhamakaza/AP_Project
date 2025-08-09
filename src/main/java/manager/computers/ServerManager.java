@@ -1,19 +1,15 @@
 package manager.computers;
 
-import controller.ComponentsController;
 import controller.PacketContoller;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
 import model.computer.Computer;
 import model.packet.*;
 import model.port.*;
-import service.SceneManager;
 
-import javax.swing.plaf.TableHeaderUI;
 import java.util.Random;
 
-import static controller.ComponentsController.TheComponentsController;
-import static manager.GameManager.lvl;
+import static manager.LevelManager.lvl;
 
 public  class ServerManager extends ComputerManager {
     private static final Random random = new Random();
