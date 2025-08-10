@@ -1,7 +1,6 @@
 package controller;
 
 
-import manager.LevelManager;
 import manager.packets.PacketManager;
 import manager.packets.PacketManagerFactory;
 import model.packet.Packet;
@@ -11,6 +10,7 @@ import view.packets.PacketViewFactory;
 
 import static controller.ComponentsController.TheComponentsController;
 import static manager.ComponentsManager.TheComponentsManager;
+import static manager.LevelManager.lvl;
 
 
 public class PacketContoller {
@@ -31,8 +31,8 @@ public class PacketContoller {
     public static void killPacket(Packet packet){
         System.out.println("packet dead :" + packet);
         packet.wire.avaible = true;
-        LevelManager.lvl.lostPackets++;
-        LevelManager.lvl.packets.remove(packet);
+        lvl.increaseLostPacket(packet.getSize());
+        lvl.packets.remove(packet);
         removePacketView(packet);
         removePacketManager(packet);
     }

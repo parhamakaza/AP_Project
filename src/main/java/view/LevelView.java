@@ -14,11 +14,16 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.QuadCurve;
+import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 import manager.LevelManager;
 import model.computer.Computer;
 import model.Level;
+import model.wire.Wire;
 import saveAndLoad.Save;
+
+import java.util.List;
 
 import static controller.ComponentsController.TheComponentsController;
 import static manager.LevelManager.theLevelManager;
@@ -143,7 +148,7 @@ public class LevelView {
 
         KeyFrame keyFrame = new KeyFrame(Duration.millis(100), event -> {
             boolean allComputersReady = true;
-
+            boolean allWiresGood = checkWires();
             for (Computer computer : lvl.comps) {
                 boolean isReady = computer.compIsReady();
                 Color glowColor = isReady ? Color.web("#00ffff") : Color.web("#FF0066");
@@ -167,15 +172,10 @@ public class LevelView {
 
 
 
-            startButton.setDisable(!allComputersReady);
+            startButton.setDisable(!(allComputersReady && allWiresGood));
             wireLabel.setText("Wire: " + String.format("%.1f", theLevelManager.updateWireLength()));
+            packetLossLabel.setText("Loss: " + String.format("%.1f%%", level.calculateSimplePacketLoss()));
 
-            try {
-                double lossPercentage = (lvl.lostPackets / (double) lvl.generatedPackets) * 100;
-                packetLossLabel.setText("Loss: " + String.format("%.1f%%", lossPercentage));
-            } catch (Exception e) {
-                packetLossLabel.setText("Loss: 0.0%");
-            }
 
             coinsLabel.setText("Coins: " + lvl.coins);
         });
@@ -184,6 +184,24 @@ public class LevelView {
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
+
+
+    private boolean checkWires(){
+        for(WireView wireV : TheComponentsController.wireViewMap.values()){
+            List<QuadCurve> curves = wireV.getCurves();
+            for (QuadCurve curve : curves){
+                for (ComputerView computerView : TheComponentsController.computerViewMap.values()) {
+                    Shape intersection  = Shape.intersect( curve, computerView.getShape());
+                        if(!(intersection.getBoundsInLocal().isEmpty() || computerView.getComputer().thisWireIsMine(wireV.getWire()))){
+
+                            return false;
+                        }
+                }
+            }
+        }
+        return true;
+    }
+
 
     // --- Getters for the controller to attach event handlers ---
     public Scene getScene() {

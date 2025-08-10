@@ -3,6 +3,7 @@ package manager.computers;
 import controller.PacketContoller;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
+import model.Type;
 import model.computer.Computer;
 import model.packet.*;
 import model.port.*;
@@ -23,6 +24,9 @@ public  class ServerManager extends ComputerManager {
 
     @Override
     public  void takePacket(Packet packet){
+        if(packet.getType() == Type.MASSIVE){
+            lvl.reachedMassivePackets.add((MassivePacket) packet);
+        }
         lvl.coins = lvl.coins + packet.value;
         PacketContoller.removePacketView(packet);
         PacketContoller.removePacketManager(packet);
@@ -56,8 +60,9 @@ public  class ServerManager extends ComputerManager {
                                     packet = new MaticPacket();
                                 }
                             }
+
                             PacketContoller.makePacket(packet);
-                            lvl.generatedPackets++;
+                            lvl.increaseGemeratedPacket(packet.getSize());
                             sendPacket(port , packet);
                         }
                     }

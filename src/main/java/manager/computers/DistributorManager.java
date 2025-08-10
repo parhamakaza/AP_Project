@@ -35,6 +35,7 @@ public class DistributorManager extends ComputerManager {
             PacketContoller.makePacket(packet1);
             bitPackets.add(packet1);
         }
+        packet.aliveChildren = packet.getSize();
     }
 
     @Override

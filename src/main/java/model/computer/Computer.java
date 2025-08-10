@@ -3,6 +3,7 @@ package model.computer;
 
 import model.packet.Packet;
 import model.port.Port;
+import model.wire.Wire;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -49,5 +50,14 @@ public abstract class Computer implements Serializable {
         return y + HEIGHT/2;
     }
 
+    public boolean thisWireIsMine(Wire wire){
+        for (Port port : ports){
+            if(port.wire == wire){
+                return true;
+            }
+        }
+        return false;
+
+    }
 
 }

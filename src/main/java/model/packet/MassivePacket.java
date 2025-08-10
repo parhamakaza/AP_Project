@@ -3,12 +3,9 @@ package model.packet;
 import model.Type;
 
 public class MassivePacket extends Packet {
-
-    public void reduceSize() {
-        size = size - 1;
-
-    }
-
+    public MassivePacket madedFrom;
+    public int aliveChildren = 0;
+    public int insideMergerChildren = 0;
 
 
 
@@ -24,9 +21,11 @@ public class MassivePacket extends Packet {
         this.size = size;
     }
 
-    public MassivePacket(int size) {
+    public MassivePacket(int size , MassivePacket father) {
         this();
         this.size =size;
+        value = size;
+        madedFrom = father;
 
     }
 

@@ -1,5 +1,6 @@
 package manager.computers;
 
+import controller.PacketContoller;
 import model.Type;
 import model.computer.Computer;
 import model.packet.BitPacket;
@@ -35,7 +36,7 @@ public class MergerManager extends  ComputerManager{
         packet.wire.avaible = true;
         bitPackets.add(packet);
         MassivePacket fatherPacket = packet.fatherPacket;
-        fatherPacket.reduceSize();
+        fatherPacket.insideMergerChildren++;
         if(packetsMap.containsKey(fatherPacket)){
             packetsMap.get(fatherPacket).add(packet);
         }else {
@@ -48,10 +49,11 @@ public class MergerManager extends  ComputerManager{
     @Override
     protected Packet choosePacketToSend(){
         for(MassivePacket fatherPacket : packetsMap.keySet()){
-            if(fatherPacket.getSize() <= 0){
-                fatherPacket.setSize(packetsMap.get(fatherPacket).size());
+            if(fatherPacket.insideMergerChildren == fatherPacket.aliveChildren ){
+                MassivePacket ms =  new MassivePacket(packetsMap.get(fatherPacket).size() , fatherPacket);
+                PacketContoller.makePacket(ms);
                 packetsMap.remove(fatherPacket);
-                return fatherPacket;
+                return ms;
             }
         }
         return super.choosePacketToSend();
