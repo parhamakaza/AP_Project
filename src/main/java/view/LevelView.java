@@ -26,6 +26,7 @@ import saveAndLoad.Save;
 import java.util.List;
 
 import static controller.ComponentsController.TheComponentsController;
+import static manager.LevelManager.lvl;
 import static manager.LevelManager.theLevelManager;
 import static service.SceneManager.showMenuView;
 
@@ -80,7 +81,7 @@ public class LevelView {
         });
 
         startButton = UI.createHUDButton("Start");
-        startButton.setOnAction(e -> theLevelManager.start());
+        startButton.setOnAction(e ->checkReadyToGo() );
 
         shopButton = UI.createHUDButton2("Shop");
         shopButton.setOnAction(e -> Shop.openShop(e));
@@ -110,7 +111,7 @@ public class LevelView {
             }
         });
 
-        // --- Build the HUD and bind data ---
+
         buildHUD();
         bind(levelModel);
     }
@@ -147,21 +148,8 @@ public class LevelView {
         this.timeline = new Timeline();
 
         KeyFrame keyFrame = new KeyFrame(Duration.millis(100), event -> {
-            boolean allComputersReady = true;
-            boolean allWiresGood = checkWires();
-            for (Computer computer : lvl.comps) {
-                boolean isReady = computer.compIsReady();
-                Color glowColor = isReady ? Color.web("#00ffff") : Color.web("#FF0066");
-                DropShadow glow = new DropShadow(10, glowColor);
-                glow.setSpread(0.2);
-                ComputerView computerView= TheComponentsController.getView(computer);
-                computerView.getShape().setEffect(glow);
-                computerView.label.setText(computer.computerType.toString() +"\n" + computer.packets.size());
-                computer.ready = isReady;
-                if (!isReady) {
-                    allComputersReady = false;
-                }
-            }
+
+
 
                 if (!isDragging[0]) {
                     currentTimeLabel.setText("Time: " + String.format("%.1f", lvl.getTime()) + "s"); // <-- MODIFIED
@@ -172,7 +160,7 @@ public class LevelView {
 
 
 
-            startButton.setDisable(!(allComputersReady && allWiresGood));
+
             wireLabel.setText("Wire: " + String.format("%.1f", theLevelManager.updateWireLength()));
             packetLossLabel.setText("Loss: " + String.format("%.1f%%", level.calculateSimplePacketLoss()));
 
@@ -183,6 +171,22 @@ public class LevelView {
         timeline.getKeyFrames().add(keyFrame);
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+    }
+
+    private void checkReadyToGo(){
+        if(allComputersAreReady() && checkWires()){
+        theLevelManager.start();
+
+        }
+    }
+    private boolean allComputersAreReady(){
+        for(Computer computer : lvl.comps){
+            if(!computer.ready){
+                return false;
+            }
+        }
+        return true;
+
     }
 
 

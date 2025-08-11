@@ -3,6 +3,9 @@ package controller;
 
 import manager.packets.PacketManager;
 import manager.packets.PacketManagerFactory;
+import model.Type;
+import model.packet.BitPacket;
+import model.packet.MassivePacket;
 import model.packet.Packet;
 import service.SceneManager;
 import view.packets.PacketView;
@@ -29,6 +32,11 @@ public class PacketContoller {
     }
 
     public static void killPacket(Packet packet){
+        if (packet.getType() == Type.BIT){
+            BitPacket pacekt1 = (BitPacket) packet;
+            MassivePacket msp = pacekt1.fatherPacket;
+            msp.aliveChildren--;
+        }
         System.out.println("packet dead :" + packet);
         packet.wire.avaible = true;
         lvl.increaseLostPacket(packet.getSize());

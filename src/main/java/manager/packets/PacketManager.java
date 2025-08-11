@@ -139,7 +139,7 @@ public abstract class PacketManager extends AnimationTimer {
                 break;
         }
 
-        if(  lvl.getTime()  - startTime >= 5){
+        if(  lvl.getTime()  - startTime >= 10){
             PacketContoller.killPacket(packet);
             stop();
         }
@@ -158,7 +158,9 @@ public abstract class PacketManager extends AnimationTimer {
     }
 
     protected void packetMovementEnds(Computer computer) {
-        packet.wire.avaible = true;
+        wire.avaible = true;
+        packet.insideSystem = true;
+        packet.distanceTravled = 0;
         packet.resetSpeed();
         SceneManager.removeComponent(shape);
         TheComponentsManager.computerManagerMap.get(computer).takePacket(packet);

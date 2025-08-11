@@ -8,6 +8,7 @@ import model.computer.Computer;
 import model.packet.*;
 import model.port.*;
 
+import java.util.Map;
 import java.util.Random;
 
 import static manager.LevelManager.lvl;
@@ -26,6 +27,11 @@ public  class ServerManager extends ComputerManager {
     public  void takePacket(Packet packet){
         if(packet.getType() == Type.MASSIVE){
             lvl.reachedMassivePackets.add((MassivePacket) packet);
+        }
+        if (packet.getType() == Type.BIT){
+            BitPacket pacekt1 = (BitPacket) packet;
+            MassivePacket msp = pacekt1.fatherPacket;
+            msp.aliveChildren--;
         }
         lvl.coins = lvl.coins + packet.value;
         PacketContoller.removePacketView(packet);
@@ -47,7 +53,12 @@ public  class ServerManager extends ComputerManager {
 
                             Packet packet = null;
                             if(probability() ){
+                                if(probability2()){
+
                                 packet =new MassivePacket();
+                                }else {
+                                    packet = new ConfidentialPacket();
+                                }
 
                             }else {
                                 if (port instanceof SquarePort) {
@@ -73,6 +84,12 @@ public  class ServerManager extends ComputerManager {
     //5% chance
     private boolean probability() {
         return random.nextDouble() < 0.10;
+    }
+
+    private boolean probability2(){
+
+        return random.nextDouble() < 0.5;
+
     }
 
 

@@ -22,7 +22,6 @@ public class Wire implements Serializable {
     public double secondControlY;
     public double thirdControlX;
     public double thirdControlY;
-
     public boolean avaible = true;
     public double length;
     private boolean curved = false;

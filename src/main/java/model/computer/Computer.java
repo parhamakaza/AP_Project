@@ -16,8 +16,18 @@ public abstract class Computer implements Serializable {
     public double y;
     public ComputerTypes computerType ;
     protected final String id;
+
+    public void setDisabledTime(double disabledTime) {
+        this.disabledTime = disabledTime;
+    }
+
+    public double getDisabledTime() {
+        return disabledTime;
+    }
+
     public boolean disable = false;
     public boolean ready = false;
+    protected double disabledTime ;
 
     public String getId() {
         return id;
@@ -33,13 +43,16 @@ public abstract class Computer implements Serializable {
         this.y = y;
     }
 
-    public  boolean compIsReady(){
+    public boolean compIsReady(){
         for(Port i : this.ports){
             if (i.wire == null){
-                return false;
+                ready = false;
+                return ready;
             }
+
+        ready = true;
         }
-       return true;
+       return ready;
     }
 
     public double getCenterX(){

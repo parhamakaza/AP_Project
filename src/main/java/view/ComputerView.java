@@ -2,7 +2,6 @@ package view;
 
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -12,6 +11,7 @@ import model.computer.Computer;
 
 import service.SceneManager;
 
+import static controller.ComponentsController.TheComponentsController;
 import static model.computer.Computer.HEIGHT;
 import static model.computer.Computer.WIDTH;
 
@@ -51,10 +51,6 @@ public  class ComputerView implements Drawable  {
             module.setStroke(Color.web("#4a4a4a"));
             module.setStrokeWidth(2);
 
-            DropShadow glow = new DropShadow(1, Color.web("#00ffff"));
-            glow.setSpread(0.2);
-            module.setEffect(glow);
-
             // Create the Label to go on top
             Label computerLabel = new Label(computer.computerType.toString() +"\n" + computer.packets.size()); // Or get text from this.computer.getName()
             computerLabel.setTextFill(Color.GOLD);      // Make the text easy to see
@@ -78,9 +74,36 @@ public  class ComputerView implements Drawable  {
             container.setLayoutX(this.computer.x);
             container.setLayoutY(this.computer.y);
             this.shape = module;
+            setIndicator();
             this.container = container;
             SceneManager.addComponent(container);
 
+
+
+        }
+
+        public void setIndicator(){
+            DropShadow glow ;
+
+            if(computer.compIsReady()){
+
+                glow=new DropShadow(10, Color.web("#00ffff"));
+            }else {
+                glow =new DropShadow(10, Color.web("#FF0066"));
+
+
+            }
+            glow.setSpread(0.2);
+            shape.setEffect(glow);
+            System.out.println("salam");
+
+
+        }
+
+
+        public static void setIndicator(Computer computer){
+            ComputerView computerView =  TheComponentsController.getView(computer);
+            computerView.setIndicator();
 
 
         }

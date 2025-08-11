@@ -11,6 +11,7 @@ import manager.packets.PacketManager;
 import model.port.Port;
 import model.wire.Wire;
 import service.SceneManager;
+import view.ComputerView;
 import view.port.PortView;
 import view.WireView;
 
@@ -111,6 +112,10 @@ public class WireManager {
         WireView wireView = WireController.makeWire(new Wire(firstPort, secondPort));
         List<QuadCurve> curves = wireView.getCurves();
         wireView.getWire().length = PacketManager.calculateWireLength(curves);
+
+        System.out.println("fafas");
+        ComputerView.setIndicator(firstPort.computer);
+        ComputerView.setIndicator(secondPort.computer);
     }
 
     public static void disConnectWire(Wire wire){
@@ -120,9 +125,13 @@ public class WireManager {
         }
         //wireView.setCurves(null);
 
+
         wire.sPort.wire = null;
         wire.ePort.wire = null;
         TheComponentsController.wireViewMap.remove(wire);
+
+        ComputerView.setIndicator(wire.sPort.computer);
+        ComputerView.setIndicator(wire.ePort.computer);
     }
 
 

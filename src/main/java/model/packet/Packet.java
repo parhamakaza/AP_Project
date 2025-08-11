@@ -116,11 +116,7 @@ public abstract class Packet implements Serializable {
 
 
     public boolean isDamged(){
-        if (noise == 0){
-
-            return false;
-        }
-        return true;
+        return noise != 0;
     }
 
     public void resetSpeed(){

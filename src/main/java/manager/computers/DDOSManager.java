@@ -1,7 +1,9 @@
 package manager.computers;
 
 import controller.ComponentsController;
+import controller.PacketContoller;
 import javafx.scene.paint.Color;
+import model.Type;
 import model.computer.Computer;
 import model.packet.Packet;
 import model.port.Port;
@@ -19,22 +21,29 @@ public class DDOSManager extends ComputerManager{
 
     @Override
     public void takePacket(Packet packet) {
+        if (packet.getType() == Type.BIT){
+            PacketContoller.killPacket(packet);
+            return;
+        }
         super.takePacket(packet);
         if(packet.isVpn()){
-            packet.setVpn(false);
             VPNManager.resetPacket(packet);
             return;
         }
+
         if (!packet.isDamged()) {
             packet.increaseNoize();
         }
+
         if (probability()) {
             makeTrojan(packet);
         }
+
     }
 
     @Override
     public boolean isPerfect(Packet packet, Port port){
+
        return packet.getType() != port.getType();
     }
     // 30% chance
@@ -45,6 +54,7 @@ public class DDOSManager extends ComputerManager{
     private void makeTrojan(Packet packet){
         packet.setTrozhan(true);
         TheComponentsController.getView(packet).getShape().setFill(Color.RED);
+        System.out.println("trozhan");
     }
 
 }
