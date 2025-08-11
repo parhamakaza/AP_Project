@@ -9,8 +9,8 @@ import service.AudioManager;
 import service.SceneManager;
 
 public class Main extends Application {
-    public static final double STAGE_WIDTH = 1920;
-    public static final double STAGE_HEIGHT =  1080;
+    public static final double STAGE_WIDTH = 1600;
+    public static final double STAGE_HEIGHT =  900;
 
     public static void main(String[] args) {
         launch(args);

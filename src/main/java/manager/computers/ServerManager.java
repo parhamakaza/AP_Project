@@ -47,7 +47,12 @@ public  class ServerManager extends ComputerManager {
 
                             Packet packet = null;
                             if(probability() ){
+                                if(probability2()){
+
                                 packet =new MassivePacket();
+                                }else {
+                                    packet = new ConfidentialPacket();
+                                }
 
                             }else {
                                 if (port instanceof SquarePort) {
@@ -73,6 +78,12 @@ public  class ServerManager extends ComputerManager {
     //5% chance
     private boolean probability() {
         return random.nextDouble() < 0.10;
+    }
+
+    private boolean probability2(){
+
+        return random.nextDouble() < 0.5;
+
     }
 
 

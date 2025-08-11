@@ -20,10 +20,13 @@ import java.util.Optional;
 
 import static controller.ComponentsController.TheComponentsController;
 import static manager.ComponentsManager.TheComponentsManager;
+import static manager.LevelManager.lvl;
 
 public abstract class ComputerManager {
     public Computer computer;
     public Timeline timeline = new Timeline();
+    protected KeyFrame keyFrame;
+
 
 
     public void sendPacket(Port sPort , Packet packet){
@@ -41,6 +44,7 @@ public abstract class ComputerManager {
     }
 
     public Computer getComputer() {
+
         return computer;
     }
 
@@ -52,10 +56,9 @@ public abstract class ComputerManager {
     }
 
     public void takePacket(Packet packet) {
-        packet.insideSystem = true;
-        packet.distanceTravled = 0;
         this.computer.packets.add(packet);
     }
+
 
     protected Packet choosePacketToSend(){
         if (computer.packets.isEmpty()) {
@@ -116,9 +119,30 @@ public abstract class ComputerManager {
 
 
     public void startTransfer(){
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(10) , event -> transfer());
-        timeline.getKeyFrames().add(keyFrame);
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(10) , event -> {
 
+        if (!computer.disable){
+            transfer();
+        }else {
+            avaibleComputer();
+        }
+
+        });
+        this.keyFrame = keyFrame;
+
+
+        timeline.getKeyFrames().add(keyFrame );
+
+
+    }
+
+    protected void avaibleComputer(){
+        if ( lvl.getTime() - computer.getDisabledTime() >= 2 ) {
+            computer.disable = false;
+            Shape shape = TheComponentsController.getView(computer).getShape();
+            shape.setOpacity(1);
+            computer.setDisabledTime(0);
+        }
 
     }
 
@@ -127,19 +151,10 @@ public abstract class ComputerManager {
     }
 
     public void disableComputer(){
+        computer.setDisabledTime(lvl.getTime());
         computer.disable = true;
         Shape shape = TheComponentsController.getView(computer).getShape();
         shape.setOpacity(0.5);
-        timeline.pause();
-        PauseTransition pause = new PauseTransition(Duration.seconds(2));
-
-        pause.setOnFinished(event -> {
-            computer.disable = false;
-            shape.setOpacity(1);
-            timeline.play();
-        });
-
-        pause.play();
 
     }
 

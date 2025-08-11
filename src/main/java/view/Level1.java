@@ -25,39 +25,41 @@ public class Level1 extends LevelView{
 
         LevelManager.lvl = lvl.getLevel();
         SceneManager.goToLevel(lvl.getScene());
-        Server sServer = new Server(500 , 500 , "a");
+        Server sServer = new Server(300 , 500 , "a");
         ComputerController.MakeComputer(sServer);
-        PortController.makePort(new TrianglePort(PortType.OUTPUT, sServer, 1 , "s1f"));
+        //PortController.makePort(new TrianglePort(PortType.OUTPUT, sServer, 1 , "s1f"));
         PortController.makePort(new SquarePort(PortType.OUTPUT, sServer, 2, "s2f"));
-        PortController.makePort(new MaticPort(PortType.OUTPUT, sServer, 3, "s3f"));
+        //PortController.makePort(new MaticPort(PortType.OUTPUT, sServer, 3, "s3f"));
 
         Server endServer = new Server(1400 , 500 , "b");
         ComputerController.MakeComputer(endServer);
-       PortController.makePort(new TrianglePort(PortType.INPUT, endServer, 1, "s4f"));
+        PortController.makePort(new TrianglePort(PortType.INPUT, endServer, 1, "s4f"));
         PortController.makePort(new SquarePort(PortType.INPUT, endServer, 2, "s5f"));
         PortController.makePort(new MaticPort(PortType.INPUT, endServer, 3, "s6f"));
 
+        VPN vpn = new VPN(700 , 500, "vieajviern");
+        ComputerController.MakeComputer(vpn);
+        PortController.makePort(new SquarePort(PortType.INPUT, vpn, 2, "s5fsffvsvd"));
+        PortController.makePort(new SquarePort(PortType.OUTPUT, vpn, 2, "s2fcac"));
 
-        Merger merger = new Merger(1100 , 500, "c");
+
+
+        Spy merger = new Spy(900 , 300, "c");
         ComputerController.MakeComputer(merger);
-        PortController.makePort(new TrianglePort(PortType.INPUT, merger, 1, "s7f"));
-        PortController.makePort(new SquarePort(PortType.INPUT, merger, 2, "s8f"));
-        PortController.makePort(new MaticPort(PortType.INPUT, merger, 3, "s9f"));
-        PortController.makePort(new TrianglePort(PortType.OUTPUT, merger, 1, "s0f"));
-        PortController.makePort(new SquarePort(PortType.OUTPUT, merger, 2, "sf2"));
-        PortController.makePort(new MaticPort(PortType.OUTPUT, merger, 3, "sf1"));
 
-        Distributor distributor = new Distributor(800 , 500, "d");
+        PortController.makePort(new SquarePort(PortType.OUTPUT, merger, 2, "sf2"));
+
+
+        Spy distributor = new Spy(900 , 500, "d");
         ComputerController.MakeComputer(distributor);
 
         PortController.makePort(new TrianglePort(PortType.INPUT, distributor, 1, "sf4"));
-        PortController.makePort(new SquarePort(PortType.INPUT, distributor, 2, "sf5"));
-        PortController.makePort(new MaticPort(PortType.INPUT, distributor, 3, "sf6"));
-        PortController.makePort(new TrianglePort(PortType.OUTPUT, distributor, 1, "sf7"));
-        PortController.makePort(new SquarePort(PortType.OUTPUT, distributor, 2, "sf3"));
+
         PortController.makePort(new MaticPort(PortType.OUTPUT, distributor, 3, "sfqfwe"));
 
-
+        Spy spy = new Spy(900 , 700, "gad");
+        ComputerController.MakeComputer(spy);
+        PortController.makePort(new SquarePort(PortType.OUTPUT , spy , 2 , "nanrgnoei"));
 
     }
 }

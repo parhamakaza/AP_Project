@@ -21,20 +21,22 @@ public class DDOSManager extends ComputerManager{
     public void takePacket(Packet packet) {
         super.takePacket(packet);
         if(packet.isVpn()){
-            packet.setVpn(false);
             VPNManager.resetPacket(packet);
             return;
         }
         if (!packet.isDamged()) {
             packet.increaseNoize();
         }
+
         if (probability()) {
             makeTrojan(packet);
         }
+
     }
 
     @Override
     public boolean isPerfect(Packet packet, Port port){
+
        return packet.getType() != port.getType();
     }
     // 30% chance
