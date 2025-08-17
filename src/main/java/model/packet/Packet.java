@@ -46,7 +46,7 @@ public abstract class Packet implements Serializable {
 
     protected PacketState state = PacketState.FORWARD;
 
-    public void increaseNoize(){
+    public void increaseNoise(){
         noise += 1;
     }
 

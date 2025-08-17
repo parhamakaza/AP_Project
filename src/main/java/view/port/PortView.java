@@ -24,7 +24,7 @@ public abstract class PortView implements Drawable {
     }
 
 
-    protected void setPortCordination(){
+    public void setPortCordination(){
         if (port.portType.equals(PortType.OUTPUT)) {
             port.x = port.computer.x + (Computer.WIDTH);
             shape.setLayoutX(port.x);
@@ -35,13 +35,14 @@ public abstract class PortView implements Drawable {
         }
 
         switch (port.portNum) {
-            case 1 -> port.y = 15 + port.computer.y;
-            case 2 -> port.y = 65 + port.computer.y;
-            case 3 -> port.y = 115 + port.computer.y;
+            case 1 -> port.y = 25 + port.computer.y;
+            case 2 -> port.y = 75 + port.computer.y;
+            case 3 -> port.y = 125 + port.computer.y;
         }
-        shape.setLayoutY(port.y + 10);
+        shape.setLayoutY(port.y );
         shape.setOnMouseEntered(event -> shape.setOpacity(0.5));
         shape.setOnMouseExited(event -> shape.setOpacity(1));
+        shape.toFront();
 
     }
 

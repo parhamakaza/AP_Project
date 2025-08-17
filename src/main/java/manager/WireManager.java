@@ -34,8 +34,8 @@ public class WireManager {
                 currentLine = new Line();
                 currentLine.setStrokeWidth(3);
                 currentLine.setStroke(Color.WHITE);
-                currentLine.setStartX(port.centerX());
-                currentLine.setStartY(port.centerY());
+                currentLine.setStartX(port.x);
+                currentLine.setStartY(port.y);
                 currentLine.setEndX(e.getSceneX());
                 currentLine.setEndY(e.getSceneY());
                 SceneManager.addComponent(currentLine);
@@ -112,8 +112,6 @@ public class WireManager {
         WireView wireView = WireController.makeWire(new Wire(firstPort, secondPort));
         List<QuadCurve> curves = wireView.getCurves();
         wireView.getWire().length = PacketManager.calculateWireLength(curves);
-
-        System.out.println("fafas");
         ComputerView.setIndicator(firstPort.computer);
         ComputerView.setIndicator(secondPort.computer);
     }

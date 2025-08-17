@@ -41,6 +41,12 @@ public class PacketContoller {
         packet.wire.avaible = true;
         lvl.increaseLostPacket(packet.getSize());
         lvl.packets.remove(packet);
+        PacketManager packetManager = TheComponentsManager.getManager(packet);
+        if(packetManager != null){
+            packetManager.stop();
+        }
+
+
         removePacketView(packet);
         removePacketManager(packet);
     }

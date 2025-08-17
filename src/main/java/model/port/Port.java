@@ -33,13 +33,7 @@ public abstract class Port implements Serializable {
 
     }
 
-    public double centerX() {
-        return (this.x);
-    }
 
-    public double centerY() {
-        return (this.y) + SIZE / 2;
-    }
 
 
 

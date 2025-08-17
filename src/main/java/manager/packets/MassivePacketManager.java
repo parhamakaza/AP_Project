@@ -10,8 +10,10 @@ import java.util.List;
 import static controller.PacketContoller.killPacket;
 import static manager.WireManager.disConnectWire;
 
-public class MassivePacketManager extends PacketManager {
+public class MassivePacketManager extends PacketManager implements AccelerationDamper {
     private static final double MASSIVE_ACCELERATION = 20;
+     private boolean accelerating = true;
+
 
     public MassivePacketManager(Packet packet, Wire path) {
         super(packet, path);
@@ -20,7 +22,7 @@ public class MassivePacketManager extends PacketManager {
 
     @Override
     public void handle(long now) {
-        if (!packet.isVpn() && wire.isCurved()) {
+        if (!packet.isVpn() && wire.isCurved() && accelerating) {
             speed += MASSIVE_ACCELERATION * ((now - lastUpdate) / 1_000_000_000.0);
         }
 
@@ -44,4 +46,9 @@ public class MassivePacketManager extends PacketManager {
         super.packetMovementEnds(computer);
     }
 
+    @Override
+    public void turnAccelerationOff() {
+        accelerating = false;
+
+    }
 }

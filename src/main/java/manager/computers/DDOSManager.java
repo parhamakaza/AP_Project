@@ -1,6 +1,5 @@
 package manager.computers;
 
-import controller.ComponentsController;
 import controller.PacketContoller;
 import javafx.scene.paint.Color;
 import model.Type;
@@ -32,7 +31,7 @@ public class DDOSManager extends ComputerManager{
         }
 
         if (!packet.isDamged()) {
-            packet.increaseNoize();
+            packet.increaseNoise();
         }
 
         if (probability()) {
@@ -54,7 +53,7 @@ public class DDOSManager extends ComputerManager{
     private void makeTrojan(Packet packet){
         packet.setTrozhan(true);
         TheComponentsController.getView(packet).getShape().setFill(Color.RED);
-        System.out.println("trozhan");
+
     }
 
 }

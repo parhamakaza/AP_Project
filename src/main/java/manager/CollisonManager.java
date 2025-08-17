@@ -4,8 +4,6 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
@@ -22,8 +20,8 @@ import java.util.Set;
 
 import static controller.ComponentsController.TheComponentsController;
 import static controller.PacketContoller.killPacket;
-import static manager.LevelManager.theLevelManager;
-import static manager.ShopManager.*;
+import static manager.LevelManager.lvl;
+
 
 public class CollisonManager {
     private static final double EXPLOSION_RADIUS = 100;
@@ -31,67 +29,66 @@ public class CollisonManager {
     Set<String> currentCollisions = new HashSet<>();
     private Timeline timeline = new Timeline();
 
-    public  CollisonManager(Level level) {
+    public CollisonManager(Level level) {
 
         timeline.setCycleCount(Animation.INDEFINITE);
         List<Packet> packets = level.packets;
         KeyFrame keyFrame = new KeyFrame((Duration.millis(16)), event -> {
 
-            if (!airyaman && !theLevelManager.paused) {
+            if (!lvl.getShop().isAiryaman() && !lvl.isPaused()) {
 
                 // 1. Create a copy of the list to iterate over
                 ArrayList<Packet> packetsThisFrame = new ArrayList<>(packets);
                 int n = packetsThisFrame.size();
 
-                    for (int i = 0; i < n; i++) {
-                        for (int j = i + 1; j < n; j++) {
+                for (int i = 0; i < n; i++) {
+                    for (int j = i + 1; j < n; j++) {
 
-                            // 2. Get packets from the copy
-                            Packet p1 = packetsThisFrame.get(i);
-                            Packet p2 = packetsThisFrame.get(j);
-                            if(p1.insideSystem || p2.insideSystem){
-                                continue;
-                            }
-                            if(!(packets.contains(p1) && packets.contains(p2))){
-                                continue;
-                            }
+                        // 2. Get packets from the copy
+                        Packet p1 = packetsThisFrame.get(i);
+                        Packet p2 = packetsThisFrame.get(j);
+                        if (p1.insideSystem || p2.insideSystem) {
+                            continue;
+                        }
+                        if (!(packets.contains(p1) && packets.contains(p2))) {
+                            continue;
+                        }
 
 
-                            String id1 = String.valueOf(p1.id);
-                            String id2 = String.valueOf(p2.id);
-                            String key = (id1.compareTo(id2) < 0) ? id1 + "-" + id2 : id2 + "-" + id1;
+                        String id1 = String.valueOf(p1.id);
+                        String id2 = String.valueOf(p2.id);
+                        String key = (id1.compareTo(id2) < 0) ? id1 + "-" + id2 : id2 + "-" + id1;
 
-                            boolean isColliding = false;
-                            try {
+                        boolean isColliding = false;
+                        try {
 
+
+                            Shape intersect = Shape.intersect(TheComponentsController.getView(p1).getShape(), TheComponentsController.getView(p2).getShape());
+                            isColliding = !intersect.getBoundsInLocal().isEmpty();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        if (isColliding) {
+                            if (!currentCollisions.contains(key)) {
+                                currentCollisions.add(key);
 
                                 Shape intersect = Shape.intersect(TheComponentsController.getView(p1).getShape(), TheComponentsController.getView(p2).getShape());
-                                isColliding = !intersect.getBoundsInLocal().isEmpty();
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            if (isColliding ) {
-                                if (!currentCollisions.contains(key)) {
-                                   currentCollisions.add(key);
-
-                                    Shape intersect = Shape.intersect(TheComponentsController.getView(p1).getShape(), TheComponentsController.getView(p2).getShape());
-                                    Bounds collisionBounds = intersect.getBoundsInLocal();
-                                    double collisionX = collisionBounds.getMinX() + collisionBounds.getWidth() / 2;
-                                    double collisionY = collisionBounds.getMinY() + collisionBounds.getHeight() / 2;
-                                    collision(p1, p2);
-                                    if (!ShopManager.atar) {
-                                        //explosion(collisionX, collisionY);
-                                    }
+                                Bounds collisionBounds = intersect.getBoundsInLocal();
+                                double collisionX = collisionBounds.getMinX() + collisionBounds.getWidth() / 2;
+                                double collisionY = collisionBounds.getMinY() + collisionBounds.getHeight() / 2;
+                                collision(p1, p2);
+                                if (!lvl.getShop().isAtar()) {
+                                    explosion(collisionX, collisionY);
                                 }
-                            } else {
-                             currentCollisions.remove(key);
                             }
+                        } else {
+                            currentCollisions.remove(key);
                         }
                     }
                 }
-
+            }
 
 
         });
@@ -101,59 +98,58 @@ public class CollisonManager {
     private void collision(Packet packet1, Packet packet2) {
 
         AudioManager.playCollison();
-        if(packet1.getType() == Type.MATIC){
+        packet1.increaseNoise();
+        packet2.increaseNoise();
+
+        if (packet1.getType() == Type.MATIC) {
             PacketManager.changeDirection(packet1);
         }
-        if(packet2.getType() == Type.MATIC){
+        if (packet2.getType() == Type.MATIC) {
             PacketManager.changeDirection(packet2);
         }
-
-        packet1.increaseNoize();
-        packet2.increaseNoize();
 
         packet1.checkToKill();
         packet2.checkToKill();
 
+
     }
-    private void explosion(double explosionX , double explosionY){
 
-            for(Packet packet : LevelManager.lvl.packets){
+    private void explosion(double explosionX, double explosionY) {
 
-                double deltaX = packet.x - explosionX;
-                double deltaY = packet.y - explosionY;
-                double distanceSq = (deltaX * deltaX) + (deltaY * deltaY);
-                double radiusSq = EXPLOSION_RADIUS * EXPLOSION_RADIUS;
-                if (distanceSq <= radiusSq) {
-                    double distance = Math.sqrt(distanceSq);
-                    if (distance > 0) {
-                        // Normalize the direction vector (make its length 1)
-                        double normalizedX = deltaX / distance;
-                        double normalizedY = deltaY / distance;
+        for (Packet packet : LevelManager.lvl.packets) {
 
-                        // Calculate force falloff: 1.0 at center, 0.0 at the edge.
-                        // This makes the explosion weaker the farther the packet is from the center.
-                        double forceFalloff = 1.0 - (distance / EXPLOSION_RADIUS);
+            double deltaX = packet.x - explosionX;
+            double deltaY = packet.y - explosionY;
+            double distanceSq = (deltaX * deltaX) + (deltaY * deltaY);
+            double radiusSq = EXPLOSION_RADIUS * EXPLOSION_RADIUS;
+            if (distanceSq <= radiusSq) {
+                double distance = Math.sqrt(distanceSq);
+                if (distance > 0) {
+                    // Normalize the direction vector (make its length 1)
+                    double normalizedX = deltaX / distance;
+                    double normalizedY = deltaY / distance;
 
-                        // Calculate the final deflection vector
-                        double finalDeflectionX =  normalizedX * EXPLOSION_FORCE * forceFalloff;
-                        double finalDeflectionY =  normalizedY * EXPLOSION_FORCE * forceFalloff;
-                        smoothDeflecting(finalDeflectionX,finalDeflectionY,packet);
+                    // Calculate force falloff: 1.0 at center, 0.0 at the edge.
+                    // This makes the explosion weaker the farther the packet is from the center.
+                    double forceFalloff = 1.0 - (distance / EXPLOSION_RADIUS);
 
-
-                    } else {
-
-                        packet.deflectedX = 0;
-                        packet.deflectedY = 1 * EXPLOSION_FORCE;
-                    }
+                    // Calculate the final deflection vector
+                    double finalDeflectionX = normalizedX * EXPLOSION_FORCE * forceFalloff;
+                    double finalDeflectionY = normalizedY * EXPLOSION_FORCE * forceFalloff;
+                    smoothDeflecting(finalDeflectionX, finalDeflectionY, packet);
 
 
+                } else {
+
+                    packet.deflectedX = 0;
+                    packet.deflectedY = 1 * EXPLOSION_FORCE;
                 }
 
 
-
-
-
             }
+
+
+        }
 
     }
 
@@ -200,53 +196,55 @@ public class CollisonManager {
 
 
     }*/
-    private static void smoothDeflecting(double toDeflectX, double toDeflectY , Packet packet){
+    public static void smoothDeflecting(double toDeflectX, double toDeflectY, Packet packet) {
 
 
-        double whatToAddX = toDeflectX / 100.0;
-        double whatToAddY = toDeflectY / 100.0;
+        double whatToAddX = toDeflectX / 1000.0;
+        double whatToAddY = toDeflectY / 1000.0;
 
 
         Timeline timeline = new Timeline();
 
         KeyFrame keyFrame = new KeyFrame(Duration.millis(1), e -> {
-            packet.deflectedX += whatToAddX;
-            packet.deflectedY += whatToAddY;
+            if (!packet.insideSystem) {
+                packet.deflectedX += whatToAddX;
+                packet.deflectedY += whatToAddY;
+                checkToKill(packet);
+            } else {
+                timeline.stop();
+
+            }
         });
 
         timeline.getKeyFrames().add(keyFrame);
-        timeline.setCycleCount(100); // Run 100 times
+        timeline.setCycleCount(1000);
 
-        // Set the onFinished handler correctly
-        // This will now run only ONCE, after all 100 cycles are complete.
-        timeline.setOnFinished(event -> {
-
-            checkToKill(packet);
-        });
-
-        // Play the single timeline
         timeline.play();
 
 
-
-
-
     }
-    public void play(){
+
+    public void play() {
         timeline.play();
     }
-    public void pause(){
+
+    public void pause() {
         timeline.pause();
     }
-    public void stop(){
+
+    public void stop() {
         timeline.stop();
     }
-    private static EventHandler<ActionEvent> checkToKill(Packet packet){
 
-        if(Math.abs(packet.deflectedY) >= 10 || Math.abs(packet.deflectedX) >=10){
+    private static void checkToKill(Packet packet) {
+        if (!lvl.packets.contains(packet)) {
+            return;
+        }
+
+        if (Math.abs(packet.deflectedY) >= 10 || Math.abs(packet.deflectedX) >= 10) {
             killPacket(packet);
         }
-        return null;
+
     }
 
 

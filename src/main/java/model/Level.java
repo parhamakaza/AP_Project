@@ -16,18 +16,56 @@ public class Level implements Serializable {
 
     private int generatedPackets = 0;
     private int lostPackets = 0;
-    public int coins = 10;
+    public int coins = 50;
     public final double initialWireLength;
-
-    public double getTime() {
-        return time;
-    }
-
     public double wireLength ;
     private double time = 0;
     public List<Computer> comps = new ArrayList<>();
     public List<Packet> packets = new ArrayList<>();
     public List<MassivePacket> reachedMassivePackets =  new ArrayList<>();
+    private Shop shop = new Shop();
+    private boolean paused;
+
+    public boolean isPaused() {
+        return paused;
+    }
+
+    public void setShop(Shop shop) {
+        this.shop = shop;
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+    }
+
+    public Shop getShop() {
+        return shop;
+    }
+
+    public void setTime(double time) {
+        this.time = time;
+    }
+
+    public int getGeneratedPackets() {
+        return generatedPackets;
+    }
+
+    public void setLostPackets(int lostPackets) {
+        this.lostPackets = lostPackets;
+    }
+
+    public void setGeneratedPackets(int generatedPackets) {
+        this.generatedPackets = generatedPackets;
+    }
+
+
+    public int getLostPackets() {
+        return lostPackets;
+    }
+
+    public double getTime() {
+        return time;
+    }
 
     public Level(double x){
         initialWireLength = x;

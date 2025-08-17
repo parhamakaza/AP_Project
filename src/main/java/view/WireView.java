@@ -2,9 +2,12 @@ package view;
 
 
 import javafx.geometry.Point2D;
+import javafx.scene.Cursor;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.QuadCurve;
 import manager.packets.PacketManager;
+import model.port.Port;
+import model.port.PortType;
 import model.wire.Wire;
 import service.AudioManager;
 import service.SceneManager;
@@ -12,7 +15,10 @@ import service.SceneManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import static controller.ComponentsController.TheComponentsController;
 import static manager.LevelManager.lvl;
+import static manager.LevelManager.theLevelManager;
+import static manager.packets.PacketManager.calculateWireLength;
 
 
 public class WireView {
@@ -81,7 +87,7 @@ public class WireView {
                 int i = curves.indexOf(draggedCurve);
 
                 // 1. Calculate the length of this specific curve *before* any changes
-                double originalLength = PacketManager.calculateWireLength(List.of(draggedCurve));
+                double originalLength = calculateWireLength(List.of(draggedCurve));
 
                 // Get the potential new mouse coordinates
                 double controlX = event.getX();
@@ -93,7 +99,7 @@ public class WireView {
                         controlX, controlY, // Use the new potential control point
                         draggedCurve.getEndX(), draggedCurve.getEndY()
                 );
-                double newLength = PacketManager.calculateWireLength(List.of(potentialCurve));
+                double newLength = calculateWireLength(List.of(potentialCurve));
 
                 // 3. Determine the change in length (will be negative if the curve gets shorter)
                 double lengthChange = newLength - originalLength;
@@ -110,7 +116,7 @@ public class WireView {
                     draggedCurve.setControlX(controlX);
                     draggedCurve.setControlY(controlY);
 
-                    wire.length = PacketManager.calculateWireLength(curves);
+                    wire.length = calculateWireLength(curves);
 
                     // c. Call your smoothing function
                     smoother(i, draggedCurve);
@@ -118,6 +124,21 @@ public class WireView {
                 }
 
 
+            });
+            curve.setOnMouseClicked(event -> {
+                    double trapX = event.getX();
+                    double trapY = event.getY();
+                    Point2D point2D = new Point2D(trapX, trapY);
+                if (lvl.getShop().isAergia()) {
+
+
+                    lvl.getShop().doAergia(point2D);
+
+
+                }
+                if(lvl.getShop().isEliphas()){
+                    lvl.getShop().doEliphas(point2D);
+                }
             });
             SceneManager.addComponent(curve);
         });
@@ -210,6 +231,36 @@ public class WireView {
             case MATIC    -> curve.setStroke(Color.GRAY);
             default       -> curve.setStroke(Color.WHITE);
         }
+    }
+
+    public static void linkToPort(Port port){
+        if(port.wire != null){
+            if (port.portType == PortType.INPUT){
+                linkInput(port.wire);
+            }else if(port.portType == PortType.OUTPUT){
+                linkOutput(port.wire);
+            }
+
+        }
+    }
+
+    private static void linkInput(Wire wire){
+        WireView wireView = TheComponentsController.getView(wire);
+        wire.endX = wire.ePort.x;
+        wire.endY = wire.ePort.y;
+        wireView.getCurves().getLast().setEndY(wire.endY);
+        wireView.getCurves().getLast().setEndX(wire.endX);
+
+        wire.length = calculateWireLength(wireView.getCurves());
+
+    }
+    private static void linkOutput(Wire wire){
+        WireView wireView = TheComponentsController.getView(wire);
+        wire.endX = wire.sPort.x;
+        wire.endY = wire.sPort.y;
+        wireView.getCurves().getFirst().setStartY(wire.endY);
+        wireView.getCurves().getFirst().setStartX(wire.endX);
+        wire.length = calculateWireLength(wireView.getCurves());
 
     }
 

@@ -16,6 +16,8 @@ public abstract class Computer implements Serializable {
     public double y;
     public ComputerTypes computerType ;
     protected final String id;
+    private final double initialX;
+    private final double initialY;
 
     public void setDisabledTime(double disabledTime) {
         this.disabledTime = disabledTime;
@@ -37,10 +39,20 @@ public abstract class Computer implements Serializable {
     public List<Packet> packets = new ArrayList<>();
 
 
+    public double getInitialX() {
+        return initialX;
+    }
+
+    public double getInitialY() {
+        return initialY;
+    }
+
     public Computer(double x , double y , String id){
         this.id = id;
         this.x = x;
         this.y = y;
+        initialX = x;
+        initialY = y;
     }
 
     public boolean compIsReady(){

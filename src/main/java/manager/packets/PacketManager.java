@@ -101,7 +101,7 @@ public abstract class PacketManager extends AnimationTimer {
     public void handle(long now) {
 
         packet.wire.avaible = false;
-        if (lastUpdate == 0 || theLevelManager.paused) {
+        if (lastUpdate == 0 || lvl.isPaused()) {
             lastUpdate = now;
             return;
         }
@@ -166,10 +166,7 @@ public abstract class PacketManager extends AnimationTimer {
         TheComponentsManager.computerManagerMap.get(computer).takePacket(packet);
     }
 
-    /**
-     * Refactored to first calculate the total path length using the static method,
-     * then builds the lookup table needed for animation.
-     */
+
     protected void buildLookupTable() {
         // First, get the total length. This reuses our new static method.
         this.totalPathLength = calculateWireLength(this.path);
@@ -214,10 +211,7 @@ public abstract class PacketManager extends AnimationTimer {
         return new ArcLengthData(p1.curveIndex(), interpolatedT, distance);
     }
 
-    /**
-     * Instance method for use by an active PacketManager animation.
-     * It implicitly uses this instance's path.
-     */
+
     protected Point2D evaluateCurve(int curveIndex, double t) {
         return evaluateCurve(this.path, curveIndex, t);
     }
@@ -247,4 +241,8 @@ public abstract class PacketManager extends AnimationTimer {
         }
         packet.setState(packetState);
     }
+
+
+
+
 }

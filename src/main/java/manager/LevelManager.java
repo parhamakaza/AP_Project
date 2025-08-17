@@ -24,7 +24,6 @@ public class LevelManager {
     private CollisonManager collisonManager;
     private Timeline timeline = new Timeline();
 
-    public boolean paused;
 
     public LevelManager(Level level){
         theLevelManager = this;
@@ -34,13 +33,26 @@ public class LevelManager {
         this.collisonManager = new CollisonManager(level);
         KeyFrame keyFrame = new KeyFrame(Duration.millis(100), event -> {
             level.increaseTime();
+            if (level.getTime() >= 60){
+
+            }
         });
         timeline.getKeyFrames().add(keyFrame);
         timeline.setCycleCount(Animation.INDEFINITE);
     }
+    private void endLevel(){
+
+
+    }
+    private void Win(){
+
+    }
+    private void lose(){
+
+    }
 
     public void pauseAndResume(boolean b){
-        paused = b;
+        level.setPaused(b);
         if(!b){
             start();
         }else {
@@ -56,7 +68,7 @@ public class LevelManager {
         }
         timeline.play();
 
-        Save.save();
+        //Save.save();
 
         collisonManager.play();
     }

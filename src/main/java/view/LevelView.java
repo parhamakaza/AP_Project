@@ -65,8 +65,8 @@ public class LevelView {
 
         scene.setOnKeyPressed((KeyEvent event) -> {
             if (event.getCode() == KeyCode.P) {
-                theLevelManager.paused = !theLevelManager.paused;
-                theLevelManager.pauseAndResume(theLevelManager.paused);
+                lvl.setPaused(!lvl.isPaused());
+                theLevelManager.pauseAndResume(lvl.isPaused());
             }
         });
 

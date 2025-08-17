@@ -53,11 +53,11 @@ public  class ServerManager extends ComputerManager {
 
                             Packet packet = null;
                             if(probability() ){
+                                    packet = new ConfidentialPacket();
                                 if(probability2()){
 
-                                packet =new MassivePacket();
+                               // packet =new MassivePacket();
                                 }else {
-                                    packet = new ConfidentialPacket();
                                 }
 
                             }else {

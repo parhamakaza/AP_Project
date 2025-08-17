@@ -43,10 +43,10 @@ public class Wire implements Serializable {
             this.ePortId = ePort.portID;
 
 
-            this.startX = sPort.centerX();
-            this.startY = sPort.centerY();
-            this.endX = ePort.centerX();
-            this.endY = ePort.centerY();
+            this.startX = sPort.x;
+            this.startY = sPort.y;
+            this.endX = ePort.x;
+            this.endY = ePort.y;
 
 
             if (this.length > LevelManager.lvl.wireLength) {
@@ -80,6 +80,8 @@ public class Wire implements Serializable {
         return  b && c && d;
 
     }
+
+
 
     public void setCurved(){
         curved = true;

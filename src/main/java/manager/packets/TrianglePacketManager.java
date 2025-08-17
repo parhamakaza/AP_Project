@@ -6,7 +6,7 @@ import model.wire.Wire;
 
 import java.util.List;
 
-public class TrianglePacketManager extends PacketManager {
+public class TrianglePacketManager extends PacketManager implements AccelerationDamper {
     private static final double TRIANGLE_ACCELERATION = 20;
     private boolean acceleration = false;
 
@@ -25,6 +25,11 @@ public class TrianglePacketManager extends PacketManager {
         super.handle(now);
 
 
+    }
+
+    @Override
+    public void turnAccelerationOff() {
+        acceleration = false;
     }
 
 }

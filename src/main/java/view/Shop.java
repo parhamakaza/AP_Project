@@ -1,6 +1,5 @@
 package view;
 
-import javafx.animation.PauseTransition;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,9 +9,8 @@ import javafx.scene.layout.VBox; // <-- Switched to VBox
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import manager.LevelManager;
-import manager.ShopManager;
+
+import static manager.LevelManager.lvl;
 
 public class Shop {
 
@@ -56,12 +54,12 @@ public class Shop {
         shop.eliphasButton.setPrefWidth(buttonWidth);
 
         // --- Button Actions (No changes here) ---
-        shop.atarButton.setOnAction(e2 -> { if (LevelManager.lvl.coins >= 3) { atar(); shopStage.close(); } });
-        shop.airyamanButton.setOnAction(e3 -> { if (LevelManager.lvl.coins >= 4) { airyaman(); shopStage.close(); } });
-        shop.anahitaButton.setOnAction(e4 -> { if (LevelManager.lvl.coins >= 5) { anahita(); shopStage.close(); } });
-        shop.aergiaButton.setOnAction(e5 -> { if (LevelManager.lvl.coins >= 10) { aergia(); shopStage.close(); } });
-        shop.sisyphusButton.setOnAction(e6 -> { if (LevelManager.lvl.coins >= 15) { sisyphus(); shopStage.close(); } });
-        shop.eliphasButton.setOnAction(e7 -> { if (LevelManager.lvl.coins >= 20) { eliphas(); shopStage.close(); } });
+        shop.atarButton.setOnAction(e2 -> { if (lvl.coins >= 3) { lvl.getShop().atar(); shopStage.close(); } });
+        shop.airyamanButton.setOnAction(e3 -> { if (lvl.coins >= 4) { lvl.getShop().airyaman(); shopStage.close(); } });
+        shop.anahitaButton.setOnAction(e4 -> { if (lvl.coins >= 5) { lvl.getShop().anahita(); shopStage.close(); } });
+        shop.aergiaButton.setOnAction(e5 -> { if (lvl.coins >= 10) { lvl.getShop().aergia(); shopStage.close(); } });
+        shop.sisyphusButton.setOnAction(e6 -> { if (lvl.coins >= 15) { lvl.getShop().sisyphus(); shopStage.close(); } });
+        shop.eliphasButton.setOnAction(e7 -> { if (lvl.coins >= 20) { lvl.getShop().eliphas(); shopStage.close(); } });
 
         // --- Layout using a VBox for a single vertical column ---
         VBox buttonLayout = new VBox(15); // 15px vertical spacing
@@ -84,13 +82,6 @@ public class Shop {
         shopStage.showAndWait();
     }
 
-    // --- Purchase Logic Methods (No changes here) ---
-    public static void atar() { /* ... */ }
-    public static void airyaman() { /* ... */ }
-    public static void anahita() { /* ... */ }
-    public static void aergia() { /* ... */ }
-    public static void sisyphus() { /* ... */ }
-    public static void eliphas() { /* ... */ }
 
-    private void closeShop() { /* ... */ }
+    private void closeShop() { }
 }
